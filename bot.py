@@ -1,4 +1,4 @@
-#어만사 전용 디스코드 봇 변경
+#어만사 전용 디스코드 봇
 
 import discord
 import asyncio
