@@ -33,6 +33,14 @@ client_secret = code.client_secret
 cred = credentials.Certificate("firebase-adminsdk.json")
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
+options = webdriver.ChromeOptions()
+options.add_argument('headless')
+options.add_argument('window-size=1920x1080')
+options.add_argument("disable-gpu")
+options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
+options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
+driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
+
 #경마 조절 장치
 loto_mal = True
 
@@ -482,23 +490,35 @@ async def on_message(message):
         await message.channel.send(message.author.mention + "님이" + " 현재 보유중인 돈은 : " + str(ye) + "원입니다")
 
     if message.content == "!코로나":#코로나 정보
-        html = urlopen("http://ncov.mohw.go.kr/") # 사이트 열람
-        bsObject = BeautifulSoup(html, "html.parser")# 파라미터 읽기
+        driver.get("http://ncov.mohw.go.kr/")# 사이트 열람
+        driver.implicitly_wait(1)
+
+        html = driver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
 
         embed = discord.Embed(title="코로나 정보", description="", color=0x5CD1E5) #임베드 생성
 
-        einput = str(bsObject.select("body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(1) > span.before"))
+        einput = str(soup.select(
+            'body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(1) > span.before'
+        ))
         embed.add_field(name="질병관리청 공식 확진자 수 [전날 확진자 <AM 10시에 업데이트>]", value=einput[28:-9] + "명", inline=False) # 전날 확진자 선택 및 임베트 추가
 
-        einput = str(bsObject.select("body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(4) > span.before"))
+        einput = str(soup.select(
+            'body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(4) > span.before'
+        ))
         embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput[23:-9] + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
 
-        html = urlopen("https://v1.coronanow.kr/")# 사이트 열람
-        bsObject = BeautifulSoup(html, "html.parser")
+        driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
+        driver.implicitly_wait(1)
 
-        einput = str(bsObject.select("#live_board2 > div:nth-child(1) > h5"))
+        html = driver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
 
-        embed.add_field(name="실시간 코로나 확진자 수", value=einput[129:-6], inline=False)#실시간 확진자 선택 및 임베트 추가
+        einput = str(soup.select(
+            '#ALL_decidecnt_increase > b'
+        ))
+
+        embed.add_field(name="실시간 코로나 확진자 수", value=einput[4:-5], inline=False)#실시간 확진자 선택 및 임베트 추가
 
         await message.channel.send(embed=embed)
 
@@ -607,8 +627,11 @@ async def on_message(message):
             await message.channel.send("벌금을 낼 수 있는 금액보다 너무 큰 금액입니다. 배팅 금액을 다시 입력해주세요\n신용 금액은 평균 금액인 배팅액 * 7 원으로 측정됩니다")
 
     if message.content == "!지진": #최근 지진 정보 접속 및 안내
-        html = urlopen("https://www.weather.go.kr/weather/earthquake_volcano/domesticlist.jsp") # 사이트 접속 후 파라설정
-        bsObject = BeautifulSoup(html, "html.parser")
+        driver.get("https://www.weather.go.kr/weather/earthquake_volcano/domesticlist.jsp")# 사이트 열람
+        driver.implicitly_wait(1)
+
+        html = driver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
 
         embed = discord.Embed(title="최근 지진 정보", description="", color=0x5CD1E5) # 임베드 생성
 
@@ -617,7 +640,7 @@ async def on_message(message):
         TFL = False
 
         for insite in einlist:
-            einput = str(bsObject.select("#excel_body > tbody > tr:nth-child(1) > td:nth-child( " + str(listin) + ")")) # 가져올 값 선택
+            einput = str(soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child( ' + str(listin) + ')')) # 가져올 값 선택
 
             if listin < 8: # 필요한 글자만 자르기
                 einput = einput[5:-6]
@@ -1754,23 +1777,35 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
         if "10:01" ==  time.strftime('%H:%M', time.localtime(time.time())) or "23:59" ==  time.strftime('%H:%M', time.localtime(time.time())): #특정 시간에 작동
             channel = client.get_channel(718436389062180917)
 
-            html = urlopen("http://ncov.mohw.go.kr/") #사이트 조회 및 파라미터 읽어오기
-            bsObject = BeautifulSoup(html, "html.parser")
+            driver.get("http://ncov.mohw.go.kr/")# 사이트 열람
+            driver.implicitly_wait(1)
 
-            embed = discord.Embed(title="코로나 정보", description="[10:01, 23:59 자동 코로나 알림]", color=0x5CD1E5) #임베드 생성
+            html = driver.page_source
+            soup = BeautifulSoup(html, 'html.parser')
 
-            einput = str(bsObject.select("body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(1) > span.before"))
-            embed.add_field(name="질병관리청 공식 확진자 수 [전날 확진자 <AM 10시에 업데이트>]", value=einput[28:-9] + "명", inline=False)
+            embed = discord.Embed(title="코로나 정보", description="", color=0x5CD1E5) #임베드 생성
 
-            einput = str(bsObject.select("body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(4) > span.before"))
-            embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput[23:-9] + "명", inline=False)
+            einput = str(soup.select(
+                'body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(1) > span.before'
+            ))
+            embed.add_field(name="질병관리청 공식 확진자 수 [전날 확진자 <AM 10시에 업데이트>]", value=einput[28:-9] + "명", inline=False) # 전날 확진자 선택 및 임베트 추가
 
-            html = urlopen("https://v1.coronanow.kr/")
-            bsObject = BeautifulSoup(html, "html.parser")
+            einput = str(soup.select(
+                'body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(4) > span.before'
+            ))
+            embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput[23:-9] + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
 
-            einput = str(bsObject.select("#live_board2 > div:nth-child(1) > h5"))
+            driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
+            driver.implicitly_wait(1)
 
-            embed.add_field(name="실시간 코로나 확진자 수", value=einput[129:-6], inline=False)
+            html = driver.page_source
+            soup = BeautifulSoup(html, 'html.parser')
+
+            einput = str(soup.select(
+                '#ALL_decidecnt_increase > b'
+            ))
+
+            embed.add_field(name="실시간 코로나 확진자 수", value=einput[4:-5], inline=False)#실시간 확진자 선택 및 임베트 추가
 
             await channel.send(embed=embed)
 
@@ -1784,10 +1819,13 @@ async def background_heijisin():#지진 자동 감지 시스템 **!지진 시스
         ji = dirji.get()
         ji = ji['jisin']
 
-        html = urlopen("http://www.weather.go.kr/weather/earthquake_volcano/internationallist.jsp")
-        bsObject = BeautifulSoup(html, "html.parser")
+        driver.get("http://www.weather.go.kr/weather/earthquake_volcano/internationallist.jsp")# 사이트 열람
+        driver.implicitly_wait(1)
 
-        einput = str(bsObject.select("#content_weather > table > tbody > tr:nth-child(2) > td:nth-child(2)"))
+        html = driver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
+
+        einput = str(soup.select('#content_weather > table > tbody > tr:nth-child(2) > td:nth-child(2)')) # 가져올 값 선택
         einput = einput[5:-6]
 
         if ji != einput:
@@ -1795,14 +1833,14 @@ async def background_heijisin():#지진 자동 감지 시스템 **!지진 시스
 
             embed = discord.Embed(title="경고! 해외에 강진이 발생하였습니다", description="지진 자동 감지 시스템\n지진 발생시 자동으로 올라옵니다", color=0x5CD1E5)
 
-            einlist = ["발생시각", "규모", "깊이", "위치"]
+            einlist = ["발생시각", "규모", "깊이", "최대진도" ,"위치"]
             listin = 2
             TFL = False
 
             for insite in einlist:
-                einput = str(bsObject.select("#content_weather > table > tbody > tr:nth-child(1) > td:nth-child( "+ str(listin) + ")"))
+                einput = str(soup.select("#content_weather > table > tbody > tr:nth-child(1) > td:nth-child( "+ str(listin) + ")"))
 
-                if listin < 7:
+                if listin < 8:
                     einput = einput[5:-6]
                 else:
                     einput = einput[24:-6]
@@ -1811,8 +1849,8 @@ async def background_heijisin():#지진 자동 감지 시스템 **!지진 시스
 
                 listin += 1
                 TFL = True
-                if listin == 5:
-                    listin = 7
+                if listin == 6:
+                    listin = 8
                     TFL = False
             
             channel = client.get_channel(718436389062180917)
@@ -1830,10 +1868,13 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
         ji = dirji.get()
         ji = ji['jisin']
 
-        html = urlopen("https://www.weather.go.kr/weather/earthquake_volcano/domesticlist.jsp")
-        bsObject = BeautifulSoup(html, "html.parser")
+        driver.get("https://www.weather.go.kr/weather/earthquake_volcano/domesticlist.jsp")# 사이트 열람
+        driver.implicitly_wait(1)
 
-        einput = str(bsObject.select("#excel_body > tbody > tr:nth-child(1) > td:nth-child(2)"))
+        html = driver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
+
+        einput = str(soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(2)')) # 가져올 값 선택
         einput = einput[5:-6]
 
         if ji != einput:
@@ -1846,7 +1887,7 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
             TFL = False
 
             for insite in einlist:
-                einput = str(bsObject.select("#excel_body > tbody > tr:nth-child(1) > td:nth-child( " + str(listin) + ")"))
+                einput = str(soup.select("#excel_body > tbody > tr:nth-child(1) > td:nth-child( " + str(listin) + ")"))
 
                 if listin < 8:
                     einput = einput[5:-6]
@@ -2331,85 +2372,36 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
     await client.wait_until_ready()
 
     while True:
-        channel = client.get_channel(823395883088871434)
-
         dircov = db.reference('cov19')
         cov = dircov.get()
         cov1 = cov['cov1']
         cov2 = cov['cov2']
 
-        html = urlopen("https://v1.coronanow.kr/live.html") #사이트 조회 및 파라미터 읽어오기
-        bsObject = BeautifulSoup(html, "html.parser")
+        driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
+        driver.implicitly_wait(1)
 
-        einput1 = str(bsObject.select("#reallive_table > tbody > tr:nth-child(2)"))
-        einput2 = str(bsObject.select("#reallive_table > tbody > tr:nth-child(2) > td:nth-child(2)"))
+        html = driver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
+
+        einput1 = str(soup.select("#reallive_table > tbody > tr:nth-child(2)"))
+        einput2 = str(soup.select("#reallive_table > tbody > tr:nth-child(2) > td:nth-child(2)"))
 
         if cov1 != einput1 and cov2 != einput2:
             embed = discord.Embed(title="실시간 코로나 정보", description="[코로나 확진자 자동 알림]", color=0x5CD1E5) #임베드 생성
 
-            
-            embed.add_field(name="위치", value=einput1 + "명", inline=False)
-            embed.add_field(name="확진자 수", value=einput2 + "명", inline=False)
+            embed.add_field(name="위치", value=einput1[50:-14], inline=False)
+            embed.add_field(name="확진자 수", value=einput2[18:-118], inline=False)
 
+            await channel.send(embed=embed)
+
+            channel = client.get_channel(823395883088871434)
+            await channel.send(embed=embed)
+
+            #channel = client.get_channel(751716285129424897)
             await channel.send(embed=embed)
 
         await asyncio.sleep(60*1)
 
-async def background_backjisinnihong():#일본 지진 자동 감지 시스템 **!지진 시스템과 일치**
-    await client.wait_until_ready()
-
-    while True:
-        dirji = db.reference('jisinnihong')
-        ji = dirji.get()
-        ji = ji['jisin']
-
-        options = webdriver.ChromeOptions()
-        options.add_argument('headless')
-        options.add_argument('window-size=1920x1080')
-        options.add_argument("disable-gpu")
-
-        driver = webdriver.Chrome('chromedriver', chrome_options=options)
-
-        driver.get("https://www.data.jma.go.jp/multi/quake/index.html?lang=kr")
-        driver.implicitly_wait(3)
-
-        einput = driver.find_elements_by_xpath('/html/body/div/main/div/section/table/tbody/tr[2]/td[5]')[0]
-        driver.quit()
-        print(einput)
-
-        '''
-        if ji != einput:
-            dirji.update({'jisin':einput})
-
-            embed = discord.Embed(title="[경고! 지진이 발생하였습니다]", description="지진 자동 감지 시스템\n지진 발생시 자동으로 올라옵니다", color=0x5CD1E5)
-
-            einlist = ["발생시각", "규모", "깊이", "최대진도" ,"위치"]
-            listin = 2
-            TFL = False
-
-            for insite in einlist:
-                einput = str(bsObject.select("#excel_body > tbody > tr:nth-child(1) > td:nth-child( " + str(listin) + ")"))
-
-                if listin < 8:
-                    einput = einput[5:-6]
-                else:
-                    einput = einput[24:-6]
-
-                embed.add_field(name=insite, value=einput, inline=TFL)
-
-                listin += 1
-                TFL = True
-                if listin == 6:
-                    listin = 8
-                    TFL = False
-            
-            channel = client.get_channel(718436389062180917)
-            await channel.send(embed=embed)
-
-            channel = client.get_channel(751716285129424897)
-            await channel.send(embed=embed)
-        '''
-        await asyncio.sleep(60*1)
 
 #선언
 client.loop.create_task(background_backcov())
@@ -2424,5 +2416,5 @@ client.loop.create_task(background_ye())
 client.loop.create_task(background_code00mukye())
 client.loop.create_task(background_code01mukye())
 client.loop.create_task(background_jusic())
-#client.loop.create_task(background_backjisinnihong())
+client.loop.create_task(background_backcovlive())
 client.run(token)
