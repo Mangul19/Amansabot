@@ -491,7 +491,7 @@ async def on_message(message):
 
     if message.content == "!코로나":#코로나 정보
         driver.get("http://ncov.mohw.go.kr/")# 사이트 열람
-        driver.implicitly_wait(1)
+        driver.implicitly_wait(10)
 
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
@@ -509,7 +509,7 @@ async def on_message(message):
         embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput[23:-9] + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
 
         driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
-        driver.implicitly_wait(1)
+        driver.implicitly_wait(10)
 
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
@@ -628,7 +628,7 @@ async def on_message(message):
 
     if message.content == "!지진": #최근 지진 정보 접속 및 안내
         driver.get("https://www.weather.go.kr/weather/earthquake_volcano/domesticlist.jsp")# 사이트 열람
-        driver.implicitly_wait(1)
+        driver.implicitly_wait(10)
 
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
@@ -1778,7 +1778,7 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
             channel = client.get_channel(718436389062180917)
 
             driver.get("http://ncov.mohw.go.kr/")# 사이트 열람
-            driver.implicitly_wait(1)
+            driver.implicitly_wait(10)
 
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
@@ -1796,7 +1796,7 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
             embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput[23:-9] + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
 
             driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
-            driver.implicitly_wait(1)
+            driver.implicitly_wait(10)
 
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
@@ -1820,7 +1820,7 @@ async def background_heijisin():#지진 자동 감지 시스템 **!지진 시스
         ji = ji['jisin']
 
         driver.get("http://www.weather.go.kr/weather/earthquake_volcano/internationallist.jsp")# 사이트 열람
-        driver.implicitly_wait(1)
+        driver.implicitly_wait(10)
 
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
@@ -1869,7 +1869,7 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
         ji = ji['jisin']
 
         driver.get("https://www.weather.go.kr/weather/earthquake_volcano/domesticlist.jsp")# 사이트 열람
-        driver.implicitly_wait(1)
+        driver.implicitly_wait(10)
 
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
@@ -2375,32 +2375,62 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
         dircov = db.reference('cov19')
         cov = dircov.get()
         cov1 = cov['cov1']
-        cov2 = cov['cov2']
 
         driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
+        driver.implicitly_wait(10)
+
+        html = driver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
+
+        einput1 = str(soup.select("#d_67381 > div > span > p:nth-child(1) > b"))[29:-5]
+
+        if cov1 != einput1:
+            einput2 = str(soup.select("#d_67381 > div > span > p:nth-child(3)"))[117:-40]
+
+            embed = discord.Embed(title="실시간 코로나 정보", description="[코로나 확진자 자동 알림]", color=0x5CD1E5) #임베드 생성
+
+            embed.add_field(name="위치 및 확진자 수", value=einput1, inline=False)
+            embed.add_field(name="상세 정보", value=einput2, inline=False)
+
+            dircov.update({'cov1':einput1})
+
+            channel = client.get_channel(718436389062180917)
+            await channel.send(embed=embed)
+
+            channel = client.get_channel(751716285129424897)
+            await channel.send(embed=embed)
+
+        await asyncio.sleep(60*1)
+
+async def background_jisinle(): #상위의 지진 시스템과 거의 동일
+    await client.wait_until_ready()
+
+    while True:
+        dirjisin = db.reference('jisinle')
+        jisin = dirjisin.get()
+        jisin = jisin['jisin']
+
+        driver.get("http://necis.kma.go.kr/necis-dbf/usermain/new/common/userMainNewForm.do")# 사이트 열람
+        driver.implicitly_wait(10)
+
+        #로그인
+        driver.find_element_by_name('email').send_keys(code.necisid)
+        driver.find_element_by_name('pPasswd').send_keys(code.necispaw)
+        driver.find_element_by_xpath("//*[@id='necisLoginVO']/div/div[1]/a").click()
+        driver.implicitly_wait(1)
+
+        #정보 찾으러 클릭
+        driver.find_element_by_xpath("//*[@id='lnb']/div/ul/li[3]/ul/li[3]/a").click()
         driver.implicitly_wait(1)
 
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
 
-        einput1 = str(soup.select("#reallive_table > tbody > tr:nth-child(2)"))
-        einput2 = str(soup.select("#reallive_table > tbody > tr:nth-child(2) > td:nth-child(2)"))
+        einput1 = str(soup.select("#gridTbody > tr:nth-child(1)"))
+        print(einput1)
 
-        if cov1 != einput1 and cov2 != einput2:
-            embed = discord.Embed(title="실시간 코로나 정보", description="[코로나 확진자 자동 알림]", color=0x5CD1E5) #임베드 생성
+        await asyncio.sleep(60*60)
 
-            embed.add_field(name="위치", value=einput1[50:-14], inline=False)
-            embed.add_field(name="확진자 수", value=einput2[18:-118], inline=False)
-
-            await channel.send(embed=embed)
-
-            channel = client.get_channel(823395883088871434)
-            await channel.send(embed=embed)
-
-            #channel = client.get_channel(751716285129424897)
-            await channel.send(embed=embed)
-
-        await asyncio.sleep(60*1)
 
 
 #선언
@@ -2417,4 +2447,5 @@ client.loop.create_task(background_code00mukye())
 client.loop.create_task(background_code01mukye())
 client.loop.create_task(background_jusic())
 client.loop.create_task(background_backcovlive())
+#client.loop.create_task(background_jisinle())
 client.run(token)
