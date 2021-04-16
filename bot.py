@@ -635,25 +635,19 @@ async def on_message(message):
 
         embed = discord.Embed(title="최근 지진 정보", description="", color=0x5CD1E5) # 임베드 생성
 
-        einlist = ["발생시각", "규모", "깊이", "최대진도" ,"위치"] # 가져올 값 미리 설정
-        listin = 2
-        TFL = False
-
-        for insite in einlist:
-            einput = str(soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child( ' + str(listin) + ')')) # 가져올 값 선택
-
-            if listin < 8: # 필요한 글자만 자르기
-                einput = einput[5:-6]
-            else:
-                einput = einput[24:-6]
-
-            embed.add_field(name=insite, value=einput, inline=TFL)#임베트 추가
-
-            listin += 1
-            TFL = True
-            if listin == 6: # 값 계산을 위해 필요 선택란만 가져오게 계산
-                listin = 8
-                TFL = False
+        einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(1) > td'))[17:-6] # 가져올 값 선택
+        embed.add_field(name='발생시각', value=einput, inline=False)#임베드 추가
+        einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(2) > td > strong'))[9:-17] # 가져올 값 선택
+        embed.add_field(name='규모', value=einput, inline=True)#임베드 추가
+        einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(3) > td > strong > font:nth-child(1)'))[22:-8] # 가져올 값 선택
+        embed.add_field(name='최대진도', value=einput, inline=True)#임베드 추가
+        einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(4) > td:nth-child(4)'))[5:-6] # 가져올 값 선택
+        embed.add_field(name='발생깊이', value=einput, inline=True)#임베드 추가
+        einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(4) > td.td_loc'))[20:-48] # 가져올 값 선택
+        embed.add_field(name='위치', value=einput, inline=False)#임베드 추가
+        einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(5) > td'))[17:-6] # 가져올 값 선택
+        embed.add_field(name='안내사항', value=einput, inline=False)#임베드 추가
+        embed.set_image(url="https://www.weather.go.kr/" + str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div:nth-child(3) > div > img'))[32:-4])
         
         await message.channel.send(embed=embed)
     
@@ -1825,34 +1819,29 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
 
-        einput = str(soup.select('#content_weather > table > tbody > tr:nth-child(2) > td:nth-child(2)')) # 가져올 값 선택
-        einput = einput[5:-6]
+        einput = str(soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(2) > span'))[7:-8] # 가져올 값 선택 
 
         if ji != einput:
             dirji.update({'jisin':einput})
 
-            embed = discord.Embed(title="경고! 해외에 강진이 발생하였습니다", description="지진 자동 감지 시스템\n지진 발생시 자동으로 올라옵니다", color=0x5CD1E5)
+            embed = discord.Embed(title="경고! 해외에 강진이 발생하였습니다", description="지진 자동 감지 시스템", color=0x5CD1E5)
 
-            einlist = ["발생시각", "규모", "깊이", "최대진도" ,"위치"]
+            einlist = ["발생시각", "규모", "발생 깊이", "위치"]
             listin = 2
             TFL = False
 
             for insite in einlist:
-                einput = str(soup.select("#content_weather > table > tbody > tr:nth-child(1) > td:nth-child( "+ str(listin) + ")"))
-
-                if listin < 8:
-                    einput = einput[5:-6]
-                else:
-                    einput = einput[24:-6]
-
+                einput = str(soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(' + str(listin) + ') > span'))[7:-8]
                 embed.add_field(name=insite, value=einput, inline=TFL)
 
                 listin += 1
                 TFL = True
-                if listin == 6:
-                    listin = 8
+                if listin == 5:
+                    listin = 7
                     TFL = False
             
+            embed.set_image(url=str(soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(8) > a'))[10:-51])
+
             channel = client.get_channel(718436389062180917)
             await channel.send(embed=embed)
 
@@ -1874,34 +1863,26 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
 
-        einput = str(soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(2)')) # 가져올 값 선택
-        einput = einput[5:-6]
+        einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(1) > td'))[17:-6] # 가져올 값 선택
 
         if ji != einput:
             dirji.update({'jisin':einput})
 
-            embed = discord.Embed(title="[경고! 지진이 발생하였습니다]", description="지진 자동 감지 시스템\n지진 발생시 자동으로 올라옵니다", color=0x5CD1E5)
+            embed = discord.Embed(title="[경고! 지진이 발생하였습니다]", description="지진 자동 감지 시스템", color=0x5CD1E5)
 
-            einlist = ["발생시각", "규모", "깊이", "최대진도" ,"위치"]
-            listin = 2
-            TFL = False
+            embed.add_field(name='발생시각', value=einput, inline=False)#임베드 추가
+            einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(2) > td > strong'))[9:-17] # 가져올 값 선택
+            embed.add_field(name='규모', value=einput, inline=True)#임베드 추가
+            einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(3) > td > strong > font:nth-child(1)'))[22:-8] # 가져올 값 선택
+            embed.add_field(name='최대진도', value=einput, inline=True)#임베드 추가
+            einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(4) > td:nth-child(4)'))[5:-6] # 가져올 값 선택
+            embed.add_field(name='발생깊이', value=einput, inline=True)#임베드 추가
+            einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(4) > td.td_loc'))[20:-48] # 가져올 값 선택
+            embed.add_field(name='위치', value=einput, inline=False)#임베드 추가
+            einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(5) > td'))[17:-6] # 가져올 값 선택
+            embed.add_field(name='안내사항', value=einput, inline=False)#임베드 추가
+            embed.set_image(url="https://www.weather.go.kr/" + str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div:nth-child(3) > div > img'))[32:-4])
 
-            for insite in einlist:
-                einput = str(soup.select("#excel_body > tbody > tr:nth-child(1) > td:nth-child( " + str(listin) + ")"))
-
-                if listin < 8:
-                    einput = einput[5:-6]
-                else:
-                    einput = einput[24:-6]
-
-                embed.add_field(name=insite, value=einput, inline=TFL)
-
-                listin += 1
-                TFL = True
-                if listin == 6:
-                    listin = 8
-                    TFL = False
-            
             channel = client.get_channel(718436389062180917)
             await channel.send(embed=embed)
 
@@ -2382,10 +2363,10 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
 
-        einput1 = str(soup.select("#d_67381 > div > span > p:nth-child(1) > b"))[29:-5]
+        einput1 = str(soup.select("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(1) > b"))[29:-5]
 
         if cov1 != einput1:
-            einput2 = str(soup.select("#d_67381 > div > span > p:nth-child(3)"))[117:-40]
+            einput2 = str(soup.select("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(3)"))[117:-30]
 
             embed = discord.Embed(title="실시간 코로나 정보", description="[코로나 확진자 자동 알림]", color=0x5CD1E5) #임베드 생성
 
