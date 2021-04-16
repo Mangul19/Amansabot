@@ -627,7 +627,7 @@ async def on_message(message):
             await message.channel.send("벌금을 낼 수 있는 금액보다 너무 큰 금액입니다. 배팅 금액을 다시 입력해주세요\n신용 금액은 평균 금액인 배팅액 * 7 원으로 측정됩니다")
 
     if message.content == "!지진": #최근 지진 정보 접속 및 안내
-        driver.get("https://www.weather.go.kr/weather/earthquake_volcano/domesticlist.jsp")# 사이트 열람
+        driver.get("https://www.weather.go.kr/w/eqk-vol/recent-eqk.do")# 사이트 열람
         driver.implicitly_wait(10)
 
         html = driver.page_source
@@ -1811,7 +1811,7 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
 
         await asyncio.sleep(60*1)
 
-async def background_heijisin():#지진 자동 감지 시스템 **!지진 시스템과 대부분 일치**
+async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진 시스템과 대부분 일치**
     await client.wait_until_ready()
 
     while True:
@@ -1819,7 +1819,7 @@ async def background_heijisin():#지진 자동 감지 시스템 **!지진 시스
         ji = dirji.get()
         ji = ji['jisin']
 
-        driver.get("http://www.weather.go.kr/weather/earthquake_volcano/internationallist.jsp")# 사이트 열람
+        driver.get("https://www.weather.go.kr/w/eqk-vol/search/worldwide.do")# 사이트 열람
         driver.implicitly_wait(10)
 
         html = driver.page_source
@@ -1868,7 +1868,7 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
         ji = dirji.get()
         ji = ji['jisin']
 
-        driver.get("https://www.weather.go.kr/weather/earthquake_volcano/domesticlist.jsp")# 사이트 열람
+        driver.get("https://www.weather.go.kr/w/eqk-vol/recent-eqk.do")# 사이트 열람
         driver.implicitly_wait(10)
 
         html = driver.page_source
@@ -2429,7 +2429,7 @@ async def background_jisinle(): #상위의 지진 시스템과 거의 동일
         einput1 = str(soup.select("#gridTbody > tr:nth-child(1)"))
         print(einput1)
 
-        await asyncio.sleep(60*60)
+        await asyncio.sleep(60*1)
 
 
 
