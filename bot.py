@@ -1863,6 +1863,8 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
 
                 channel = client.get_channel(751716285129424897)
                 await channel.send(embed=embed)
+            elif einput != "":
+               print("불러오기 오류 다음에 다시 시도합니다") 
         except:
             print("오류 발생 다음에 다시 시도합니다")
         await asyncio.sleep(60*1)
@@ -1909,6 +1911,8 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
 
                 channel = client.get_channel(751716285129424897)
                 await channel.send(embed=embed)
+            elif einput != "":
+               print("불러오기 오류 다음에 다시 시도합니다") 
         except:
             print("오류 발생 다음에 다시 시도합니다")
 
@@ -2433,6 +2437,8 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
 
                 channel = client.get_channel(832799360210436107)
                 await channel.send(embed=embed)
+            elif einput != "":
+               print("불러오기 오류 다음에 다시 시도합니다") 
         except:
             print("오류 발생 다음에 다시 시도합니다")
 
@@ -2472,8 +2478,6 @@ async def background_jisinle(): #상위의 지진 시스템과 거의 동일
             print("오류 발생 다음에 다시 시도합니다")
 
         await asyncio.sleep(60*1)
-
-
 
 #선언
 client.loop.create_task(background_backcov())
