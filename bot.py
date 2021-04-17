@@ -634,7 +634,7 @@ async def on_message(message):
         soup = BeautifulSoup(html, 'html.parser')
 
         embed = discord.Embed(title="최근 지진 정보", description="", color=0x5CD1E5) # 임베드 생성
-
+        
         einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(1) > td'))[17:-6] # 가져올 값 선택
         embed.add_field(name='발생시각', value=einput, inline=False)#임베드 추가
         einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(2) > td > strong'))[9:-17] # 가져올 값 선택
@@ -648,7 +648,7 @@ async def on_message(message):
         einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(5) > td'))[17:-6] # 가져올 값 선택
         embed.add_field(name='안내사항', value=einput, inline=False)#임베드 추가
         embed.set_image(url="https://www.weather.go.kr/" + str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div:nth-child(3) > div > img'))[32:-4])
-        
+
         await message.channel.send(embed=embed)
     
     if message.content == "!코드발급":#비밀코드를 어드민만 볼 수 있게 생성
@@ -2375,10 +2375,7 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
 
             dircov.update({'cov1':einput1})
 
-            channel = client.get_channel(718436389062180917)
-            await channel.send(embed=embed)
-
-            channel = client.get_channel(751716285129424897)
+            channel = client.get_channel(832799360210436107)
             await channel.send(embed=embed)
 
         await asyncio.sleep(60*1)
@@ -2417,7 +2414,7 @@ async def background_jisinle(): #상위의 지진 시스템과 거의 동일
 #선언
 client.loop.create_task(background_backcov())
 client.loop.create_task(background_heijisin())
-client.loop.create_task(background_backjisin())
+#client.loop.create_task(background_backjisin())
 client.loop.create_task(background_backrank())
 client.loop.create_task(background_amangochichung())
 client.loop.create_task(background_amangochicdirt())
