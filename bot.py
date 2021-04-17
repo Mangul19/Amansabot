@@ -1768,7 +1768,7 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
     await client.wait_until_ready()
 
     while True:
-        if "10:01" ==  time.strftime('%H:%M', time.localtime(time.time())) or "23:59" ==  time.strftime('%H:%M', time.localtime(time.time())): #특정 시간에 작동
+        if "10:01" ==  time.strftime('%H:%M', time.localtime(time.time())): #특정 시간에 작동
             channel = client.get_channel(718436389062180917)
 
             driver.get("http://ncov.mohw.go.kr/")# 사이트 열람
@@ -1867,7 +1867,7 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
 
         if ji != einput:
             dirji.update({'jisin':einput})
-
+            
             embed = discord.Embed(title="[경고! 지진이 발생하였습니다]", description="지진 자동 감지 시스템", color=0x5CD1E5)
 
             embed.add_field(name='발생시각', value=einput, inline=False)#임베드 추가
@@ -2366,7 +2366,7 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
         einput1 = str(soup.select("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(1) > b"))[29:-5]
 
         if cov1 != einput1:
-            einput2 = str(soup.select("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(3)"))[117:-30]
+            einput2 = str(soup.select("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(3)"))[117:-5]
 
             embed = discord.Embed(title="실시간 코로나 정보", description="[코로나 확진자 자동 알림]", color=0x5CD1E5) #임베드 생성
 
