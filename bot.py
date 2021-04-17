@@ -1786,7 +1786,7 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
                 driver.quit()
                 soup = BeautifulSoup(html, 'html.parser')
 
-                embed = discord.Embed(title="코로나 정보", description="", color=0x5CD1E5) #임베드 생성
+                embed = discord.Embed(title="코로나 정보", color=0x5CD1E5) #임베드 생성
 
                 einput = str(soup.select(
                     'body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(1) > span.before'
@@ -1863,7 +1863,7 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
 
                 channel = client.get_channel(751716285129424897)
                 await channel.send(embed=embed)
-            elif einput != "":
+            elif einput == "":
                print("불러오기 오류 다음에 다시 시도합니다") 
         except:
             print("오류 발생 다음에 다시 시도합니다")
@@ -1911,7 +1911,7 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
 
                 channel = client.get_channel(751716285129424897)
                 await channel.send(embed=embed)
-            elif einput != "":
+            elif einput == "":
                print("불러오기 오류 다음에 다시 시도합니다") 
         except:
             print("오류 발생 다음에 다시 시도합니다")
@@ -2437,7 +2437,7 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
 
                 channel = client.get_channel(832799360210436107)
                 await channel.send(embed=embed)
-            elif einput != "":
+            elif einput1 == "":
                print("불러오기 오류 다음에 다시 시도합니다") 
         except:
             print("오류 발생 다음에 다시 시도합니다")
