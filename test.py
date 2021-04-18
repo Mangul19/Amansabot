@@ -17,9 +17,11 @@ html = driver.page_source
 driver.quit()
 soup = BeautifulSoup(html, 'html.parser')
 
-einput1 = str(soup.select("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(1) > b"))[29:-5]
+einput1 = str(soup.select("body > div.cona_main > div:nth-child(6) > a > p"))[29:-5]
 
 if einput1 != " ":
     print("비어있지 않음")
+    print(einput1)
 elif einput1 == " ":
     print("불러오기 오류 다음에 다시 시도합니다") 
+    print(einput1)

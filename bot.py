@@ -1776,7 +1776,7 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
     while True:
         try:
             if "10:01" ==  time.strftime('%H:%M', time.localtime(time.time())): #특정 시간에 작동
-                channel = client.get_channel(718436389062180917)
+                channel = client.get_channel(832799360210436107)
 
                 driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
                 driver.get("http://ncov.mohw.go.kr/")# 사이트 열람
@@ -1858,10 +1858,7 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
                 
                 embed.set_image(url=str(soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(8) > a'))[10:-51])
 
-                channel = client.get_channel(718436389062180917)
-                await channel.send(embed=embed)
-
-                channel = client.get_channel(751716285129424897)
+                channel = client.get_channel(832799360210436107)
                 await channel.send(embed=embed)
             elif einput == "":
                print("불러오기 오류 다음에 다시 시도합니다") 
@@ -1906,10 +1903,7 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
                 embed.add_field(name='안내사항', value=einput, inline=False)#임베드 추가
                 embed.set_image(url="https://www.weather.go.kr/" + str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div:nth-child(3) > div > img'))[32:-4])
 
-                channel = client.get_channel(718436389062180917)
-                await channel.send(embed=embed)
-
-                channel = client.get_channel(751716285129424897)
+                channel = client.get_channel(832799360210436107)
                 await channel.send(embed=embed)
             elif einput == "":
                print("불러오기 오류 다음에 다시 시도합니다") 
