@@ -74,9 +74,6 @@ async def on_member_remove(member):
 #메세지 수신시
 @client.event
 async def on_message(message):
-    # 답장할 채널은 메세지 받은 채널로 설정
-    channel = message.channel
-
     #봇일 경우 무시
     if message.author == client.user:
         return
