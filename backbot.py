@@ -580,6 +580,7 @@ async def background_code00mukye(): #코드 00번 적금 자동 해지
                         givemoney = round(random.uniform(1, 50) * 1000, 3) #기본 지급 금액 계산후 납부한 횟수에 따라 더 많은 돈을 지급
                         for count in range(mukye00cou):
                             givemoney = round(50000 + (givemoney / 100 * 10), 3)
+                            count
 
                         dirmoney = db.reference('money/' + word) #돈조회 - 주식을 살때 돈 정보가 있는지 미리 확인함으로 초기화 작업 불필요
                         money = dirmoney.get()
@@ -626,6 +627,7 @@ async def background_code01mukye(): #코드 01번 적금 자동 해지 **코드 
                         givemoney = round(random.uniform(1, 35) * 1000, 3)
                         for count in range(mukye01cou):
                             givemoney = round(35000 + (givemoney / 100 * 15), 3)
+                            count
 
                         dirmoney = db.reference('money/' + word)
                         money = dirmoney.get()
