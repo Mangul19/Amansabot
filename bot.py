@@ -87,7 +87,7 @@ async def on_message(message):
         helplist = helplist['helplist']
 
         #봇방에는 채팅을 치지못하게 설정
-        if str(message.channel.id) == "751716285129424897" or str(message.channel.id) == "823395883088871434":
+        if str(message.channel.id) == "751716285129424897" or str(message.channel.id) == "823395883088871434" or str(message.channel.id) == "833629507939467274":
             trsText = message.content.split(" ")
             trsText = trsText[0]
             TRF = trsText in helplist
@@ -97,13 +97,13 @@ async def on_message(message):
                 return
             
         #명령어 사용 구역외에는 명령어 사용 불가능하게 설정
-        if str(message.channel.id) != "792305493459861506" and str(message.channel.id) != "809826202088898570" and str(message.channel.id) != "751716285129424897" and str(message.channel.id) != "823395883088871434": #봇방이 아닌곳 채팅 제한
+        if str(message.channel.id) != "792305493459861506" and str(message.channel.id) != "809826202088898570" and str(message.channel.id) != "751716285129424897" and str(message.channel.id) != "823395883088871434" and str(message.channel.id) != "833629507939467274": #봇방이 아닌곳 채팅 제한
             trsText = message.content.split(" ")
             trsText = trsText[0]
             TRF = trsText in helplist
             if TRF:
                 if trsText == "!TRS":
-                    if str(message.channel.id) != "821752050948767754":
+                    if str(message.channel.id) != "821752050948767754" and str(message.channel.id) == "792305492931772437":
                         await message.delete()
                         await message.channel.send("번역기는 전용 채팅방에 입력하여주세요")
                         return

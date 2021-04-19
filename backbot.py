@@ -46,8 +46,6 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
     while True:
         try:
             if "10:01" ==  time.strftime('%H:%M', time.localtime(time.time())): #특정 시간에 작동
-                channel = client.get_channel(832799360210436107)
-
                 driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
                 driver.get("http://ncov.mohw.go.kr/")# 사이트 열람
                 driver.implicitly_wait(10)
@@ -82,6 +80,10 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
 
                 embed.add_field(name="실시간 코로나 확진자 수", value=einput[4:-5], inline=False)#실시간 확진자 선택 및 임베트 추가
 
+                channel = client.get_channel(832799360210436107)
+                await channel.send(embed=embed)
+
+                channel = client.get_channel(833629507939467274)
                 await channel.send(embed=embed)
         except:
             print("오류 발생 다음에 다시 시도합니다")
@@ -130,6 +132,9 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
 
                 channel = client.get_channel(832799360210436107)
                 await channel.send(embed=embed)
+
+                channel = client.get_channel(833629507939467274)
+                await channel.send(embed=embed)
             elif einput == "":
                print("불러오기 오류 다음에 다시 시도합니다") 
         except:
@@ -174,6 +179,9 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
                 embed.set_image(url="https://www.weather.go.kr/" + str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div:nth-child(3) > div > img'))[32:-4])
 
                 channel = client.get_channel(832799360210436107)
+                await channel.send(embed=embed)
+
+                channel = client.get_channel(833629507939467274)
                 await channel.send(embed=embed)
             elif einput == "":
                print("불러오기 오류 다음에 다시 시도합니다") 
@@ -702,6 +710,9 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
                 dircov.update({'cov1':einput1})
 
                 channel = client.get_channel(832799360210436107)
+                await channel.send(embed=embed)
+
+                channel = client.get_channel(833629507939467274)
                 await channel.send(embed=embed)
             elif einput1 == "":
                print("불러오기 오류 다음에 다시 시도합니다") 
