@@ -97,7 +97,7 @@ async def on_message(message):
                 return
             
         #명령어 사용 구역외에는 명령어 사용 불가능하게 설정
-        if str(message.channel.id) != "792305493459861506" and str(message.channel.id) != "809826202088898570" and str(message.channel.id) != "751716285129424897" and str(message.channel.id) != "823395883088871434" and str(message.channel.id) != "833629507939467274": #봇방이 아닌곳 채팅 제한
+        if str(message.channel.id) != "809826202088898570" and str(message.channel.id) != "751716285129424897" and str(message.channel.id) != "823395883088871434" and str(message.channel.id) != "833629507939467274": #봇방이 아닌곳 채팅 제한
             trsText = message.content.split(" ")
             trsText = trsText[0]
             TRF = trsText in helplist
@@ -492,7 +492,6 @@ async def on_message(message):
             driver.implicitly_wait(10)
 
             html = driver.page_source
-            driver.quit()
             soup = BeautifulSoup(html, 'html.parser')
 
             embed = discord.Embed(title="코로나 정보", description="", color=0x5CD1E5) #임베드 생성
@@ -507,7 +506,6 @@ async def on_message(message):
             ))
             embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput[23:-9] + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
 
-            driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
             driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
             driver.implicitly_wait(10)
 

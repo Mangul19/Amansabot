@@ -39,6 +39,7 @@ options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
+driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
 
 async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나 명령어와 시스템 동일**
     await client.wait_until_ready()
@@ -46,12 +47,10 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
     while True:
         try:
             if "10:01" ==  time.strftime('%H:%M', time.localtime(time.time())): #특정 시간에 작동
-                driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
                 driver.get("http://ncov.mohw.go.kr/")# 사이트 열람
                 driver.implicitly_wait(10)
 
                 html = driver.page_source
-                driver.quit()
                 soup = BeautifulSoup(html, 'html.parser')
 
                 embed = discord.Embed(title="코로나 정보", color=0x5CD1E5) #임베드 생성
@@ -66,12 +65,10 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
                 ))
                 embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput[23:-9] + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
 
-                driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
                 driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
                 driver.implicitly_wait(10)
 
                 html = driver.page_source
-                driver.quit()
                 soup = BeautifulSoup(html, 'html.parser')
 
                 einput = str(soup.select(
@@ -99,12 +96,10 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
             ji = dirji.get()
             ji = ji['jisin']
 
-            driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
             driver.get("https://www.weather.go.kr/w/eqk-vol/search/worldwide.do")# 사이트 열람
             driver.implicitly_wait(10)
 
             html = driver.page_source
-            driver.quit()
             soup = BeautifulSoup(html, 'html.parser')
 
             einput = str(soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(2) > span'))[7:-8] # 가져올 값 선택 
@@ -150,12 +145,10 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
             ji = dirji.get()
             ji = ji['jisin']
 
-            driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
             driver.get("https://www.weather.go.kr/w/eqk-vol/recent-eqk.do")# 사이트 열람
             driver.implicitly_wait(10)
 
             html = driver.page_source
-            driver.quit()
             soup = BeautifulSoup(html, 'html.parser')
 
             einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(1) > td'))[17:-6] # 가져올 값 선택
@@ -689,12 +682,10 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
             cov = dircov.get()
             cov1 = cov['cov1']
 
-            driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
             driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
             driver.implicitly_wait(10)
 
             html = driver.page_source
-            driver.quit()
             soup = BeautifulSoup(html, 'html.parser')
 
             einput1 = str(soup.select("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(1) > b"))[29:-5]
@@ -729,8 +720,6 @@ async def background_jisinle(): #상위의 지진 시스템과 거의 동일
             dirjisin = db.reference('jisinle')
             jisin = dirjisin.get()
             jisin = jisin['jisin']
-
-            driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
             
             driver.get("http://necis.kma.go.kr/necis-dbf/usermain/new/common/userMainNewForm.do")# 사이트 열람
             driver.implicitly_wait(10)
@@ -746,7 +735,6 @@ async def background_jisinle(): #상위의 지진 시스템과 거의 동일
             driver.implicitly_wait(1)
 
             html = driver.page_source
-            driver.quit()
             soup = BeautifulSoup(html, 'html.parser')
 
             einput1 = str(soup.select("#gridTbody > tr:nth-child(1)"))
