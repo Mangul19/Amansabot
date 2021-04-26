@@ -728,11 +728,11 @@ async def background_jisinle(): #상위의 지진 시스템과 거의 동일
             driver.find_element_by_name('email').send_keys(code.necisid)
             driver.find_element_by_name('pPasswd').send_keys(code.necispaw)
             driver.find_element_by_xpath("//*[@id='necisLoginVO']/div/div[1]/a").click()
-            driver.implicitly_wait(10)
+            driver.implicitly_wait(1)
 
             #정보 찾으러 클릭
             driver.find_element_by_xpath("//*[@id='lnb']/div/ul/li[3]/ul/li[3]/a").click()
-            driver.implicitly_wait(10)
+            driver.implicitly_wait(1)
 
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
