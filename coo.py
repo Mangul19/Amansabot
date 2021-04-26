@@ -197,10 +197,11 @@ async def on_message(message):
             trsText = message.content.split(" ")[1]
             await message.delete()
 
-            await message.channel.send(message.author.mention + "님 쿠폰 작업을 시작합니다\n보안을 위해 ID가 포함된 메시지는 삭제됩니다\n게스트 계정을 1회성으로 ID 등록이 되진 않습니다")
+            await message.channel.send(message.author.mention + "님 쿠폰 작업을 시작합니다\n보안을 위해 ID가 포함된 메시지는 삭제됩니다\n게스트 계정 쿠폰 수령은 1회성으로 ID 등록이 되진 않습니다")
 
-            if trsText.split('-')[0] != "GUEST":
+            if trsText.split('-')[0] != "GUEST" and trsText.split('-')[0] != "guest":
                 await message.channel.send("해당명령어는 게스트 계정을 위한 1회용 일괄 수령 시스템입니다 정규 계정은 다른 명령어를 이용해주세요")
+                return
 
             dircoocu = db.reference('coocu/') #쿠키 리스트 가져오기
             coocuch = dircoocu.get()
@@ -219,7 +220,7 @@ async def on_message(message):
                 driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
                 WebDriverWait(driver, 10).until(EC.alert_is_present())
                 alertin = driver.switch_to_alert().text
-                embed.add_field(name=trsText.split('-')[0]  + "-"  + trsText.split('-')[1][:2]+ "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
+                embed.add_field(name=trsText.split('-')[0]  + "-"  + trsText.split('-')[1][:2]+ "-----" + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
                 driver.switch_to_alert().accept()
 
                 if alertin == "DevPlay 계정을 다시 한번 확인해주세요.":
