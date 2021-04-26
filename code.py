@@ -1,6 +1,6 @@
 #discord bot tokken
-token = "ODA2OTM1NjQ1NzAzNjM0OTQ0.YBwrYg.Ss6brdzYheah0ekp3927eU-7zSQ"
-cotoken = "ODM2MTQ0ODY3MzAxMTMwMjcx.YIZulw.B3kD4oq9Zaxf9MeW4-NaIzM2MU0"
+token = "ODA2OTM1NjQ1NzAzNjM0OTQ0.YBwrYg.iUdAGonkiS1ZswklcQOIC_JhLo0"
+cotoken = "ODM2MTQ0ODY3MzAxMTMwMjcx.YIZulw.5E3dDF_SOQnRWP_B6FOQOCjS89I"
 #Naver Open API application ID
 client_id = "A27Hvo3fb2CvbB7ib2Ec"
 #Naver Open API application token
