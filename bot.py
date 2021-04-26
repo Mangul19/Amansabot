@@ -2,7 +2,7 @@
 
 import discord
 import asyncio
-from discord.ext import commands
+from discord.ext import tasks, commands
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
@@ -1066,7 +1066,7 @@ async def on_message(message):
         if message.content == "!게임리스트": #게임 리스트 확인
             dirgame = db.reference('gamelist/') 
             gmaelist = dirgame.get()
-            gmaelist = sorted(list(gmaelist.keys())) #모든 게임리스트 가져온 후 리스트로 전환
+            gmaelist = sorted(list(gmaelist.values())) #모든 게임리스트 가져온 후 리스트로 전환
 
             namelist = ""
             lenCC, chk = 1, 0
