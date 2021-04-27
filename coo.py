@@ -1,7 +1,5 @@
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import discord
 import asyncio
 from discord.ext import commands
@@ -109,14 +107,17 @@ async def on_message(message):
                     dircoocu.delete()
                     for delin in get:
                         coochcu.remove(delin)
-                        print(coocuch)
+
+                    if len(coochcu) == 0:
+                        coochcu.append('KINGDOMWELOVEYOU')
 
                     dircoocu.update({'00':coochcu[0]})
                     count = 1
 
-                    for inin in coochcu[1:]:
-                        dircoocu.update({count:inin})
-                        count += 1
+                    if len(coochcu) > 1:
+                        for inin in coochcu[1:]:
+                            dircoocu.update({count:inin})
+                            count += 1
                 
                 embed.add_field(name="ID를 정상적으로 등록하였습니다",value="앞으로 누군가 쿠폰을 최초 등록하면 이 계정에 쿠폰이 자동 수령됩니다", inline=False)
                 dircooking.update({str(len(cookingch)):trsText})
@@ -172,11 +173,7 @@ async def on_message(message):
 
                 dircoocu.update({str(len(coocuch)):trsText})
             else:
-                channel = client.get_channel(836171133966483492)
-                await channel.send("이미 등록된 쿠폰입니다")
-
-                channel = client.get_channel(836183313253007380)
-                await channel.send("이미 등록된 쿠폰입니다")
+                await message.channel.send("이미 등록된 쿠폰입니다")
         
         if message.content.startswith("!!게스트"): #게스트 아이디 사용
             trsText = message.content.split(" ")[1]

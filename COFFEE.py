@@ -1,7 +1,5 @@
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import discord
 import asyncio
 from discord.ext import commands
@@ -19,9 +17,9 @@ cred = credentials.Certificate("firebase-adminsdk.json")
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
 options = webdriver.ChromeOptions()
-#options.add_argument('headless')
-#options.add_argument('window-size=1920x1080')
-#options.add_argument("disable-gpu")
+options.add_argument('headless')
+options.add_argument('window-size=1920x1080')
+options.add_argument("disable-gpu")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
 driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
@@ -50,7 +48,7 @@ async def on_message(message):
     try:
         CHin = str(message.channel)
         if CHin != '등록채널' and CHin != '질문채널':
-            if message.content != "!!help" and message.content.startswith("!!등록") == False and message.content.startswith("!!쿠폰등록") == False and message.content.startswith("!!게스트") == False:
+            if message.content != "!!help" and message.content.startswith("!!등록") == False and message.content.startswith("!!쿠폰등록") == False:
                 await message.channel.send("대화는 금지!")
                 await message.delete()
 
@@ -66,7 +64,7 @@ async def on_message(message):
             embed.add_field(name="!!쿠폰등록 쿠폰번호", value="쿠폰번호를 등록합니다 등록하면 ID 리스트에 등록된 모든 사람들에게 쿠폰 수령을 시도합니다\nEX) !!쿠폰등록 KINGDOMWELOVEYOU", inline=False)
             await message.channel.send( embed=embed)
 
-        if message.content.startswith("!!등록"): #쿠킹덤 ID 리스트에 사용자 등록
+        if message.content.startswith("!!등록"): #알럽커피 ID 리스트에 사용자 등록
             trsText = message.content.split(" ")[1]
             await message.delete()
 
@@ -77,45 +75,66 @@ async def on_message(message):
             if trsText in coffeech: #해당 ID가 있다면
                 await message.channel.send(message.author.mention + "님은 이미 등록되어있습니다")
             else:# 없다면 리스트로 저장
+
+                
                 await message.channel.send(message.author.mention + "님 등록과 함께 쿠폰 작업을 시작합니다\n보안을 위해 ID가 포함된 메시지는 삭제됩니다")
 
-                dircoffeecu = db.reference('coffeecu/') #쿠키 리스트 가져오기
+                dircoffeecu = db.reference('coffeecu/') #알럽쿠폰 리스트 가져오기
                 coffeecuch = dircoffeecu.get()
                 coffeecuch = list(coffeecuch.values())
                 coffeechcu = coffeecuch
                 get = []
                 embed = discord.Embed(title="처리내용", color=0x5CD1E5)
 
-                for inpu in coffeecuch:
-                    driver.get("https://ilovecoffeen.natris.co.kr/coupon/coupon.html")
-                    driver.implicitly_wait(5)
-                    driver.find_element_by_id('accountId').send_keys(trsText)
-                    driver.find_element_by_id('couponCode').send_keys(inpu)
-                    driver.find_element_by_xpath("//*[@id='submitBtn']").click()
-                    WebDriverWait(driver, 10).until(EC.alert_is_present())
-                    alertin = driver.switch_to_alert().text
-                    embed.add_field(name=trsText[:2] + "-----@" + trsText.split('@')[1] + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
-                    driver.switch_to_alert().accept()
+                if len(coffeecuch) > 0:
+                    for inpu in coffeecuch:
+                        driver.get("https://ilovecoffeen.natris.co.kr/coupon/coupon.html")
+                        driver.implicitly_wait(5)
+                        driver.find_element_by_id('accountId').send_keys(trsText)
+                        driver.find_element_by_id('couponCode').send_keys(inpu)
+                        driver.find_element_by_xpath("//*[@id='submitBtn']").click()
 
-                    if alertin == "DevPlay 계정을 다시 한번 확인해주세요.":
-                        embed.add_field(name="ID 확인요청", value="ID를 다시 확인하여 주세요", inline=False)
-                        await message.channel.send(embed=embed)
-                        return
-                    elif alertin == "사용 기간이 만료된 쿠폰입니다.":
-                        get.append(inpu)
+                        while True:
+                            if driver.find_element_by_xpath('//*[@id="popFail"]').is_displayed():
+                                embed.add_field(name=trsText[:2] + "----- 님에게 " + inpu + " 지급 신청", value="고객 센터에 연락이 필요합니다.", inline=False)
+                                await message.channel.send(embed=embed)
+                                return
+                            elif driver.find_element_by_xpath('//*[@id="popFail5"]').is_displayed():
+                                embed.add_field(name=trsText[:2] + "----- 님에게 " + inpu + " 지급 신청", value="만료된 쿠폰입니다", inline=False)
+                                get.append(inpu)
+                                break
+                            elif driver.find_element_by_xpath('//*[@id="popFail7"]').is_displayed():
+                                embed.add_field(name=trsText[:2] + "----- 님에게 " + inpu + " 지급 신청", value="해당계정은 사용하지 못하는 쿠폰입니다", inline=False)
+                                break
+                            elif driver.find_element_by_xpath('//*[@id="popFail3"]').is_displayed():
+                                embed.add_field(name=trsText[:2] + "----- 님에게 " + inpu + " 지급 신청", value="아이디를 다시 확인하여주세요", inline=False)
+                                await message.channel.send(embed=embed)
+                                return
+                            elif driver.find_element_by_xpath('//*[@id="popFail2"]').is_displayed() or driver.find_element_by_xpath('//*[@id="popFail6"]').is_displayed() or driver.find_element_by_xpath('//*[@id="popFail1"]').is_displayed():
+                                embed.add_field(name=trsText[:2] + "----- 님에게 " + inpu + " 지급 신청", value="이미 사용한 쿠폰입니다", inline=False)
+                                break
+                            elif driver.find_element_by_xpath('//*[@id="popFail4"]').is_displayed():
+                                embed.add_field(name=trsText[:2] + "----- 님에게 " + inpu + " 지급 신청", value="쿠폰 번호 오류", inline=False)
+                                break
+                            elif driver.find_element_by_xpath('//*[@id="popDone"]').is_displayed():
+                                embed.add_field(name=trsText[:2] + "----- 님에게 " + inpu + " 지급 신청", value="우편으로 정상적으로 지급되었습니다", inline=False)
+                                break
 
-                if len(get) > 0:
-                    dircoffeecu.delete()
-                    for delin in get:
-                        coffeechcu.remove(delin)
-                        print(coffeecuch)
+                    if len(get) > 0:
+                        dircoffeecu.delete()
+                        for delin in get:
+                            coffeechcu.remove(delin)
 
-                    dircoffeecu.update({'00':coffeechcu[0]})
-                    count = 1
+                        if len(coffeecuch) == 0:
+                            coffeechcu.append('ILOVECOFFEENDAY')
 
-                    for inin in coffeechcu[1:]:
-                        dircoffeecu.update({count:inin})
-                        count += 1
+                        dircoffeecu.update({'00':coffeechcu[0]})
+                        count = 1
+
+                        if len(coffeecuch) > 1:
+                            for inin in coffeechcu[1:]:
+                                dircoffeecu.update({count:inin})
+                                count += 1
                 
                 embed.add_field(name="ID를 정상적으로 등록하였습니다",value="앞으로 누군가 쿠폰을 최초 등록하면 이 계정에 쿠폰이 자동 수령됩니다", inline=False)
                 dircoffee.update({str(len(coffeech)):trsText})
@@ -143,39 +162,43 @@ async def on_message(message):
                     driver.find_element_by_id('accountId').send_keys(inpu)
                     driver.find_element_by_id('couponCode').send_keys(trsText)
                     driver.find_element_by_xpath("//*[@id='submitBtn']").click()
-                    WebDriverWait(driver, 10).until(EC.alert_is_present())
-                    alertin = driver.switch_to_alert().text
-                    embed.add_field(name=inpu[:2] + "-----@" + inpu.split('@')[1] + "님에게 " + trsText + " 지급 신청", value=alertin, inline=False)
-                    driver.switch_to_alert().accept()
 
-                    if alertin == "쿠폰번호는 16자리입니다. 다시 한 번 확인해 주세요.":
-                        embed.add_field(name="쿠폰 번호 확인 요청", value="쿠폰 번호를 다시 확인하여주세요", inline=False)
-                        await message.channel.send(embed=embed)
-                        return
-                    elif alertin == "쿠폰번호를 다시 한번 확인해주세요.":
-                        embed.add_field(name="쿠폰 번호 확인 요청", value="쿠폰 번호를 다시 확인하여주세요", inline=False)
-                        await message.channel.send(embed=embed)
-                        return
-                    elif alertin == "사용 기간이 만료된 쿠폰입니다.":
-                        embed.add_field(name="쿠폰 번호 확인 요청", value="쿠폰 번호를 다시 확인하여주세요", inline=False)
-                        await message.channel.send(embed=embed)
-                        return
+                    while True:
+                        if driver.find_element_by_xpath('//*[@id="popFail"]').is_displayed():
+                            embed.add_field(name=inpu[:2] + "----- 님에게 " + trsText + " 지급 신청", value="고객 센터에 연락이 필요합니다.", inline=False)
+                            break
+                        elif driver.find_element_by_xpath('//*[@id="popFail5"]').is_displayed():
+                            embed.add_field(name="쿠폰 번호 확인 요청", value="만료된 쿠폰입니다", inline=False)
+                            await message.channel.send(embed=embed)
+                            return
+                        elif driver.find_element_by_xpath('//*[@id="popFail7"]').is_displayed():
+                            embed.add_field(name=inpu[:2] + "----- 님에게 " + trsText + " 지급 신청", value="해당계정은 사용하지 못하는 쿠폰입니다", inline=False)
+                            break
+                        elif driver.find_element_by_xpath('//*[@id="popFail3"]').is_displayed():
+                            embed.add_field(name=inpu[:2] + "----- 님에게 " + trsText + " 지급 신청", value="아이디를 다시 확인하여주세요", inline=False)
+                            break
+                        elif driver.find_element_by_xpath('//*[@id="popFail2"]').is_displayed() or driver.find_element_by_xpath('//*[@id="popFail6"]').is_displayed() or driver.find_element_by_xpath('//*[@id="popFail1"]').is_displayed():
+                            embed.add_field(name=inpu[:2] + "----- 님에게 " + trsText + " 지급 신청", value="이미 사용한 쿠폰입니다", inline=False)
+                            break
+                        elif driver.find_element_by_xpath('//*[@id="popFail4"]').is_displayed():
+                            embed.add_field(name="쿠폰 번호 확인 요청", value="없는 쿠폰입니다", inline=False)
+                            await message.channel.send(embed=embed)
+                            return
+                        elif driver.find_element_by_xpath('//*[@id="popDone"]').is_displayed():
+                            embed.add_field(name=inpu[:2] + "----- 님에게 " + trsText + " 지급 신청", value="우편으로 정상적으로 지급되었습니다", inline=False)
+                            break
                 
                 embed.add_field(name="@everyone 쿠폰 지급 안내", value=str(len(coffeecuch)) + "명 계정에 지급 신청을 완료하였습니다", inline=False)
 
-                channel = client.get_channel(836171133966483492)
+                channel = client.get_channel(836456948555448370)
                 await channel.send(embed=embed)
 
-                channel = client.get_channel(836183313253007380)
+                channel = client.get_channel(836456634196164620)
                 await channel.send(embed=embed)
 
                 dircoffeecu.update({str(len(coffeecuch)):trsText})
             else:
-                channel = client.get_channel(836171133966483492)
-                await channel.send("이미 등록된 쿠폰입니다")
-
-                channel = client.get_channel(836183313253007380)
-                await channel.send("이미 등록된 쿠폰입니다")
+                await message.channel.send("이미 등록된 쿠폰입니다")
     except:
         await message.channel.send(message.author.mention + "님 명령어 실행 중 오류가 발생하였습니다 명령어를 확인하여 주세요")
         await message.delete()
