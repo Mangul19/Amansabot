@@ -192,8 +192,6 @@ async def background_backrank():#랭킹 지원금
         await asyncio.sleep(60*60*timeran + 60*timeranbun)#랜덤 시간동안 기다리기
 
         try:
-            channel = client.get_channel(751716285129424897) # 메세지 송출할 채널 지정
-
             dirmoney = db.reference('money/')
             money = dirmoney.get()
             moneykey = list(money.keys()) #돈을 소지하고 있는 유저 전부 조회
@@ -248,6 +246,10 @@ async def background_backrank():#랭킹 지원금
                 if scor == 9:
                     break
 
+            channel = client.get_channel(832799360210436107)
+            await channel.send(embed=embed)
+
+            channel = client.get_channel(833629507939467274)
             await channel.send(embed=embed)
         except:
             print("오류 발생 다음에 다시 시도합니다")
@@ -259,8 +261,6 @@ async def background_amangochicdirt():#어만고치 청결도 시스템
         await asyncio.sleep(60 * random.randint(5, 15)) #일정 시간 슬립
 
         try:
-            channel = client.get_channel(751716285129424897)
-
             diramangoci = db.reference('amangoci/') #존재하는 어만고치 조회
             amangoci = diramangoci.get()
             amangoci = list(amangoci.keys())
@@ -333,7 +333,11 @@ async def background_amangochicdirt():#어만고치 청결도 시스템
                             money = round(money  + (100000.0 * level), 3) #레벨 업 상금 레벨에 따라 차등 지급 
                             dirmoney.update({word:money})
 
+                            channel = client.get_channel(832799360210436107)
                             await channel.send("ID : " + word[:-5] + "님의 어만고치의 레벨이 상승하였습니다 상금 " + str(10 * level) + "만원을 지급합니다")
+
+                            channel = client.get_channel(833629507939467274)
+                            await channel.send("ID : " + word[:-5] + "님의 어만고치의 레벨이 상승하였습니다 상금 " + str(10 * level) + "만원을 지급합니다")  
                         else:#경험치로 인한 레벨 변화가 없을시
                             diramangociin.update({'exp':exp}) #일반 업데이트
         except:
@@ -420,6 +424,10 @@ async def background_amangochichung():#어만고치 허기도 시스템 ** 어�
                             money = round(money  + (100000.0 * level), 3)
                             dirmoney.update({word:money})
 
+                            channel = client.get_channel(832799360210436107)
+                            await channel.send("ID : " + word[:-5] + "님의 어만고치의 레벨이 상승하였습니다 상금 " + str(10 * level) + "만원을 지급합니다")
+
+                            channel = client.get_channel(833629507939467274)
                             await channel.send("ID : " + word[:-5] + "님의 어만고치의 레벨이 상승하였습니다 상금 " + str(10 * level) + "만원을 지급합니다")
                         else:
                             diramangociin.update({'exp':exp}) 
@@ -431,8 +439,6 @@ async def background_se(): #자동 세금 시스템 - 소지금
 
     while True:
         try:
-            channel = client.get_channel(751716285129424897)
-
             if "00:00" ==  time.strftime('%H:%M', time.localtime(time.time())) or "12:00" ==  time.strftime('%H:%M', time.localtime(time.time())) :#해당 시간에만 작동하게 설정
                 dirmoney = db.reference('money/') #소지금이 있는 모든 사람 조회
                 money = dirmoney.get()
@@ -473,7 +479,11 @@ async def background_se(): #자동 세금 시스템 - 소지금
                     dirlastsegum = db.reference('lastsegum/' + word) #마지막으로 낸 세금 초기화 후 업데이트
                     dirlastsegum.update({word:mey})
             
-                await channel.send("소지금 세금을 납부하게 하였습니다")
+                channel = client.get_channel(832799360210436107)
+                await channel.send(embed=embed)
+
+                channel = client.get_channel(833629507939467274)
+                await channel.send(embed=embed)
         except:
             print("오류 발생 다음에 다시 시도합니다")
         await asyncio.sleep(60*1)
@@ -483,8 +493,6 @@ async def background_segum(): #자동 세금 시스템 - 보유금 ***자동 세
 
     while True:
         try:
-            channel = client.get_channel(751716285129424897)
-
             if "00:00" ==  time.strftime('%H:%M', time.localtime(time.time())) or "12:00" ==  time.strftime('%H:%M', time.localtime(time.time())) :#해당 시간에만 작동하게 설정
                 dirmoney = db.reference('ye/')
                 money = dirmoney.get()
@@ -524,8 +532,12 @@ async def background_segum(): #자동 세금 시스템 - 보유금 ***자동 세
                     segum = segum[word]
                     segum = round(segum + mey, 3)
                     dirlastsegum.update({word:segum}) #마지막으로 납부한 세금 *소지금 세금과 합쳐서 계산 업데이트
-            
+
+                channel = client.get_channel(832799360210436107)
                 await channel.send("보유금 세금을 납부하게 하였습니다")
+
+                channel = client.get_channel(833629507939467274)
+                await channel.send("보유금 세금을 납부하게 하였습니다") 
         except:
             print("오류 발생 다음에 다시 시도합니다")
         await asyncio.sleep(60*1)
@@ -594,6 +606,11 @@ async def background_code00mukye(): #코드 00번 적금 자동 해지
                         dirmukye00in = db.reference('mukye00in/' + word)
                         dirmukye00in.delete() #해당 유저에 대한 주식 00번 정보 삭제
 
+
+                        channel = client.get_channel(832799360210436107)
+                        await channel.send("ID : " + word[:-5] + "님의 사흘적금이 만기되었습니다 원금 + 이자 + 보너스  총 " + str(givemoney) + "원이 입금됩니다")
+
+                        channel = client.get_channel(833629507939467274)
                         await channel.send("ID : " + word[:-5] + "님의 사흘적금이 만기되었습니다 원금 + 이자 + 보너스  총 " + str(givemoney) + "원이 입금됩니다")
         except:
             print("오류 발생 다음에 다시 시도합니다")
@@ -641,6 +658,10 @@ async def background_code01mukye(): #코드 01번 적금 자동 해지 **코드 
                         dirmukye01in = db.reference('mukye01in/' + word)
                         dirmukye01in.delete() #해당 유저에 대한 주식 01번 정보 삭제
 
+                        channel = client.get_channel(832799360210436107)
+                        await channel.send("ID : " + word[:-5] + "님의 닷새적금이 만기되었습니다 원금 + 이자 + 보너스 총 " + str(givemoney) + "원이 입금됩니다")
+
+                        channel = client.get_channel(833629507939467274)
                         await channel.send("ID : " + word[:-5] + "님의 닷새적금이 만기되었습니다 원금 + 이자 + 보너스 총 " + str(givemoney) + "원이 입금됩니다")
         except:
             print("오류 발생 다음에 다시 시도합니다")
