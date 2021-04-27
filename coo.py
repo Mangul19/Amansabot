@@ -24,6 +24,7 @@ options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
+driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
 
 #준비 될 시 시작
 @client.event
@@ -62,8 +63,8 @@ async def on_message(message):
             await message.delete()
             embed = discord.Embed(title="명령어", color=0x5CD1E5)
             embed.add_field(name="!!등록 ID", value="'ID'를 등록하고 만료되지 않은 모든 쿠폰 수령을 시도합니다\nEX) !!등록 TEST@gmail.com", inline=False)
-            embed.add_field(name="!!게스트 ID", value="ID에 만료되지 않은 모든 쿠폰 수령을 시도합니다\n게스트 아이디 전용\nEX) !!쿠폰등록 KINGDOMWELOVEYOU", inline=False)
-            embed.add_field(name="!!쿠폰등록 쿠폰번호", value="쿠폰번호를 등록합니다 등록하면 ID 리스트에 등록된 모든 사람들에게 쿠폰 수령을 시도합니다\n!!게스트 GUEST-123456", inline=False)
+            embed.add_field(name="!!게스트 ID", value="ID에 만료되지 않은 모든 쿠폰 수령을 시도합니다\n게스트 아이디 전용\nEX) !!게스트 GUEST-123456", inline=False)
+            embed.add_field(name="!!쿠폰등록 쿠폰번호", value="쿠폰번호를 등록합니다 등록하면 ID 리스트에 등록된 모든 사람들에게 쿠폰 수령을 시도합니다\nEX) !!쿠폰등록 KINGDOMWELOVEYOU", inline=False)
             await message.channel.send( embed=embed)
 
         if message.content.startswith("!!등록"): #쿠킹덤 ID 리스트에 사용자 등록
@@ -84,8 +85,6 @@ async def on_message(message):
                 coocuch = list(coocuch.values())
                 coochcu = coocuch
                 get = []
-
-                driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
                 embed = discord.Embed(title="처리내용", color=0x5CD1E5)
 
                 for inpu in coocuch:
@@ -123,8 +122,7 @@ async def on_message(message):
                 dircooking.update({str(len(cookingch)):trsText})
 
                 await message.channel.send(embed=embed)
-                driver.close()
-       
+
         if message.content.startswith("!!쿠폰등록"): #쿠킹덤 ID 리스트에 사용자 등록
             await message.channel.send("쿠폰 등록을 실행합니다 잠시만 기다려 주세요")
             trsText = message.content.split(" ")[1]
@@ -134,8 +132,6 @@ async def on_message(message):
             coocuch = list(coocuch.values())
 
             if trsText not in coocuch: #해당 쿠폰이 없다면 실행
-                driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
-
                 dircooking = db.reference('cooking/') #ID 리스트 가져오기
                 cookingch = dircooking.get()
                 cookingch = list(cookingch.values())
@@ -155,27 +151,15 @@ async def on_message(message):
 
                     if alertin == "쿠폰번호는 16자리입니다. 다시 한 번 확인해 주세요.":
                         embed.add_field(name="쿠폰 번호 확인 요청", value="쿠폰 번호를 다시 확인하여주세요", inline=False)
-                        channel = client.get_channel(836171133966483492)
-                        await channel.send(embed=embed)
-
-                        channel = client.get_channel(836183313253007380)
-                        await channel.send(embed=embed)
+                        await message.channel.send(embed=embed)
                         return
                     elif alertin == "쿠폰번호를 다시 한번 확인해주세요.":
                         embed.add_field(name="쿠폰 번호 확인 요청", value="쿠폰 번호를 다시 확인하여주세요", inline=False)
-                        channel = client.get_channel(836171133966483492)
-                        await channel.send(embed=embed)
-
-                        channel = client.get_channel(836183313253007380)
-                        await channel.send(embed=embed)
+                        await message.channel.send(embed=embed)
                         return
                     elif alertin == "사용 기간이 만료된 쿠폰입니다.":
                         embed.add_field(name="쿠폰 번호 확인 요청", value="쿠폰 번호를 다시 확인하여주세요", inline=False)
-                        channel = client.get_channel(836171133966483492)
-                        await channel.send(embed=embed)
-
-                        channel = client.get_channel(836183313253007380)
-                        await channel.send(embed=embed)
+                        await message.channel.send(embed=embed)
                         return
                 
                 channel = client.get_channel(836171133966483492)
@@ -183,7 +167,6 @@ async def on_message(message):
 
                 channel = client.get_channel(836183313253007380)
                 await channel.send(embed=embed)
-                driver.close()
 
                 dircoocu.update({str(len(coocuch)):trsText})
             else:
@@ -209,7 +192,6 @@ async def on_message(message):
             coochcu = coocuch
             get = []
 
-            driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
             embed = discord.Embed(title="처리내용", color=0x5CD1E5)
 
             for inpu in coocuch:
@@ -244,7 +226,6 @@ async def on_message(message):
                     count += 1
 
             await message.channel.send(embed=embed)
-            driver.close()
     except:
         await message.channel.send(message.author.mention + "님 명령어 실행 중 오류가 발생하였습니다 명령어를 확인하여 주세요")
         await message.delete()
