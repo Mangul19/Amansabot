@@ -60,8 +60,8 @@ async def on_message(message):
         if message.content == "!!help":
             await message.delete()
             embed = discord.Embed(title="명령어", color=0x5CD1E5)
-            embed.add_field(name="!!등록 ID", value="'ID'를 등록하고 만료되지 않은 모든 쿠폰 수령을 시도합니다\nEX) !!등록 TEST@gmail.com", inline=False)
-            embed.add_field(name="!!쿠폰등록 쿠폰번호", value="쿠폰번호를 등록합니다 등록하면 ID 리스트에 등록된 모든 사람들에게 쿠폰 수령을 시도합니다\nEX) !!쿠폰등록 KINGDOMWELOVEYOU", inline=False)
+            embed.add_field(name="!!등록 ID", value="'ID'를 등록하고 만료되지 않은 모든 쿠폰 수령을 시도합니다\nEX) !!등록 ABCD12345", inline=False)
+            embed.add_field(name="!!쿠폰등록 쿠폰번호", value="쿠폰번호를 등록합니다 등록하면 ID 리스트에 등록된 모든 사람들에게 쿠폰 수령을 시도합니다\nEX) !!쿠폰등록 ILOVECOFFEENDAY", inline=False)
             await message.channel.send( embed=embed)
 
         if message.content.startswith("!!등록"): #알럽커피 ID 리스트에 사용자 등록
