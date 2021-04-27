@@ -50,7 +50,7 @@ async def on_message(message):
     try:
         CHin = str(message.channel)
         if CHin != '질문채널':
-            if message.content != "!!help" and message.content.startswith("!!등록") == False and message.content.startswith("!!쿠폰등록") == False and message.content.startswith("!!게스트") == False:
+            if message.content != "!!help" and message.content.startswith("!!등록") == False and message.content.startswith("!!쿠폰등록") == False and message.content.startswith("!!게스트") == False and message.content.startswith("!!테스트") == False:
                 await message.channel.send("대화는 금지!")
                 await message.delete()
 
@@ -173,8 +173,9 @@ async def on_message(message):
                         embed = discord.Embed(title="처리내용", color=0x5CD1E5)
                         count = 0
                 
-                embed.add_field(name= "@everyone" + "쿠폰 지급 최종 안내", value=str(len(cookingch)) + "명 계정에 새로 등록된 쿠폰 지급 신청을 완료하였습니다", inline=False)
+                embed.add_field(name= "쿠폰 지급 최종 안내", value=str(len(cookingch)) + "명 계정에 새로 등록된 쿠폰 지급 신청을 완료하였습니다", inline=False)
                 await message.channel.send(embed=embed)
+                await message.channel.send("@everyone 새로운 쿠폰이 등록되어 쿠폰을 일괄 지급하였습니다 확인하여주세요")
 
                 dircoocu.update({str(len(coocuch)):trsText})
             else:
