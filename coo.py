@@ -162,6 +162,8 @@ async def on_message(message):
                         await message.channel.send(embed=embed)
                         return
                 
+                embed.add_field(name="@everyone 쿠폰 지급 안내", value=str(len(coocuch)) + "명 계정에 지급 신청을 완료하였습니다", inline=False)
+
                 channel = client.get_channel(836171133966483492)
                 await channel.send(embed=embed)
 
