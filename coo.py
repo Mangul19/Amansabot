@@ -50,7 +50,7 @@ async def on_message(message):
     try:
         CHin = str(message.channel)
         if CHin != '질문채널':
-            if message.content != "!!help" and message.content.startswith("!!등록") == False and message.content.startswith("!!쿠폰등록") == False and message.content.startswith("!!게스트") == False and message.content.startswith("!!테스트") == False:
+            if message.content != "!!help" and message.content.startswith("!!등록") == False and message.content.startswith("!!쿠폰등록") == False and message.content.startswith("!!게스트") == False:
                 await message.channel.send("대화는 금지!")
                 await message.delete()
 
