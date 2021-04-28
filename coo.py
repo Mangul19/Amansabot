@@ -47,14 +47,16 @@ async def on_message(message):
     #받은 메세지 출력
     print(message.content)
 
+    global driver
+
     try:
         CHin = str(message.channel)
-        if CHin != '질문채널':
+        if CHin != '질문채널' and CHin != '도움채널':
             if message.content != "!!help" and message.content.startswith("!!등록") == False and message.content.startswith("!!쿠폰등록") == False and message.content.startswith("!!게스트") == False:
                 await message.channel.send("대화는 금지!")
                 await message.delete()
 
-        if CHin == '질문채널':
+        if CHin == '질문채널' and CHin != '도움채널':
             if message.content == "!!help" or message.content.startswith("!!등록") or message.content.startswith("!!쿠폰등록"):
                 await message.channel.send("여기는 질문창입니다 명령어는 명령어-입력-채널 에 입력해주세요")
                 await message.delete()
@@ -76,7 +78,7 @@ async def on_message(message):
             cookingch = list(cookingch.values())
 
             if trsText in cookingch: #해당 ID가 있다면
-                await message.channel.send(message.author.mention + "님은 이미 등록되어있습니다")
+                await message.channel.send(message.author.mention + "님은 해당 아이디는 이미 등록되어있습니다")
             else:# 없다면 리스트로 저장
                 await message.channel.send(message.author.mention + "님 등록과 함께 쿠폰 작업을 시작합니다\n보안을 위해 ID가 포함된 메시지는 삭제됩니다")
 
@@ -86,6 +88,7 @@ async def on_message(message):
                 coochcu = coocuch
                 get = []
                 embed = discord.Embed(title="처리내용", color=0x5CD1E5)
+                count = 0
 
                 for inpu in coocuch:
                     driver.get("https://game.devplay.com/coupon/ck/ko")
@@ -104,6 +107,34 @@ async def on_message(message):
                         return
                     elif alertin == "사용 기간이 만료된 쿠폰입니다.":
                         get.append(inpu)
+
+                    while alertin == "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
+                        await message.channel.send("데브 사이트 서버 오류 확인 재시작합니다")
+                        driver.close()
+                        driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
+                        driver.get("https://game.devplay.com/coupon/ck/ko")
+                        driver.implicitly_wait(5)
+                        driver.find_element_by_id('email-box').send_keys(trsText)
+                        driver.find_element_by_id('code-box').send_keys(inpu)
+                        driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
+                        WebDriverWait(driver, 10).until(EC.alert_is_present())
+                        alertin = driver.switch_to_alert().text
+                        embed.add_field(name=trsText[:2] + "-----@" + trsText.split('@')[1] + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
+                        driver.switch_to_alert().accept()
+
+                        count += 1
+                        if count == 20:
+                            embed.add_field(name="쿠폰 지급 중간 안내", value="안내된 계정은 지급이 완료 되었으며 남은 계정에 지급 신청을 계속합니다", inline=False)
+                            await message.channel.send(embed=embed)
+                            embed = discord.Embed(title="처리내용", color=0x5CD1E5)
+                            count = 0
+
+                    count += 1
+                    if count == 20:
+                        embed.add_field(name="쿠폰 지급 중간 안내", value="안내된 계정은 지급이 완료 되었으며 남은 계정에 지급 신청을 계속합니다", inline=False)
+                        await message.channel.send(embed=embed)
+                        embed = discord.Embed(title="처리내용", color=0x5CD1E5)
+                        count = 0
 
                 if len(get) > 0:
                     dircoocu.delete()
@@ -165,6 +196,27 @@ async def on_message(message):
                         embed.add_field(name="쿠폰 번호 확인 요청", value="쿠폰 번호를 다시 확인하여주세요", inline=False)
                         await message.channel.send(embed=embed)
                         return
+                    
+                    while alertin == "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
+                        await message.channel.send("데브 사이트 서버 오류 확인 재시작합니다")
+                        driver.close()
+                        driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
+                        driver.get("https://game.devplay.com/coupon/ck/ko")
+                        driver.implicitly_wait(5)
+                        driver.find_element_by_id('email-box').send_keys(inpu)
+                        driver.find_element_by_id('code-box').send_keys(trsText)
+                        driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
+                        WebDriverWait(driver, 10).until(EC.alert_is_present())
+                        alertin = driver.switch_to_alert().text
+                        embed.add_field(name=inpu[:2] + "-----@" + inpu.split('@')[1] + "님에게 " + trsText + " 지급 신청", value=alertin, inline=False)
+                        driver.switch_to_alert().accept()
+
+                        count += 1
+                        if count == 20:
+                            embed.add_field(name="쿠폰 지급 중간 안내", value="안내된 계정은 지급이 완료 되었으며 남은 계정에 지급 신청을 계속합니다", inline=False)
+                            await message.channel.send(embed=embed)
+                            embed = discord.Embed(title="처리내용", color=0x5CD1E5)
+                            count = 0
 
                     count += 1
                     if count == 20:
@@ -175,7 +227,7 @@ async def on_message(message):
                 
                 embed.add_field(name= "쿠폰 지급 최종 안내", value=str(len(cookingch)) + "명 계정에 새로 등록된 쿠폰 지급 신청을 완료하였습니다", inline=False)
                 await message.channel.send(embed=embed)
-                await message.channel.send("@everyone 새로운 쿠폰이 등록되어 쿠폰을 일괄 지급하였습니다 확인하여주세요")
+                await message.channel.send("@everyone 새로운 " + trsText + " 쿠폰이 등록되어 쿠폰을 일괄 지급하였습니다 확인하여주세요")
 
                 dircoocu.update({str(len(coocuch)):trsText})
             else:
@@ -198,6 +250,7 @@ async def on_message(message):
             get = []
 
             embed = discord.Embed(title="처리내용", color=0x5CD1E5)
+            count = 0
 
             for inpu in coocuch:
                 driver.get("https://game.devplay.com/coupon/ck/ko")
@@ -216,6 +269,34 @@ async def on_message(message):
                     return
                 elif alertin == "사용 기간이 만료된 쿠폰입니다.":
                     get.append(inpu)
+
+                while alertin == "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
+                    await message.channel.send("데브 사이트 서버 오류 확인 재시작합니다")
+                    driver.close()
+                    driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
+                    driver.get("https://game.devplay.com/coupon/ck/ko")
+                    driver.implicitly_wait(5)
+                    driver.find_element_by_id('email-box').send_keys(trsText)
+                    driver.find_element_by_id('code-box').send_keys(inpu)
+                    driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
+                    WebDriverWait(driver, 10).until(EC.alert_is_present())
+                    alertin = driver.switch_to_alert().text
+                    embed.add_field(name=trsText.split('-')[0]  + "-"  + trsText.split('-')[1][:2]+ "-----" + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
+                    driver.switch_to_alert().accept()
+
+                    count += 1
+                    if count == 20:
+                        embed.add_field(name="쿠폰 지급 중간 안내", value="안내된 계정은 지급이 완료 되었으며 남은 계정에 지급 신청을 계속합니다", inline=False)
+                        await message.channel.send(embed=embed)
+                        embed = discord.Embed(title="처리내용", color=0x5CD1E5)
+                        count = 0
+
+                count += 1
+                if count == 20:
+                    embed.add_field(name="쿠폰 지급 중간 안내", value="안내된 계정은 지급이 완료 되었으며 남은 계정에 지급 신청을 계속합니다", inline=False)
+                    await message.channel.send(embed=embed)
+                    embed = discord.Embed(title="처리내용", color=0x5CD1E5)
+                    count = 0
 
             if len(get) > 0:
                 dircoocu.delete()
