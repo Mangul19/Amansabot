@@ -323,7 +323,7 @@ async def on_message(message):
         await message.delete()
 
 async def background(): #자동 공지
-    await asyncio.sleep(60*5)
+    await asyncio.sleep(60*1)
     await client.wait_until_ready()
 
     while True:
@@ -331,11 +331,13 @@ async def background(): #자동 공지
             embed = discord.Embed(title="자동 안내", description="여러가지 문의 및 기능 추가 요청 등의 사항은 언제나 받고 있으니 자유로이 말씀해주시기 바랍니다 " +
                 "제 시스템을 이용해주셔서 감사합니다 " +
                 "새로 오신분들 필독 꼭! 확인해주세요 " +
-                "문제 발생시에는 저를 불러주시면 됩니다 " +
                 "이 디코는 기본적으로 멘션 @ 태그로만 알림이 가도록 설정되어있으니 참고하여 주세요 " +
                 "새 쿠폰이 인식되었을때 자동 수령을 받기 위해서는 ID 등록을 최초 한번 하셔야합니다 " +
                 "오류나 기타 문의시에는 @Han_MangUl 로 관리자를 호출해주세요", color=0x5CD1E5)
             embed.set_footer(text="12시간 주기로 자동 안내됩니다")
+
+            channel = client.get_channel(836191919935324170)
+            await channel.send(embed=embed)
         except:
             print("오류 발생 다음에 다시 시도합니다")
 
