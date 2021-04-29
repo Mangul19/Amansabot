@@ -78,7 +78,7 @@ async def on_message(message):
             cookingch = list(cookingch.values())
 
             if trsText in cookingch: #해당 ID가 있다면
-                await message.channel.send(message.author.mention + "님은 해당 아이디는 이미 등록되어있습니다")
+                await message.channel.send(message.author.mention + "님 해당 아이디는 이미 등록되어있습니다")
             else:# 없다면 리스트로 저장
                 await message.channel.send(message.author.mention + "님 등록과 함께 쿠폰 작업을 시작합니다\n보안을 위해 ID가 포함된 메시지는 삭제됩니다")
 
