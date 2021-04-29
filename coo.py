@@ -98,7 +98,8 @@ async def on_message(message):
                     driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
                     WebDriverWait(driver, 10).until(EC.alert_is_present())
                     alertin = driver.switch_to_alert().text
-                    embed.add_field(name=trsText[:2] + "-----@" + trsText.split('@')[1] + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
+                    if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
+                        embed.add_field(name=trsText[:2] + "-----@" + trsText.split('@')[1] + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
                     driver.switch_to_alert().accept()
 
                     if alertin == "DevPlay 계정을 다시 한번 확인해주세요.":
@@ -119,7 +120,8 @@ async def on_message(message):
                         driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
                         WebDriverWait(driver, 10).until(EC.alert_is_present())
                         alertin = driver.switch_to_alert().text
-                        embed.add_field(name=trsText[:2] + "-----@" + trsText.split('@')[1] + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
+                        if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
+                            embed.add_field(name=trsText[:2] + "-----@" + trsText.split('@')[1] + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
                         driver.switch_to_alert().accept()
 
                         count += 1
@@ -181,7 +183,8 @@ async def on_message(message):
                     driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
                     WebDriverWait(driver, 10).until(EC.alert_is_present())
                     alertin = driver.switch_to_alert().text
-                    embed.add_field(name=inpu[:2] + "-----@" + inpu.split('@')[1] + "님에게 " + trsText + " 지급 신청", value=alertin, inline=False)
+                    if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
+                        embed.add_field(name=inpu[:2] + "-----@" + inpu.split('@')[1] + "님에게 " + trsText + " 지급 신청", value=alertin, inline=False)
                     driver.switch_to_alert().accept()
 
                     if alertin == "쿠폰번호는 16자리입니다. 다시 한 번 확인해 주세요.":
@@ -208,7 +211,8 @@ async def on_message(message):
                         driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
                         WebDriverWait(driver, 10).until(EC.alert_is_present())
                         alertin = driver.switch_to_alert().text
-                        embed.add_field(name=inpu[:2] + "-----@" + inpu.split('@')[1] + "님에게 " + trsText + " 지급 신청", value=alertin, inline=False)
+                        if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
+                            embed.add_field(name=inpu[:2] + "-----@" + inpu.split('@')[1] + "님에게 " + trsText + " 지급 신청", value=alertin, inline=False)
                         driver.switch_to_alert().accept()
 
                         count += 1
@@ -260,7 +264,8 @@ async def on_message(message):
                 driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
                 WebDriverWait(driver, 10).until(EC.alert_is_present())
                 alertin = driver.switch_to_alert().text
-                embed.add_field(name=trsText.split('-')[0]  + "-"  + trsText.split('-')[1][:2]+ "-----" + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
+                if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
+                    embed.add_field(name=trsText.split('-')[0]  + "-"  + trsText.split('-')[1][:2]+ "-----" + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
                 driver.switch_to_alert().accept()
 
                 if alertin == "DevPlay 계정을 다시 한번 확인해주세요.":
@@ -281,7 +286,8 @@ async def on_message(message):
                     driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
                     WebDriverWait(driver, 10).until(EC.alert_is_present())
                     alertin = driver.switch_to_alert().text
-                    embed.add_field(name=trsText.split('-')[0]  + "-"  + trsText.split('-')[1][:2]+ "-----" + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
+                    if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
+                        embed.add_field(name=trsText.split('-')[0]  + "-"  + trsText.split('-')[1][:2]+ "-----" + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
                     driver.switch_to_alert().accept()
 
                     count += 1
@@ -316,4 +322,24 @@ async def on_message(message):
         await message.channel.send(message.author.mention + "님 명령어 실행 중 오류가 발생하였습니다 명령어를 확인하여 주세요")
         await message.delete()
 
+async def background(): #자동 공지
+    await asyncio.sleep(60*5)
+    await client.wait_until_ready()
+
+    while True:
+        try:
+            embed = discord.Embed(title="자동 안내", description="여러가지 문의 및 기능 추가 요청 등의 사항은 언제나 받고 있으니 자유로이 말씀해주시기 바랍니다 " +
+                "제 시스템을 이용해주셔서 감사합니다 " +
+                "새로 오신분들 필독 꼭! 확인해주세요 " +
+                "문제 발생시에는 저를 불러주시면 됩니다 " +
+                "이 디코는 기본적으로 멘션 @ 태그로만 알림이 가도록 설정되어있으니 참고하여 주세요 " +
+                "새 쿠폰이 인식되었을때 자동 수령을 받기 위해서는 ID 등록을 최초 한번 하셔야합니다 " +
+                "오류나 기타 문의시에는 @Han_MangUl 로 관리자를 호출해주세요", color=0x5CD1E5)
+            embed.set_footer(text="12시간 주기로 자동 안내됩니다")
+        except:
+            print("오류 발생 다음에 다시 시도합니다")
+
+        await asyncio.sleep(60*60*12)
+
+client.loop.create_task(background())
 client.run(token)
