@@ -227,7 +227,7 @@ async def on_message(message):
                 
                 embed.add_field(name= "쿠폰 지급 최종 안내", value=str(len(cookingch)) + "명 계정에 새로 등록된 쿠폰 지급 신청을 완료하였습니다", inline=False)
                 await message.channel.send(embed=embed)
-                await message.channel.send("@everyone 새로운 " + trsText + " 쿠폰이 등록되어 쿠폰을 일괄 지급하였습니다 확인하여주세요")
+                await message.channel.send("@everyone 새로운 " + trsText + " 쿠폰이 등록되어 쿠폰을 일괄 지급하였습니다 확인하여주세요\n쿠폰을 입력해주신 " + message.author.mention + "님 감사합니다")
 
                 dircoocu.update({str(len(coocuch)):trsText})
             else:
