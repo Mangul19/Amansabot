@@ -287,7 +287,7 @@ async def on_message(message):
                     WebDriverWait(driver, 10).until(EC.alert_is_present())
                     alertin = driver.switch_to_alert().text
                     if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
-                        embed.add_field(name=trsText.split('-')[0]  + "-"  + trsText.split('-')[1][:2]+ "-----" + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
+                        embed.add_field(name=trsText.split('-')[0]  + " 아이디 인식, 번호 : "  + trsText.split('-')[1][:2]+ "-----" + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
                     driver.switch_to_alert().accept()
 
                     count += 1
@@ -323,7 +323,7 @@ async def on_message(message):
         await message.delete()
 
 async def background(): #자동 공지
-    await asyncio.sleep(60*1)
+    await asyncio.sleep(60*60)
     await client.wait_until_ready()
 
     while True:
