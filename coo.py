@@ -164,7 +164,7 @@ async def on_message(message):
 
         if message.content.startswith("!!쿠폰등록"): #쿠킹덤 ID 리스트에 사용자 등록
             await message.channel.send("쿠폰 등록을 실행합니다 잠시만 기다려 주세요\n시간이 다소 걸리니 처리 완료까지 기다려주세요")
-            trsText = message.content.split(" ")[1]
+            trsText = message.content.split(" ")[1].upper()
 
             dircoocu = db.reference('coocu/') #쿠키 리스트 가져오기
             coocuch = dircoocu.get()
