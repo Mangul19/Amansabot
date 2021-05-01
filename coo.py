@@ -52,14 +52,16 @@ async def on_message(message):
     try:
         CHin = str(message.channel)
         if CHin != '질문채널' and CHin != '도움채널':
-            if message.content != "!!help" and message.content.startswith("!!등록") == False and message.content.startswith("!!쿠폰등록") == False and message.content.startswith("!!게스트") == False:
+            if message.content != "!!help" and message.content.startswith("!!등록") == False and message.content.startswith("!!쿠폰등록") == False and message.content.startswith("!!게스트") == False and message.content.startswith("!!쿠폰리스트") == False:
                 await message.channel.send("대화는 금지!")
                 await message.delete()
+                return
 
-        if CHin == '질문채널' and CHin != '도움채널':
+        if CHin == '질문채널' or CHin == '도움채널':
             if message.content == "!!help" or message.content.startswith("!!등록") or message.content.startswith("!!쿠폰등록"):
                 await message.channel.send("여기는 질문창입니다 명령어는 명령어-입력-채널 에 입력해주세요")
                 await message.delete()
+                return
 
         if message.content == "!!help":
             await message.delete()
@@ -67,6 +69,7 @@ async def on_message(message):
             embed.add_field(name="!!등록 ID", value="'ID'를 등록하고 만료되지 않은 모든 쿠폰 수령을 시도합니다\nEX) !!등록 TEST@gmail.com", inline=False)
             embed.add_field(name="!!게스트 ID", value="ID에 만료되지 않은 모든 쿠폰 수령을 시도합니다\n게스트 아이디 전용\nEX) !!게스트 GUEST-123456", inline=False)
             embed.add_field(name="!!쿠폰등록 쿠폰번호", value="쿠폰번호를 등록합니다 등록하면 ID 리스트에 등록된 모든 사람들에게 쿠폰 수령을 시도합니다\nEX) !!쿠폰등록 KINGDOMWELOVEYOU", inline=False)
+            embed.add_field(name="!!쿠폰리스트", value="쿠폰번호를 리스트를 안내해드립니다", inline=False)
             await message.channel.send( embed=embed)
 
         if message.content.startswith("!!등록"): #쿠킹덤 ID 리스트에 사용자 등록
@@ -231,11 +234,13 @@ async def on_message(message):
                 
                 embed.add_field(name= "쿠폰 지급 최종 안내", value=str(len(cookingch)) + "명 계정에 새로 등록된 쿠폰 지급 신청을 완료하였습니다", inline=False)
                 await message.channel.send(embed=embed)
-                await message.channel.send("@everyone 새로운 " + trsText + " 쿠폰이 등록되어 쿠폰을 일괄 지급하였습니다 확인하여주세요\n쿠폰을 입력해주신 " + message.author.mention + "님 감사합니다")
+
+                channel = client.get_channel(836191919935324170)
+                await channel.send("@everyone 새로운 " + trsText + " 쿠폰이 등록되어 쿠폰을 일괄 지급하였습니다 확인하여주세요\n쿠폰을 입력해주신 " + message.author.mention + "님 감사합니다")
 
                 dircoocu.update({str(len(coocuch)):trsText})
             else:
-                await message.channel.send("이미 등록된 쿠폰입니다")
+                await message.channel.send(message.author.mention + "님 해당 쿠폰은 이미 등록된 쿠폰입니다")
         
         if message.content.startswith("!!게스트"): #게스트 아이디 사용
             trsText = message.content.split(" ")[1]
@@ -265,7 +270,7 @@ async def on_message(message):
                 WebDriverWait(driver, 10).until(EC.alert_is_present())
                 alertin = driver.switch_to_alert().text
                 if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
-                    embed.add_field(name=trsText.split('-')[0]  + "-"  + trsText.split('-')[1][:2]+ "-----" + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
+                    embed.add_field(name=trsText.split('-')[0]  + " 아이디 인식, 번호 : "  + trsText.split('-')[1][:2]+ "-----" + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
                 driver.switch_to_alert().accept()
 
                 if alertin == "DevPlay 계정을 다시 한번 확인해주세요.":
@@ -318,13 +323,37 @@ async def on_message(message):
                     count += 1
 
             await message.channel.send(embed=embed)
+
+        if message.content == "!!쿠폰리스트": #쿠킹덤 ID 리스트에 사용자 등록
+            await message.channel.send("쿠폰 리스트를 불러옵니다")
+
+            dircoocu = db.reference('coocu/') #쿠키 리스트 가져오기
+            coocuch = dircoocu.get()
+            coocuch = list(coocuch.values())
+
+            embed = discord.Embed(title="쿠폰 리스트", color=0x5CD1E5)
+            count = 0
+            incount = 1
+
+            for inpu in coocuch:
+                embed.add_field(name=str(incount) + "번 쿠폰", value=inpu, inline=False)
+
+                count += 1
+                incount += 1
+                if count == 20:
+                    embed.add_field(name="쿠폰 리스트 중간 안내", value="남은 쿠폰리스트를 계속 불러옵니다", inline=False)
+                    await message.channel.send(embed=embed)
+                    embed = discord.Embed(title="쿠폰 리스트", color=0x5CD1E5)
+                    count = 0
+            
+            await message.channel.send(embed=embed)
     except:
         await message.channel.send(message.author.mention + "님 명령어 실행 중 오류가 발생하였습니다 명령어를 확인하여 주세요")
         await message.delete()
 
 async def background(): #자동 공지
-    await asyncio.sleep(60*60)
     await client.wait_until_ready()
+    await asyncio.sleep(60*60)
 
     while True:
         try:
