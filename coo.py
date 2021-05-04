@@ -236,7 +236,7 @@ async def on_message(message):
                 await message.channel.send(embed=embed)
 
                 channel = client.get_channel(836191919935324170)
-                await channel.send("@everyone 새로운 " + trsText + " 쿠폰이 등록되어 쿠폰을 일괄 지급하였습니다 확인하여주세요\n쿠폰을 입력해주신 " + message.author.mention + "님 감사합니다")
+                await channel.send("@everyone 새로운 " + trsText + " 쿠폰이 등록되어 쿠폰을 일괄 지급하였습니다 확인하여주세요\n쿠폰을 입력해주신 " + message.author.mention + "님 감사합니다\n 귀하의 입력에 " + str(len(cookingch)) + "분이 자동 수령을 받으셨습니다")
 
                 dircoocu.update({str(len(coocuch)):trsText})
             else:
