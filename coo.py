@@ -45,8 +45,7 @@ async def on_message(message):
         return
 
     #받은 메세지 및 입력자 출력
-    print(message.author)
-    print(message.content)
+    print(str(message.author) + str(message.author.mention) + " : " + str(message.content))
 
     global driver
 
