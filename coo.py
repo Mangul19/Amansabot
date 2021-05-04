@@ -44,7 +44,8 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    #받은 메세지 출력
+    #받은 메세지 및 입력자 출력
+    print(message.author)
     print(message.content)
 
     global driver
