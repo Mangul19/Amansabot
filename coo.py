@@ -58,7 +58,7 @@ async def on_message(message):
                 return
 
         if CHin == '질문채널' or CHin == '도움채널':
-            if message.content == "!!help" or message.content.startswith("!!등록") or message.content.startswith("!!쿠폰등록"):
+            if message.content == "!!help" or message.content.startswith("!!등록") or message.content.startswith("!!쿠폰등록") and message.content.startswith("!!게스트") and message.content.startswith("!!쿠폰리스트"):
                 await message.channel.send("여기는 질문창입니다 명령어는 명령어-입력-채널 에 입력해주세요")
                 await message.delete()
                 return
