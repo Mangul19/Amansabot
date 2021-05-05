@@ -85,6 +85,8 @@ async def on_message(message):
             else:# 없다면 리스트로 저장
                 await message.channel.send(message.author.mention + "님 등록과 함께 쿠폰 작업을 시작합니다\n보안을 위해 ID가 포함된 메시지는 삭제됩니다")
 
+                dircooking.update({str(len(cookingch)):trsText})
+                
                 dircoocu = db.reference('coocu/') #쿠키 리스트 가져오기
                 coocuch = dircoocu.get()
                 coocuch = list(coocuch.values())
@@ -158,8 +160,6 @@ async def on_message(message):
                             count += 1
                 
                 embed.add_field(name="ID를 정상적으로 등록하였습니다",value="앞으로 누군가 쿠폰을 최초 등록하면 이 계정에 쿠폰이 자동 수령됩니다", inline=False)
-                dircooking.update({str(len(cookingch)):trsText})
-
                 await message.channel.send(embed=embed)
 
         if message.content.startswith("!!쿠폰등록"): #쿠킹덤 ID 리스트에 사용자 등록
@@ -171,6 +171,8 @@ async def on_message(message):
             coocuch = list(coocuch.values())
 
             if trsText not in coocuch: #해당 쿠폰이 없다면 실행
+                dircoocu.update({str(len(coocuch)):trsText})
+                
                 dircooking = db.reference('cooking/') #ID 리스트 가져오기
                 cookingch = dircooking.get()
                 cookingch = list(cookingch.values())
@@ -237,8 +239,6 @@ async def on_message(message):
 
                 channel = client.get_channel(836191919935324170)
                 await channel.send("@everyone 새로운 " + trsText + " 쿠폰이 등록되어 쿠폰을 일괄 지급하였습니다 확인하여주세요\n쿠폰을 입력해주신 " + message.author.mention + "님 감사합니다\n 귀하의 입력에 " + str(len(cookingch)) + "분이 자동 수령을 받으셨습니다")
-
-                dircoocu.update({str(len(coocuch)):trsText})
             else:
                 await message.channel.send(message.author.mention + "님 해당 쿠폰은 이미 등록된 쿠폰입니다")
         
@@ -353,7 +353,7 @@ async def on_message(message):
 
 async def background(): #자동 공지
     await client.wait_until_ready()
-    await asyncio.sleep(60*60)
+    await asyncio.sleep(60*60*6)
 
     while True:
         try:
@@ -363,14 +363,14 @@ async def background(): #자동 공지
                 "이 디코는 기본적으로 멘션 @ 태그로만 알림이 가도록 설정되어있으니 참고하여 주세요\n" +
                 "새 쿠폰이 인식되었을때 자동 수령을 받기 위해서는 ID 등록을 최초 한번 하셔야합니다\n" +
                 "오류나 기타 문의시에는 @Han_MangUl 로 관리자를 호출해주세요\n", color=0x5CD1E5)
-            embed.set_footer(text="6시간 주기로 자동 안내됩니다")
+            embed.set_footer(text="12시간 주기로 자동 안내됩니다")
 
             channel = client.get_channel(836191919935324170)
             await channel.send(embed=embed)
         except:
             print("오류 발생 다음에 다시 시도합니다")
 
-        await asyncio.sleep(60*60*6)
+        await asyncio.sleep(60*60*12)
 
 client.loop.create_task(background())
 client.run(token)
