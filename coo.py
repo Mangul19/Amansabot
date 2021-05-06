@@ -52,13 +52,13 @@ async def on_message(message):
     try:
         CHin = str(message.channel)
         if CHin != '질문채널' and CHin != '도움채널':
-            if message.content != "!!help" and message.content.startswith("!!등록") == False and message.content.startswith("!!쿠폰등록") == False and message.content.startswith("!!게스트") == False and message.content.startswith("!!쿠폰리스트") == False:
+            if message.content != "!!help" and message.content.startswith("!!등록") == False and message.content.startswith("!!쿠폰등록") == False and message.content.startswith("!!게스트") == False and message.content.startswith("!!쿠폰리스트") == False and message.content.startswith("!!당첨확인") == False:
                 await message.channel.send("대화는 금지!")
                 await message.delete()
                 return
 
-        if CHin == '질문채널' or CHin == '도움채널':
-            if message.content == "!!help" or message.content.startswith("!!등록") or message.content.startswith("!!쿠폰등록") or message.content.startswith("!!게스트") or message.content.startswith("!!쿠폰리스트"):
+        if CHin == '질문채널':
+            if message.content == "!!help" or message.content.startswith("!!등록") or message.content.startswith("!!쿠폰등록") or message.content.startswith("!!게스트") or message.content.startswith("!!쿠폰리스트") or message.content.startswith("!!당첨확인"):
                 await message.channel.send("여기는 질문창입니다 명령어는 명령어-입력-채널 에 입력해주세요")
                 await message.delete()
                 return
@@ -70,6 +70,7 @@ async def on_message(message):
             embed.add_field(name="!!게스트 ID", value="ID에 만료되지 않은 모든 쿠폰 수령을 시도합니다\n게스트 아이디 전용\nEX) !!게스트 GUEST-123456", inline=False)
             embed.add_field(name="!!쿠폰등록 쿠폰번호", value="쿠폰번호를 등록합니다 등록하면 ID 리스트에 등록된 모든 사람들에게 쿠폰 수령을 시도합니다\nEX) !!쿠폰등록 KINGDOMWELOVEYOU", inline=False)
             embed.add_field(name="!!쿠폰리스트", value="쿠폰번호를 리스트를 안내해드립니다", inline=False)
+            embed.add_field(name="!!당첨확인 MID", value="10억 감사제 당첨 내역을 조회해드립니다\n주의사항 : 계정 ID가 아닌 MID를 입력하여야합니다\nMID는 게임 접속 후 계정 ID 아래에 위치해있습니다", inline=False)
             await message.channel.send( embed=embed)
 
         if message.content.startswith("!!등록"): #쿠킹덤 ID 리스트에 사용자 등록
@@ -84,8 +85,7 @@ async def on_message(message):
                 await message.channel.send(message.author.mention + "님 해당 아이디는 이미 등록되어있습니다")
             else:# 없다면 리스트로 저장
                 await message.channel.send(message.author.mention + "님 등록과 함께 쿠폰 작업을 시작합니다\n보안을 위해 ID가 포함된 메시지는 삭제됩니다")
-
-                dircooking.update({str(len(cookingch)):trsText})
+                irua = True
                 
                 dircoocu = db.reference('coocu/') #쿠키 리스트 가져오기
                 coocuch = dircoocu.get()
@@ -142,6 +142,10 @@ async def on_message(message):
                         await message.channel.send(embed=embed)
                         embed = discord.Embed(title="처리내용", color=0x5CD1E5)
                         count = 0
+                    
+                    if irua:
+                        dircooking.update({str(len(cookingch)):trsText})
+                        irua = False
 
                 if len(get) > 0:
                     dircoocu.delete()
@@ -171,7 +175,7 @@ async def on_message(message):
             coocuch = list(coocuch.values())
 
             if trsText not in coocuch: #해당 쿠폰이 없다면 실행
-                dircoocu.update({str(len(coocuch)):trsText})
+                irua = True
                 
                 dircooking = db.reference('cooking/') #ID 리스트 가져오기
                 cookingch = dircooking.get()
@@ -233,6 +237,10 @@ async def on_message(message):
                         await message.channel.send(embed=embed)
                         embed = discord.Embed(title="처리내용", color=0x5CD1E5)
                         count = 0
+                    
+                    if irua:
+                        dircoocu.update({str(len(coocuch)):trsText})
+                        irua = False
                 
                 embed.add_field(name= "쿠폰 지급 최종 안내", value=str(len(cookingch)) + "명 계정에 새로 등록된 쿠폰 지급 신청을 완료하였습니다", inline=False)
                 await message.channel.send(embed=embed)
@@ -346,6 +354,24 @@ async def on_message(message):
                     embed = discord.Embed(title="쿠폰 리스트", color=0x5CD1E5)
                     count = 0
             
+            await message.channel.send(embed=embed)
+            
+        if message.content.startswith("!!당첨확인"): #당첨확인
+            await message.channel.send(message.author.mention + "님의 10억 감사제 조회를 시작합니다")
+            trsText = message.content.split(" ")[1]
+            await message.delete()
+            
+            embed = discord.Embed(title="처리내용", color=0x5CD1E5)
+             
+            driver.get("https://thanks10m.cookierun-kingdom.com/ko/")
+            driver.implicitly_wait(10)
+            driver.find_element_by_xpath('//*[@id="top"]/div[3]/form/input').send_keys(trsText)
+            driver.find_element_by_xpath('//*[@id="btn-mid-check"]').click()
+            WebDriverWait(driver, 10).until(EC.alert_is_present())
+            alertin = driver.switch_to_alert().text
+            driver.switch_to_alert().accept()
+            
+            embed.add_field(name=trsText[:2] + "-----" + "님의 당첨 조회 결과 입니다", value=alertin, inline=False)
             await message.channel.send(embed=embed)
     except:
         await message.channel.send(message.author.mention + "님 명령어 실행 중 오류가 발생하였습니다 명령어를 확인하여 주세요")
