@@ -89,12 +89,12 @@ async def on_message(message):
 
                 for inpu in lohcuch:
                     driver.get("https://www.coupon.lordofheroes.com/")
-                    driver.implicitly_wait(5)
+                    driver.implicitly_wait(60)
                     driver.find_element_by_id('input_comp-k7bccwio').click()
                     driver.find_element_by_id('input_comp-k7bccwio').send_keys(trsText)
                     driver.find_element_by_id('input_comp-k7bcdh0c').send_keys(inpu)
                     driver.find_element_by_xpath("//*[@id='comp-k7bces4d']/button").click()
-                    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "POPUPS_ROOT")))
+                    WebDriverWait(driver, 60).until(EC.alert_is_present())(EC.presence_of_element_located((By.ID, "POPUPS_ROOT")))
                     alertin = driver.find_element_by_xpath('//*[@id="comp-k7cr9rhw2"]/p/span/span/span/span/span').text
                     embed.add_field(name=trsText[:2] + "----- 님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
                     driver.switch_to_alert().accept()
@@ -145,11 +145,11 @@ async def on_message(message):
 
                 for inpu in lohch:
                     driver.get("https://www.coupon.lordofheroes.com/")
-                    driver.implicitly_wait(5)
+                    driver.implicitly_wait(60)
                     driver.find_element_by_id('input_comp-k7bccwio').send_keys(inpu)
                     driver.find_element_by_id('input_comp-k7bcdh0c').send_keys(trsText)
                     driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
-                    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "POPUPS_ROOT")))
+                    WebDriverWait(driver, 60).until(EC.alert_is_present())(EC.presence_of_element_located((By.ID, "POPUPS_ROOT")))
                     alertin = driver.find_element_by_xpath('//*[@id="comp-k7cr9rhw2"]/p/span/span/span/span/span').text
                     embed.add_field(name=inpu[:2] + "-----@" + inpu.split('@')[1] + "님에게 " + trsText + " 지급 신청", value=alertin, inline=False)
                     driver.switch_to_alert().accept()

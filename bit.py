@@ -19,7 +19,7 @@ options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) Apple
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
 driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
 driver.get("https://www.bithumb.com/")
-driver.implicitly_wait(10)
+driver.implicitly_wait(60)
 Select(driver.find_element_by_xpath('//*[@id="selectRealTick"]')).select_by_visible_text('30분')
 
 #clinet

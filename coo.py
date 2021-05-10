@@ -9,6 +9,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 import code
+from selenium.webdriver.chrome.options import Options
 
 #clinet
 client = discord.Client()
@@ -18,12 +19,13 @@ token = code.cotoken
 cred = credentials.Certificate("firebase-adminsdk.json")
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
-options = webdriver.ChromeOptions()
+options = Options()
 options.add_argument('headless')
 options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")
-options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
-options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
+#options.add_argument("--proxy-server=socks5://127.0.0.1:9150")
+options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.24 Safari/537.36")
+options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.24 Safari/537.36")
 driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
 
 #준비 될 시 시작
@@ -66,9 +68,9 @@ async def on_message(message):
         if message.content == "!!help":
             await message.delete()
             embed = discord.Embed(title="명령어", color=0x5CD1E5)
-            embed.add_field(name="!!등록 ID", value="'ID'를 등록하고 만료되지 않은 모든 쿠폰 수령을 시도합니다\nEX) !!등록 TEST@gmail.com", inline=False)
-            embed.add_field(name="!!게스트 ID", value="ID에 만료되지 않은 모든 쿠폰 수령을 시도합니다\n게스트 아이디 전용\nEX) !!게스트 GUEST-123456", inline=False)
-            embed.add_field(name="!!쿠폰등록 쿠폰번호", value="쿠폰번호를 등록합니다 등록하면 ID 리스트에 등록된 모든 사람들에게 쿠폰 수령을 시도합니다\nEX) !!쿠폰등록 KINGDOMWELOVEYOU", inline=False)
+            embed.add_field(name="<사용불가>!!등록 ID", value="'ID'를 등록하고 만료되지 않은 모든 쿠폰 수령을 시도합니다\nEX) !!등록 TEST@gmail.com", inline=False)
+            embed.add_field(name="<사용불가>!!게스트 ID", value="ID에 만료되지 않은 모든 쿠폰 수령을 시도합니다\n게스트 아이디 전용\nEX) !!게스트 GUEST-123456", inline=False)
+            embed.add_field(name="<사용불가>!!쿠폰등록 쿠폰번호", value="쿠폰번호를 등록합니다 등록하면 ID 리스트에 등록된 모든 사람들에게 쿠폰 수령을 시도합니다\nEX) !!쿠폰등록 KINGDOMWELOVEYOU", inline=False)
             embed.add_field(name="!!쿠폰리스트", value="쿠폰번호를 리스트를 안내해드립니다", inline=False)
             embed.add_field(name="!!당첨확인 MID", value="10억 감사제 당첨 내역을 조회해드립니다\n주의사항 : 계정 ID가 아닌 MID를 입력하여야합니다\nMID는 게임 접속 후 계정 ID 아래에 위치해있습니다", inline=False)
             await message.channel.send( embed=embed)
@@ -97,11 +99,11 @@ async def on_message(message):
 
                 for inpu in coocuch:
                     driver.get("https://game.devplay.com/coupon/ck/ko")
-                    driver.implicitly_wait(5)
+                    driver.implicitly_wait(60)
                     driver.find_element_by_id('email-box').send_keys(trsText)
                     driver.find_element_by_id('code-box').send_keys(inpu)
                     driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
-                    WebDriverWait(driver, 10).until(EC.alert_is_present())
+                    WebDriverWait(driver, 60).until(EC.alert_is_present())
                     alertin = driver.switch_to_alert().text
                     if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                         embed.add_field(name=trsText[:2] + "-----@" + trsText.split('@')[1] + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
@@ -119,22 +121,15 @@ async def on_message(message):
                         driver.close()
                         driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
                         driver.get("https://game.devplay.com/coupon/ck/ko")
-                        driver.implicitly_wait(5)
+                        driver.implicitly_wait(60)
                         driver.find_element_by_id('email-box').send_keys(trsText)
                         driver.find_element_by_id('code-box').send_keys(inpu)
                         driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
-                        WebDriverWait(driver, 10).until(EC.alert_is_present())
+                        WebDriverWait(driver, 60).until(EC.alert_is_present())
                         alertin = driver.switch_to_alert().text
                         if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                             embed.add_field(name=trsText[:2] + "-----@" + trsText.split('@')[1] + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
                         driver.switch_to_alert().accept()
-
-                        count += 1
-                        if count == 20:
-                            embed.add_field(name="쿠폰 지급 중간 안내", value="안내된 계정은 지급이 완료 되었으며 남은 계정에 지급 신청을 계속합니다", inline=False)
-                            await message.channel.send(embed=embed)
-                            embed = discord.Embed(title="처리내용", color=0x5CD1E5)
-                            count = 0
 
                     count += 1
                     if count == 20:
@@ -186,11 +181,11 @@ async def on_message(message):
 
                 for inpu in cookingch:
                     driver.get("https://game.devplay.com/coupon/ck/ko")
-                    driver.implicitly_wait(5)
+                    driver.implicitly_wait(60)
                     driver.find_element_by_id('email-box').send_keys(inpu)
                     driver.find_element_by_id('code-box').send_keys(trsText)
                     driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
-                    WebDriverWait(driver, 10).until(EC.alert_is_present())
+                    WebDriverWait(driver, 60).until(EC.alert_is_present())
                     alertin = driver.switch_to_alert().text
                     if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                         embed.add_field(name=inpu[:2] + "-----@" + inpu.split('@')[1] + "님에게 " + trsText + " 지급 신청", value=alertin, inline=False)
@@ -214,22 +209,15 @@ async def on_message(message):
                         driver.close()
                         driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
                         driver.get("https://game.devplay.com/coupon/ck/ko")
-                        driver.implicitly_wait(5)
+                        driver.implicitly_wait(60)
                         driver.find_element_by_id('email-box').send_keys(inpu)
                         driver.find_element_by_id('code-box').send_keys(trsText)
                         driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
-                        WebDriverWait(driver, 10).until(EC.alert_is_present())
+                        WebDriverWait(driver, 60).until(EC.alert_is_present())
                         alertin = driver.switch_to_alert().text
                         if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                             embed.add_field(name=inpu[:2] + "-----@" + inpu.split('@')[1] + "님에게 " + trsText + " 지급 신청", value=alertin, inline=False)
                         driver.switch_to_alert().accept()
-
-                        count += 1
-                        if count == 20:
-                            embed.add_field(name="쿠폰 지급 중간 안내", value="안내된 계정은 지급이 완료 되었으며 남은 계정에 지급 신청을 계속합니다", inline=False)
-                            await message.channel.send(embed=embed)
-                            embed = discord.Embed(title="처리내용", color=0x5CD1E5)
-                            count = 0
 
                     count += 1
                     if count == 20:
@@ -271,11 +259,11 @@ async def on_message(message):
 
             for inpu in coocuch:
                 driver.get("https://game.devplay.com/coupon/ck/ko")
-                driver.implicitly_wait(5)
+                driver.implicitly_wait(60)
                 driver.find_element_by_id('email-box').send_keys(trsText)
                 driver.find_element_by_id('code-box').send_keys(inpu)
                 driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
-                WebDriverWait(driver, 10).until(EC.alert_is_present())
+                WebDriverWait(driver, 60).until(EC.alert_is_present())
                 alertin = driver.switch_to_alert().text
                 if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                     embed.add_field(name=trsText.split('-')[0]  + " 아이디 인식, 번호 : "  + trsText.split('-')[1][:2]+ "-----" + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
@@ -293,22 +281,15 @@ async def on_message(message):
                     driver.close()
                     driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
                     driver.get("https://game.devplay.com/coupon/ck/ko")
-                    driver.implicitly_wait(5)
+                    driver.implicitly_wait(60)
                     driver.find_element_by_id('email-box').send_keys(trsText)
                     driver.find_element_by_id('code-box').send_keys(inpu)
                     driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
-                    WebDriverWait(driver, 10).until(EC.alert_is_present())
+                    WebDriverWait(driver, 60).until(EC.alert_is_present())
                     alertin = driver.switch_to_alert().text
                     if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                         embed.add_field(name=trsText.split('-')[0]  + " 아이디 인식, 번호 : "  + trsText.split('-')[1][:2]+ "-----" + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
                     driver.switch_to_alert().accept()
-
-                    count += 1
-                    if count == 20:
-                        embed.add_field(name="쿠폰 지급 중간 안내", value="안내된 계정은 지급이 완료 되었으며 남은 계정에 지급 신청을 계속합니다", inline=False)
-                        await message.channel.send(embed=embed)
-                        embed = discord.Embed(title="처리내용", color=0x5CD1E5)
-                        count = 0
 
                 count += 1
                 if count == 20:
@@ -364,10 +345,10 @@ async def on_message(message):
             embed = discord.Embed(title="처리내용", color=0x5CD1E5)
              
             driver.get("https://thanks10m.cookierun-kingdom.com/ko/")
-            driver.implicitly_wait(10)
+            driver.implicitly_wait(60)
             driver.find_element_by_xpath('//*[@id="top"]/div[3]/form/input').send_keys(trsText)
             driver.find_element_by_xpath('//*[@id="btn-mid-check"]').click()
-            WebDriverWait(driver, 10).until(EC.alert_is_present())
+            WebDriverWait(driver, 60).until(EC.alert_is_present())
             alertin = driver.switch_to_alert().text
             driver.switch_to_alert().accept()
             
