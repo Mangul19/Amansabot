@@ -19,14 +19,30 @@ token = code.cotoken
 cred = credentials.Certificate("firebase-adminsdk.json")
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
-options = Options()
+options = webdriver.ChromeOptions()
 options.add_argument('headless')
 options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")
-#options.add_argument("--proxy-server=socks5://127.0.0.1:9150")
+options.add_argument("start-maximized")
+options.add_experimental_option("excludeSwitches", ["enable-automation"])
+options.add_experimental_option('useAutomationExtension', False)
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.24 Safari/537.36")
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.24 Safari/537.36")
-driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
+options.add_argument("--incognito")
+options.add_argument("disable-infobars")
+options.add_argument("--js-flags=--expose-gc")
+options.add_argument("--enable-precise-memory-info")
+options.add_argument("--disable-popup-blocking")
+options.add_argument("--disable-default-apps")
+PROXY="192.168.0.1:8080"
+webdriver.DesiredCapabilities.CHROME['proxy'] = {
+    "httpProxy": PROXY,
+    "ftpProxy": PROXY,
+    "sslProxy": PROXY,
+    "proxyType": "MANUAL",
+}
+webdriver.DesiredCapabilities.CHROME['acceptSslCerts']=True
+driver = webdriver.Chrome(chrome_options=options, executable_path='chromedriver.exe')
 
 #준비 될 시 시작
 @client.event
@@ -78,6 +94,9 @@ async def on_message(message):
         if message.content.startswith("!!등록"): #쿠킹덤 ID 리스트에 사용자 등록
             trsText = message.content.split(" ")[1]
             await message.delete()
+            
+            await message.channel.send(message.author.mention + "님 해당 명령어는 현재 사용이 불가능합니다")
+            return
 
             dircooking = db.reference('cooking/') #ID 리스트 가져오기
             cookingch = dircooking.get()
@@ -164,6 +183,9 @@ async def on_message(message):
         if message.content.startswith("!!쿠폰등록"): #쿠킹덤 ID 리스트에 사용자 등록
             await message.channel.send("쿠폰 등록을 실행합니다 잠시만 기다려 주세요\n시간이 다소 걸리니 처리 완료까지 기다려주세요")
             trsText = message.content.split(" ")[1].upper()
+            
+            await message.channel.send(message.author.mention + "님 해당 명령어는 현재 사용이 불가능합니다")
+            return
 
             dircoocu = db.reference('coocu/') #쿠키 리스트 가져오기
             coocuch = dircoocu.get()
@@ -241,6 +263,9 @@ async def on_message(message):
         if message.content.startswith("!!게스트"): #게스트 아이디 사용
             trsText = message.content.split(" ")[1]
             await message.delete()
+            
+            await message.channel.send(message.author.mention + "님 해당 명령어는 현재 사용이 불가능합니다")
+            return
 
             await message.channel.send(message.author.mention + "님 쿠폰 작업을 시작합니다\n보안을 위해 ID가 포함된 메시지는 삭제됩니다\n게스트 계정 쿠폰 수령은 1회성으로 ID 등록이 되진 않습니다")
 
