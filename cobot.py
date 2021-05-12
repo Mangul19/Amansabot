@@ -15,6 +15,17 @@ token = code.token
 cred = credentials.Certificate("firebase-adminsdk.json")
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
+#준비 될 시 시작
+@client.event
+async def on_ready():
+    print("로그인 합니다 : " + str(client.user.name) +
+        "\n아래 id로 접속합니다 : " + str(client.user.id) +
+        "\n쿠킹덤 관리 시스템을 시작합니다" + 
+        "\n==========================================")
+    # 이 기능을 이용하여 봇의 상태를 출력
+    mssg = discord.Game("!help|Made by Han_MangUl")
+    await client.change_presence(status=discord.Status.online, activity=mssg)
+
 #메세지 수신시
 @client.event
 async def on_message(message):
@@ -58,7 +69,12 @@ async def on_message(message):
                 teamlist = dirteamlist.get()
                 teamlist = list(teamlist.values())
                 
-                embed = discord.Embed(title="유저 리스트",description=teamlist, color=0x5CD1E5)
+                bteamlist = ""
+                
+                for inpu in teamlist:
+                    bteamlist += inpu + " , "
+                
+                embed = discord.Embed(title="유저 리스트",description=bteamlist, color=0x5CD1E5)
                     
                 await message.channel.send(embed=embed)
                 
@@ -71,6 +87,10 @@ async def on_message(message):
                 trsscr = trssc - teamsc
                 
                 await message.channel.send("점수 처리 결과\n" + trsText + " 님은 " + str(trsscr) + "점을 추가로 획득하셨습니다")
+                
+                if trsscr == 0:
+                    await message.channel.send(trsText + " 님은 활동을 안 하였습니다 주의")
+                
                 dirteamsc.update({trsText:trsscr + teamsc})
                 
             if message.content == "!!정산": #정산 초기화
