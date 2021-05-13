@@ -1,6 +1,7 @@
 #어만사 전용 디스코드 봇
 
 import discord
+from discord import team
 from discord.enums import _is_descriptor
 import firebase_admin
 from firebase_admin import credentials
@@ -42,7 +43,7 @@ async def on_message(message):
                 embed = discord.Embed(title="명령어", color=0x5CD1E5)
                 embed.add_field(name="!!쿠킹등록 '닉네임'", value="'닉네임'을 등록합니다\nEX) !!쿠킹등록 한망울", inline=False)
                 embed.add_field(name="!!확인", value="등록된 유저를 확인합니다", inline=False)
-                embed.add_field(name="!!점수등록 '닉네임' 현재점수", value="현재점수를 입력하여 토벌에 참가하였는지 확인합니다\nEX) !!점수등록 한망울 15682", inline=False)
+                embed.add_field(name="!!점수등록 '닉네임' '현재점수' '금일활동횟수'", value="현재점수를 입력하여 토벌에 참가하였는지 확인합니다\nEX) !!점수등록 한망울 15682 0", inline=False)
                 embed.add_field(name="!!정산", value="토벌 점수를 초기화합니다", inline=False)
                 embed.add_field(name="!!쿠킹삭제 닉네임", value="'닉네임'을 삭제합니다\nEX) !!쿠킹삭제 한망울", inline=False)
                 await message.channel.send( embed=embed)
@@ -81,17 +82,25 @@ async def on_message(message):
             if message.content.startswith("!!점수등록"): #점수 관리
                 trsText = message.content.split(" ")[1]
                 trssc = int(float(message.content.split(" ")[2]))
+                trsscin = int(float(message.content.split(" ")[3]))
                 
                 dirteamsc = db.reference('teamsc/')
-                teamsc = dirteamsc.get()[trsText]
+                teamsc = dirteamsc.get()
+                teamch = teamsc.keys()
+                
+                if trsText not in teamch:
+                    await message.channel.send(trsText + ", 해당 유저는 등록되어 있지 않습니다")
+                    return
+                
+                teamsc = teamsc[[trsText]]
                 trsscr = trssc - teamsc
+
+                await message.channel.send("점수 처리 결과\n" + trsText + " 님은 " + str(trsscr) + "점을 추가로 획득 금일 활동 횟수 : " + str(trsscin) + "/3")
                 
-                await message.channel.send("점수 처리 결과\n" + trsText + " 님은 " + str(trsscr) + "점을 추가로 획득하셨습니다")
-                
-                if trsscr == 0:
+                if trsscin == 0:
                     await message.channel.send(trsText + " 님은 활동을 안 하였습니다 주의")
                 
-                dirteamsc.update({trsText:trsscr + teamsc})
+                dirteamsc.update({trsText:(trsscr + teamsc)})
                 
             if message.content == "!!정산": #정산 초기화
                 dirteamsc = db.reference('teamsc/')
