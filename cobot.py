@@ -41,15 +41,15 @@ async def on_message(message):
         if str(message.channel.id) == "842362278014746696":
             if message.content == "!!help":
                 embed = discord.Embed(title="명령어", color=0x5CD1E5)
-                embed.add_field(name="!!쿠킹등록 '닉네임'", value="'닉네임'을 등록합니다\nEX) !!쿠킹등록 한망울", inline=False)
+                embed.add_field(name="!!등록 '닉네임'", value="'닉네임'을 등록합니다\nEX) !!등록 한망울", inline=False)
                 embed.add_field(name="!!확인", value="등록된 유저를 확인합니다", inline=False)
-                embed.add_field(name="!!점수 '닉네임' '현재점수'", value="현재점수를 입력하여 토벌에 참가하였는지 확인합니다\nEX) !!점수등록 한망울 15682", inline=False)
-                embed.add_field(name="!!횟수 '닉네임' '금일활동횟수'", value="현재점수를 입력하여 토벌에 참가하였는지 확인합니다\nEX) !!점수등록 한망울 0", inline=False)
+                embed.add_field(name="!!점수 '닉네임' '현재점수'", value="현재점수를 입력하여 토벌에 참가하였는지 확인합니다\nEX) !!점수 한망울 15682", inline=False)
+                embed.add_field(name="!!횟수 '닉네임' '금일활동횟수'", value="현재점수를 입력하여 토벌에 참가하였는지 확인합니다\nEX) !!횟수 한망울 2", inline=False)
                 embed.add_field(name="!!정산", value="토벌 점수를 초기화합니다", inline=False)
-                embed.add_field(name="!!쿠킹삭제 닉네임", value="'닉네임'을 삭제합니다\nEX) !!쿠킹삭제 한망울", inline=False)
+                embed.add_field(name="!!삭제 닉네임", value="'닉네임'을 삭제합니다\nEX) !!삭제 한망울", inline=False)
                 await message.channel.send( embed=embed)
             
-            if message.content.startswith("!!쿠킹등록"): #유저 등록
+            if message.content.startswith("!!등록"): #유저 등록
                 trsText = message.content.split(" ")[1]
                 
                 dirteamlist = db.reference('teamlist/')
@@ -137,7 +137,7 @@ async def on_message(message):
                     
                 await message.channel.send("점수 초기화 완료")
                 
-            if message.content.startswith("!!쿠킹삭제"): #유저 삭제
+            if message.content.startswith("!!삭제"): #유저 삭제
                 trsText = message.content.split(" ")[1]
                 
                 dirteamlist = db.reference('teamlist/')
