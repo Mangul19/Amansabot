@@ -38,12 +38,13 @@ async def on_message(message):
     print(str(message.author) + str(message.author.mention) + " : " + str(message.content))
 
     try:
-        if str(message.channel.id) == "841693793828470824":
+        if str(message.channel.id) == "842362278014746696":
             if message.content == "!!help":
                 embed = discord.Embed(title="명령어", color=0x5CD1E5)
                 embed.add_field(name="!!쿠킹등록 '닉네임'", value="'닉네임'을 등록합니다\nEX) !!쿠킹등록 한망울", inline=False)
                 embed.add_field(name="!!확인", value="등록된 유저를 확인합니다", inline=False)
-                embed.add_field(name="!!점수등록 '닉네임' '현재점수' '금일활동횟수'", value="현재점수를 입력하여 토벌에 참가하였는지 확인합니다\nEX) !!점수등록 한망울 15682 0", inline=False)
+                embed.add_field(name="!!점수 '닉네임' '현재점수'", value="현재점수를 입력하여 토벌에 참가하였는지 확인합니다\nEX) !!점수등록 한망울 15682", inline=False)
+                embed.add_field(name="!!횟수 '닉네임' '금일활동횟수'", value="현재점수를 입력하여 토벌에 참가하였는지 확인합니다\nEX) !!점수등록 한망울 0", inline=False)
                 embed.add_field(name="!!정산", value="토벌 점수를 초기화합니다", inline=False)
                 embed.add_field(name="!!쿠킹삭제 닉네임", value="'닉네임'을 삭제합니다\nEX) !!쿠킹삭제 한망울", inline=False)
                 await message.channel.send( embed=embed)
@@ -79,10 +80,9 @@ async def on_message(message):
                     
                 await message.channel.send(embed=embed)
                 
-            if message.content.startswith("!!점수등록"): #점수 관리
+            if message.content.startswith("!!점수"): #점수 관리
                 trsText = message.content.split(" ")[1]
                 trssc = int(float(message.content.split(" ")[2]))
-                trsscin = int(float(message.content.split(" ")[3]))
                 
                 dirteamsc = db.reference('teamsc/')
                 teamsc = dirteamsc.get()
@@ -95,20 +95,31 @@ async def on_message(message):
                 teamsc = teamsc[trsText]
                 trsscr = trssc - teamsc
 
-                await message.channel.send("점수 처리 결과\n" + trsText + " 님은 " + str(trsscr) + "점을 추가로 획득\n금일 활동 횟수 : " + str(trsscin) + "/3")
+                await message.channel.send("점수 처리 결과\n" + trsText + " 님은 " + str(trsscr) + "점을 추가로 획득")
+                
+                dirteamsc.update({trsText:(trsscr + teamsc)})
+                
+            if message.content.startswith("!!횟수"): #점수 관리
+                trsText = message.content.split(" ")[1]
+                trsscin = int(float(message.content.split(" ")[2]))
+
+                await message.channel.send("점수 처리 결과\n" + trsText + " 님, " + "금일 활동 횟수 : " + str(trsscin) + "/3")
                 
                 if trsscin == 0:
                     dirteamscno = db.reference('teamscno/')
                     teamscno = dirteamscno.get()
-                    teamchno = teamscno.keys()
                     
-                    if trsText not in teamchno:
+                    if teamscno != None:
+                        teamchno = teamscno.keys()
+                        
+                        if trsText not in teamchno:
+                            dirteamscno.update({trsText:"Waring"})
+                            await message.channel.send(trsText + " 님은 활동을 안 하였습니다 경고 1회 누적합니다")
+                        else:
+                            await message.channel.send(trsText + " 님은 활동을 안 하였습니다 경고 누적 2회 강제 추방 조치 필요")
+                    else:
                         dirteamscno.update({trsText:"Waring"})
                         await message.channel.send(trsText + " 님은 활동을 안 하였습니다 경고 1회 누적합니다")
-                    else:
-                        await message.channel.send(trsText + " 님은 활동을 안 하였습니다 경고 누적 2회 강제 추방 조치 필요")
-                
-                dirteamsc.update({trsText:(trsscr + teamsc)})
                 
             if message.content == "!!정산": #정산 초기화
                 dirteamsc = db.reference('teamsc/')
