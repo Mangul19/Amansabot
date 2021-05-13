@@ -92,10 +92,10 @@ async def on_message(message):
                     await message.channel.send(trsText + ", 해당 유저는 등록되어 있지 않습니다")
                     return
                 
-                teamsc = teamsc[[trsText]]
+                teamsc = teamsc[trsText]
                 trsscr = trssc - teamsc
 
-                await message.channel.send("점수 처리 결과\n" + trsText + " 님은 " + str(trsscr) + "점을 추가로 획득 금일 활동 횟수 : " + str(trsscin) + "/3")
+                await message.channel.send("점수 처리 결과\n" + trsText + " 님은 " + str(trsscr) + "점을 추가로 획득\n금일 활동 횟수 : " + str(trsscin) + "/3")
                 
                 if trsscin == 0:
                     await message.channel.send(trsText + " 님은 활동을 안 하였습니다 주의")
