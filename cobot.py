@@ -105,7 +105,7 @@ async def on_message(message):
 
                 await message.channel.send("점수 처리 결과\n" + trsText + " 님, " + "금일 활동 횟수 : " + str(trsscin) + "/3")
                 
-                if trsscin == 0:
+                if trsscin < 3:
                     dirteamscno = db.reference('teamscno/')
                     teamscno = dirteamscno.get()
                     
