@@ -103,7 +103,7 @@ async def on_message(message):
                     teamchno = teamscno.keys()
                     
                     if trsText not in teamchno:
-                        dirteamscno.update({trsText:1})
+                        dirteamscno.update({trsText:"Waring"})
                         await message.channel.send(trsText + " 님은 활동을 안 하였습니다 경고 1회 누적합니다")
                     else:
                         await message.channel.send(trsText + " 님은 활동을 안 하였습니다 경고 누적 2회 강제 추방 조치 필요")
@@ -114,6 +114,9 @@ async def on_message(message):
                 dirteamsc = db.reference('teamsc/')
                 teamscr = dirteamsc.get()
                 teamsc = list(teamscr.keys())
+                
+                dirteamscno = db.reference('teamscno/')
+                dirteamscno.delete()
                 
                 for inpu in teamsc:
                     if teamscr[inpu] <= 15000:
@@ -150,7 +153,7 @@ async def on_message(message):
                     
                     if trsText in teamchno:
                         dirteamscno = db.reference('teamscno/'  + trsText)
-                        teamscno = dirteamscno.get()
+                        dirteamscno.delete()
                         
                     await message.channel.send(trsText + " 님을 정상 삭제하였습니다")
                 else:
