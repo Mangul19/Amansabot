@@ -98,7 +98,15 @@ async def on_message(message):
                 await message.channel.send("점수 처리 결과\n" + trsText + " 님은 " + str(trsscr) + "점을 추가로 획득\n금일 활동 횟수 : " + str(trsscin) + "/3")
                 
                 if trsscin == 0:
-                    await message.channel.send(trsText + " 님은 활동을 안 하였습니다 주의")
+                    dirteamscno = db.reference('teamscno/')
+                    teamscno = dirteamscno.get()
+                    teamchno = teamscno.keys()
+                    
+                    if trsText not in teamchno:
+                        dirteamscno.update({trsText:1})
+                        await message.channel.send(trsText + " 님은 활동을 안 하였습니다 경고 1회 누적합니다")
+                    else:
+                        await message.channel.send(trsText + " 님은 활동을 안 하였습니다 경고 누적 2회 강제 추방 조치 필요")
                 
                 dirteamsc.update({trsText:(trsscr + teamsc)})
                 
@@ -135,6 +143,14 @@ async def on_message(message):
                     for inin in teamlist[1:]:
                         dirteamlist.update({count:inin})
                         count += 1
+                    
+                    dirteamscno = db.reference('teamscno/')
+                    teamscno = dirteamscno.get()
+                    teamchno = teamscno.keys()
+                    
+                    if trsText in teamchno:
+                        dirteamscno = db.reference('teamscno/'  + trsText)
+                        teamscno = dirteamscno.get()
                         
                     await message.channel.send(trsText + " 님을 정상 삭제하였습니다")
                 else:
