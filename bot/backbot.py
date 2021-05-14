@@ -20,7 +20,7 @@ import urllib
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 import sys
-sys.path.insert(0, "D:/Desktop/bot-Amansa/__pycache__")
+sys.path.insert(0, "D:/Desktop/bot-Amansa/noup")
 import code
 
 #clinet
@@ -32,7 +32,7 @@ client_id = code.client_id
 #Naver Open API application token
 client_secret = code.client_secret
 #firebase
-cred = credentials.Certificate("D:/Desktop/bot-Amansa/__pycache__/firebase-adminsdk.json")
+cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.json")
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
 options = webdriver.ChromeOptions()
