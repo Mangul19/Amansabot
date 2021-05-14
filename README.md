@@ -4,6 +4,13 @@
 
 중요한 폴더 "noup"은 비공개
 -----
+support Funding
+
+https://toon.at/donate/mulmangul
+
+https://fancim.me/celeb/profile.aspx?cu_id=mulmangul19
+
+-----
 
 1. 셀레니움 하나로 계속 돌려쓰니 기상청 사이트 등에서 접속시 제대로 못 불러오는 오류가 발생
 2. 하나씩 따로 알아서 구동하도록 설정 > 로딩에 시간이 조금 더 걸리지만 오류는 없어짐
