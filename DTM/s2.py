@@ -7,7 +7,7 @@ import matplotlib.font_manager as fm
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
-    dataset = pd.read_csv('networkx.csv')
+    dataset = pd.read_csv('DTM/networkx2.csv')
 
     G_centrality = nx.Graph()
     for ind in range((len(np.where(dataset['freq'] >= 20000)[0]))):
