@@ -45,8 +45,8 @@ async def on_message(message):
                 embed = discord.Embed(title="명령어", color=0x5CD1E5)
                 embed.add_field(name="!!등록 '닉네임'", value="'닉네임'을 등록합니다\nEX) !!등록 한망울", inline=False)
                 embed.add_field(name="!!확인", value="등록된 유저를 확인합니다", inline=False)
-                embed.add_field(name="!!점수 '닉네임' '현재점수'", value="현재점수를 입력하여 토벌에 참가하였는지 확인합니다\nEX) !!점수 한망울 15682", inline=False)
-                embed.add_field(name="!!횟수 '닉네임' '금일활동횟수'", value="현재점수를 입력하여 토벌에 참가하였는지 확인합니다\nEX) !!횟수 한망울 2", inline=False)
+                embed.add_field(name="!!미달 '닉네임'", value="미달 목록을 작성합니다\nEX) !!미달 한망울", inline=False)
+                embed.add_field(name="!!미달해제 '닉네임'", value="미달 목록에서 '닉네임'을 제거합니다\nEX) !!미달해제 한망울", inline=False)
                 embed.add_field(name="!!정산", value="토벌 점수를 초기화합니다", inline=False)
                 embed.add_field(name="!!삭제 닉네임", value="'닉네임'을 삭제합니다\nEX) !!삭제 한망울", inline=False)
                 await message.channel.send( embed=embed)
@@ -60,9 +60,6 @@ async def on_message(message):
                 
                 if trsText not in teamlist:
                     dirteamlist.update({str(len(teamlist)):trsText})
-                    
-                    dirteamsc = db.reference('teamsc/')
-                    dirteamsc.update({trsText:0})
                     
                     await message.channel.send(trsText + " 님을 등록하였습니다")
                 else:
@@ -81,63 +78,39 @@ async def on_message(message):
                 embed = discord.Embed(title="유저 리스트",description=bteamlist, color=0x5CD1E5)
                     
                 await message.channel.send(embed=embed)
-                
-            if message.content.startswith("!!점수"): #점수 관리
-                trsText = message.content.split(" ")[1]
-                trssc = int(float(message.content.split(" ")[2]))
-                
-                dirteamsc = db.reference('teamsc/')
-                teamsc = dirteamsc.get()
-                teamch = teamsc.keys()
-                
-                if trsText not in teamch:
-                    await message.channel.send(trsText + ", 해당 유저는 등록되어 있지 않습니다")
-                    return
-                
-                teamsc = teamsc[trsText]
-                trsscr = trssc - teamsc
-
-                await message.channel.send("점수 처리 결과\n" + trsText + " 님은 " + str(trsscr) + "점을 추가로 획득")
-                
-                dirteamsc.update({trsText:(trsscr + teamsc)})
-                
-            if message.content.startswith("!!횟수"): #점수 관리
-                trsText = message.content.split(" ")[1]
-                trsscin = int(float(message.content.split(" ")[2]))
-
-                await message.channel.send("점수 처리 결과\n" + trsText + " 님, " + "금일 활동 횟수 : " + str(trsscin) + "/3")
-                
-                if trsscin < 3:
-                    dirteamscno = db.reference('teamscno/')
-                    teamscno = dirteamscno.get()
-                    
-                    if teamscno != None:
-                        teamchno = teamscno.keys()
                         
-                        if trsText not in teamchno:
-                            dirteamscno.update({trsText:"Waring"})
-                            await message.channel.send(trsText + " 님은 활동을 안 하였습니다 경고 1회 누적합니다")
-                        else:
-                            await message.channel.send(trsText + " 님은 활동을 안 하였습니다 경고 누적 2회 강제 추방 조치 필요")
-                    else:
-                        dirteamscno.update({trsText:"Waring"})
-                        await message.channel.send(trsText + " 님은 활동을 안 하였습니다 경고 1회 누적합니다")
+            if message.content.startswith("!!미달해제"): #점수 관리
+                trsText = message.content.split(" ")[1]
                 
-            if message.content == "!!정산": #정산 초기화
-                dirteamsc = db.reference('teamsc/')
-                teamscr = dirteamsc.get()
-                teamsc = list(teamscr.keys())
+                dirteamscno = db.reference('teamscno/' + trsText)
+                teamscno = dirteamscno.get()
+                
+                if teamscno != None:
+                    dirteamlist.delete()
+                    await message.channel.send(trsText + " 님 미달을 해제합니다")
+            elif message.content.startswith("!!미달"): #점수 관리
+                trsText = message.content.split(" ")[1]
                 
                 dirteamscno = db.reference('teamscno/')
-                dirteamscno.delete()
+                teamscno = dirteamscno.get()
                 
-                for inpu in teamsc:
-                    if teamscr[inpu] <= 15000:
-                        await message.channel.send(inpu + " 님 점수 미달 점수 : " + str(teamscr[inpu]))
-                               
-                    dirteamsc.update({inpu:0})
+                if teamscno != None:
+                    teamchno = teamscno.keys()
                     
-                await message.channel.send("점수 초기화 완료")
+                    if trsText not in teamchno:
+                        dirteamscno.update({trsText:"Waring"})
+                        await message.channel.send(trsText + " 님은 활동을 안 하였습니다 경고 1회 누적합니다")
+                    else:
+                        await message.channel.send(trsText + " 님은 활동을 안 하였습니다 경고 누적 2회 강제 추방 조치 필요")
+                else:
+                    dirteamscno.update({trsText:"Waring"})
+                    await message.channel.send(trsText + " 님은 활동을 안 하였습니다 경고 1회 누적합니다")      
+                
+            if message.content == "!!정산": #정산 초기화
+                dirteamscno = db.reference('teamscno/')
+                dirteamlist.delete()
+                    
+                await message.channel.send("초기화 완료")
                 
             if message.content.startswith("!!삭제"): #유저 삭제
                 trsText = message.content.split(" ")[1]
@@ -148,8 +121,6 @@ async def on_message(message):
 
                 if trsText in teamlist:
                     dirteamlist.delete()
-                    dirteamsc = db.reference('teamsc/' + trsText)
-                    dirteamsc.delete()
                     
                     teamlist.remove(trsText)
 
