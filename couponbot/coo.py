@@ -406,5 +406,5 @@ async def background(): #자동 공지
 
         await asyncio.sleep(60*60*12)
 
-client.loop.create_task(background())
+#client.loop.create_task(background())
 client.run(token)
