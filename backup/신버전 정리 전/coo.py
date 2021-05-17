@@ -118,11 +118,11 @@ async def on_message(message):
 
                 for inpu in coocuch:
                     driver.get("https://game.devplay.com/coupon/ck/ko")
-                    driver.implicitly_wait(60)
+                    driver.implicitly_wait(3)
                     driver.find_element_by_id('email-box').send_keys(trsText)
                     driver.find_element_by_id('code-box').send_keys(inpu)
                     driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
-                    WebDriverWait(driver, 60).until(EC.alert_is_present())
+                    WebDriverWait(driver, 10).until(EC.alert_is_present())
                     alertin = driver.switch_to_alert().text
                     if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                         embed.add_field(name=trsText[:2] + "-----@" + trsText.split('@')[1] + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
@@ -140,11 +140,11 @@ async def on_message(message):
                         driver.close()
                         driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
                         driver.get("https://game.devplay.com/coupon/ck/ko")
-                        driver.implicitly_wait(60)
+                        driver.implicitly_wait(3)
                         driver.find_element_by_id('email-box').send_keys(trsText)
                         driver.find_element_by_id('code-box').send_keys(inpu)
                         driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
-                        WebDriverWait(driver, 60).until(EC.alert_is_present())
+                        WebDriverWait(driver, 10).until(EC.alert_is_present())
                         alertin = driver.switch_to_alert().text
                         if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                             embed.add_field(name=trsText[:2] + "-----@" + trsText.split('@')[1] + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
@@ -203,11 +203,11 @@ async def on_message(message):
 
                 for inpu in cookingch:
                     driver.get("https://game.devplay.com/coupon/ck/ko")
-                    driver.implicitly_wait(60)
+                    driver.implicitly_wait(3)
                     driver.find_element_by_id('email-box').send_keys(inpu)
                     driver.find_element_by_id('code-box').send_keys(trsText)
                     driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
-                    WebDriverWait(driver, 60).until(EC.alert_is_present())
+                    WebDriverWait(driver, 10).until(EC.alert_is_present())
                     alertin = driver.switch_to_alert().text
                     if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                         embed.add_field(name=inpu[:2] + "-----@" + inpu.split('@')[1] + "님에게 " + trsText + " 지급 신청", value=alertin, inline=False)
@@ -231,11 +231,11 @@ async def on_message(message):
                         driver.close()
                         driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
                         driver.get("https://game.devplay.com/coupon/ck/ko")
-                        driver.implicitly_wait(60)
+                        driver.implicitly_wait(3)
                         driver.find_element_by_id('email-box').send_keys(inpu)
                         driver.find_element_by_id('code-box').send_keys(trsText)
                         driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
-                        WebDriverWait(driver, 60).until(EC.alert_is_present())
+                        WebDriverWait(driver, 10).until(EC.alert_is_present())
                         alertin = driver.switch_to_alert().text
                         if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                             embed.add_field(name=inpu[:2] + "-----@" + inpu.split('@')[1] + "님에게 " + trsText + " 지급 신청", value=alertin, inline=False)
@@ -284,11 +284,11 @@ async def on_message(message):
 
             for inpu in coocuch:
                 driver.get("https://game.devplay.com/coupon/ck/ko")
-                driver.implicitly_wait(60)
+                driver.implicitly_wait(3)
                 driver.find_element_by_id('email-box').send_keys(trsText)
                 driver.find_element_by_id('code-box').send_keys(inpu)
                 driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
-                WebDriverWait(driver, 60).until(EC.alert_is_present())
+                WebDriverWait(driver, 10).until(EC.alert_is_present())
                 alertin = driver.switch_to_alert().text
                 if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                     embed.add_field(name=trsText.split('-')[0]  + " 아이디 인식, 번호 : "  + trsText.split('-')[1][:2]+ "-----" + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
@@ -306,11 +306,11 @@ async def on_message(message):
                     driver.close()
                     driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
                     driver.get("https://game.devplay.com/coupon/ck/ko")
-                    driver.implicitly_wait(60)
+                    driver.implicitly_wait(3)
                     driver.find_element_by_id('email-box').send_keys(trsText)
                     driver.find_element_by_id('code-box').send_keys(inpu)
                     driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
-                    WebDriverWait(driver, 60).until(EC.alert_is_present())
+                    WebDriverWait(driver, 10).until(EC.alert_is_present())
                     alertin = driver.switch_to_alert().text
                     if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                         embed.add_field(name=trsText.split('-')[0]  + " 아이디 인식, 번호 : "  + trsText.split('-')[1][:2]+ "-----" + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
@@ -370,10 +370,10 @@ async def on_message(message):
             embed = discord.Embed(title="처리내용", color=0x5CD1E5)
              
             driver.get("https://thanks10m.cookierun-kingdom.com/ko/")
-            driver.implicitly_wait(60)
+            driver.implicitly_wait(3)
             driver.find_element_by_xpath('//*[@id="top"]/div[3]/form/input').send_keys(trsText)
             driver.find_element_by_xpath('//*[@id="btn-mid-check"]').click()
-            WebDriverWait(driver, 60).until(EC.alert_is_present())
+            WebDriverWait(driver, 10).until(EC.alert_is_present())
             alertin = driver.switch_to_alert().text
             driver.switch_to_alert().accept()
             

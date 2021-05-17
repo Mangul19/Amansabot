@@ -489,7 +489,7 @@ async def on_message(message):
         if message.content == "!코로나":#코로나 정보
             driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
             driver.get("http://ncov.mohw.go.kr/")# 사이트 열람
-            driver.implicitly_wait(60)
+            driver.implicitly_wait(3)
 
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
@@ -507,7 +507,7 @@ async def on_message(message):
             embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput[23:-9] + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
 
             driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
-            driver.implicitly_wait(60)
+            driver.implicitly_wait(3)
 
             html = driver.page_source
             driver.quit()
@@ -625,7 +625,7 @@ async def on_message(message):
         if message.content == "!지진": #최근 지진 정보 접속 및 안내
             driver = webdriver.Chrome("chromedriver.exe", chrome_options=options)
             driver.get("https://www.weather.go.kr/w/eqk-vol/recent-eqk.do")# 사이트 열람
-            driver.implicitly_wait(60)
+            driver.implicitly_wait(3)
 
             html = driver.page_source
             driver.quit()

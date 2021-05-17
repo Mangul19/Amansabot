@@ -50,7 +50,7 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
         try:
             if "10:01" ==  time.strftime('%H:%M', time.localtime(time.time())): #특정 시간에 작동
                 driver.get("http://ncov.mohw.go.kr/")# 사이트 열람
-                driver.implicitly_wait(60)
+                driver.implicitly_wait(3)
 
                 html = driver.page_source
                 soup = BeautifulSoup(html, 'html.parser')
@@ -68,7 +68,7 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
                 embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput[23:-9] + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
 
                 driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
-                driver.implicitly_wait(60)
+                driver.implicitly_wait(3)
 
                 html = driver.page_source
                 soup = BeautifulSoup(html, 'html.parser')
@@ -99,7 +99,7 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
             ji = ji['jisin']
 
             driver.get("https://www.weather.go.kr/w/eqk-vol/search/worldwide.do")# 사이트 열람
-            driver.implicitly_wait(60)
+            driver.implicitly_wait(3)
 
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
@@ -148,7 +148,7 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
             ji = ji['jisin']
 
             driver.get("https://www.weather.go.kr/w/eqk-vol/recent-eqk.do")# 사이트 열람
-            driver.implicitly_wait(60)
+            driver.implicitly_wait(3)
 
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
@@ -706,7 +706,7 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
             cov1 = cov['cov1']
 
             driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
-            driver.implicitly_wait(60)
+            driver.implicitly_wait(3)
 
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
@@ -745,7 +745,7 @@ async def background_jisinle(): #상위의 지진 시스템과 거의 동일
             jisin = jisin['jisin']
             
             driver.get("http://necis.kma.go.kr/necis-dbf/usermain/new/common/userMainNewForm.do")# 사이트 열람
-            driver.implicitly_wait(60)
+            driver.implicitly_wait(3)
 
             #로그인
             driver.find_element_by_name('email').send_keys(code.necisid)
