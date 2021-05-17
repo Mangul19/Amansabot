@@ -86,7 +86,7 @@ async def on_message(message):
                 teamscno = dirteamscno.get()
                 
                 if teamscno != None:
-                    dirteamlist.delete()
+                    dirteamscno.delete()
                     await message.channel.send(trsText + " 님 미달을 해제합니다")
             elif message.content.startswith("!!미달"): #점수 관리
                 trsText = message.content.split(" ")[1]
