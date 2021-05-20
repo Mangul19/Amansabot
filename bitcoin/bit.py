@@ -8,7 +8,10 @@ from discord.ext import commands
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
+import sys
+sys.path.insert(0, "D:/Desktop/bot-Amansa/noup")
 import code
+import datetime
 from bs4 import BeautifulSoup
 
 options = webdriver.ChromeOptions()
@@ -17,10 +20,10 @@ options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
+
 driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
 driver.get("https://www.bithumb.com/")
 driver.implicitly_wait(3)
-Select(driver.find_element_by_xpath('//*[@id="selectRealTick"]')).select_by_visible_text('30분')
 
 #clinet
 client = discord.Client()
@@ -41,22 +44,201 @@ async def on_ready():
 async def back():
     await client.wait_until_ready()
     
+    
+    channel = client.get_channel(844801705726967809)
+    msg = await channel.send("시작합니다!")
+    
     while True:
-        html = driver.page_source
-        soup = BeautifulSoup(html, 'html.parser')
+        try:
+            
+            Select(driver.find_element_by_xpath('//*[@id="selectRealTick"]')).select_by_visible_text('30분')
+            
+            list = "업데이트 시각 : " + str(datetime.datetime.now()) + "\n"
+            
+            si = driver.find_element_by_xpath('//*[@id="assetRealBTC_KRW"]').text
+            ch = driver.find_element_by_xpath('//*[@id="assetRealPriceBTC_KRW"]').text
+            chpu = driver.find_element_by_xpath('//*[@id="assetRealRateBTC_KRW"]').text
+            
+            list += "비트코인 정보 [변동률 30분]\n<비트코인>\n실시간 시세 : " + si  + "\n변동률 " + ch + " / " + chpu + "\n"
+            
+            si = driver.find_element_by_xpath('//*[@id="assetRealXRP_KRW"]').text
+            ch = driver.find_element_by_xpath('//*[@id="assetRealPriceXRP_KRW"]').text
+            chpu = driver.find_element_by_xpath('//*[@id="assetRealRateXRP_KRW"]').text
+            
+            list += "<리플>\n실시간 시세 : " + si  + "\n변동률 " + ch + " / " + chpu + "\n"
+            
+            si = driver.find_element_by_xpath('//*[@id="assetRealETH_KRW"]').text
+            ch = driver.find_element_by_xpath('//*[@id="assetRealPriceETH_KRW"]').text
+            chpu = driver.find_element_by_xpath('//*[@id="assetRealRateETH_KRW"]').text
+            
+            list += "<이더리움>\n실시간 시세 : " + si  + "\n변동률 " + ch + " / " + chpu + "\n"
+            
+            await msg.edit(content=list)
+            await asyncio.sleep(1)
+        except:
+            await msg.edit(content="오류 발생 재접속을 시도합니다")
+            driver.get("https://www.bithumb.com/")
+            driver.implicitly_wait(3)
+            
+async def back1():
+    await client.wait_until_ready()
+    
+    
+    channel = client.get_channel(844830345164750858)
+    msg = await channel.send("시작합니다!")
+    
+    while True:
+        try:
+            
+            Select(driver.find_element_by_xpath('//*[@id="selectRealTick"]')).select_by_visible_text('1시간')
+    
+            list = "업데이트 시각 : " + str(datetime.datetime.now()) + "\n"
+            
+            si = driver.find_element_by_xpath('//*[@id="assetRealBTC_KRW"]').text
+            ch = driver.find_element_by_xpath('//*[@id="assetRealPriceBTC_KRW"]').text
+            chpu = driver.find_element_by_xpath('//*[@id="assetRealRateBTC_KRW"]').text
+            
+            list += "비트코인 정보 [변동률 1시간]\n<비트코인>\n실시간 시세 : " + si  + "\n변동률 " + ch + " / " + chpu + "\n"
+            
+            si = driver.find_element_by_xpath('//*[@id="assetRealXRP_KRW"]').text
+            ch = driver.find_element_by_xpath('//*[@id="assetRealPriceXRP_KRW"]').text
+            chpu = driver.find_element_by_xpath('//*[@id="assetRealRateXRP_KRW"]').text
+            
+            list += "<리플>\n실시간 시세 : " + si  + "\n변동률 " + ch + " / " + chpu + "\n"
+            
+            si = driver.find_element_by_xpath('//*[@id="assetRealETH_KRW"]').text
+            ch = driver.find_element_by_xpath('//*[@id="assetRealPriceETH_KRW"]').text
+            chpu = driver.find_element_by_xpath('//*[@id="assetRealRateETH_KRW"]').text
+            
+            list += "<이더리움>\n실시간 시세 : " + si  + "\n변동률 " + ch + " / " + chpu + "\n"
+            
+            await msg.edit(content=list)
+            await asyncio.sleep(1)
+        except:
+            await msg.edit(content="오류 발생 재접속을 시도합니다")
+            driver.get("https://www.bithumb.com/")
+            driver.implicitly_wait(3)
+            
+async def back12():
+    await client.wait_until_ready()
+    
+    
+    channel = client.get_channel(844830636321275945)
+    msg = await channel.send("시작합니다!")
+    
+    while True:
+        try:
+            
+            Select(driver.find_element_by_xpath('//*[@id="selectRealTick"]')).select_by_visible_text('12시간')  
+    
+            list = "업데이트 시각 : " + str(datetime.datetime.now()) + "\n"
+            
+            si = driver.find_element_by_xpath('//*[@id="assetRealBTC_KRW"]').text
+            ch = driver.find_element_by_xpath('//*[@id="assetRealPriceBTC_KRW"]').text
+            chpu = driver.find_element_by_xpath('//*[@id="assetRealRateBTC_KRW"]').text
+            
+            list += "비트코인 정보 [변동률 12시간]\n<비트코인>\n실시간 시세 : " + si  + "\n변동률 " + ch + " / " + chpu + "\n"
+            
+            si = driver.find_element_by_xpath('//*[@id="assetRealXRP_KRW"]').text
+            ch = driver.find_element_by_xpath('//*[@id="assetRealPriceXRP_KRW"]').text
+            chpu = driver.find_element_by_xpath('//*[@id="assetRealRateXRP_KRW"]').text
+            
+            list += "<리플>\n실시간 시세 : " + si  + "\n변동률 " + ch + " / " + chpu + "\n"
+            
+            si = driver.find_element_by_xpath('//*[@id="assetRealETH_KRW"]').text
+            ch = driver.find_element_by_xpath('//*[@id="assetRealPriceETH_KRW"]').text
+            chpu = driver.find_element_by_xpath('//*[@id="assetRealRateETH_KRW"]').text
+            
+            list += "<이더리움>\n실시간 시세 : " + si  + "\n변동률 " + ch + " / " + chpu + "\n"
+            
+            await msg.edit(content=list)
+            await asyncio.sleep(1)
+        except:
+            await msg.edit(content="오류 발생 재접속을 시도합니다")
+            driver.get("https://www.bithumb.com/")
+            driver.implicitly_wait(3)
+            
+async def back24():
+    await client.wait_until_ready()
+    
+    
+    channel = client.get_channel(844830659519840257)
+    msg = await channel.send("시작합니다!")
+    
+    while True:
+        try:
+            
+            Select(driver.find_element_by_xpath('//*[@id="selectRealTick"]')).select_by_visible_text('24시간')
+    
+            list = "업데이트 시각 : " + str(datetime.datetime.now()) + "\n"
+            
+            si = driver.find_element_by_xpath('//*[@id="assetRealBTC_KRW"]').text
+            ch = driver.find_element_by_xpath('//*[@id="assetRealPriceBTC_KRW"]').text
+            chpu = driver.find_element_by_xpath('//*[@id="assetRealRateBTC_KRW"]').text
+            
+            list += "비트코인 정보 [변동률 24시간]\n<비트코인>\n실시간 시세 : " + si  + "\n변동률 " + ch + " / " + chpu + "\n"
+            
+            si = driver.find_element_by_xpath('//*[@id="assetRealXRP_KRW"]').text
+            ch = driver.find_element_by_xpath('//*[@id="assetRealPriceXRP_KRW"]').text
+            chpu = driver.find_element_by_xpath('//*[@id="assetRealRateXRP_KRW"]').text
+            
+            list += "<리플>\n실시간 시세 : " + si  + "\n변동률 " + ch + " / " + chpu + "\n"
+            
+            si = driver.find_element_by_xpath('//*[@id="assetRealETH_KRW"]').text
+            ch = driver.find_element_by_xpath('//*[@id="assetRealPriceETH_KRW"]').text
+            chpu = driver.find_element_by_xpath('//*[@id="assetRealRateETH_KRW"]').text
+            
+            list += "<이더리움>\n실시간 시세 : " + si  + "\n변동률 " + ch + " / " + chpu + "\n"
+            
+            await msg.edit(content=list)
+            await asyncio.sleep(1)
+        except:
+            await msg.edit(content="오류 발생 재접속을 시도합니다")
+            driver.get("https://www.bithumb.com/")
+            driver.implicitly_wait(3)
 
-        embed = discord.Embed(title="비트코인 정보 [변동률 30분]", color=0x5CD1E5) #임베드 생성
-
-        si = driver.find_element_by_xpath('//*[@id="assetRealBTC_KRW"]').text
-        ch = driver.find_element_by_xpath('//*[@id="assetRealPriceBTC_KRW"]').text
-        chpu = driver.find_element_by_xpath('//*[@id="assetRealRateBTC_KRW"]').text
-
-        embed.add_field(name="비트코인", value="실시간 시세 : " + si  + "\n변동률 " + ch + " / " + chpu, inline=False) # 임베드 추가
-        
-        channel = client.get_channel(839142822556860459)
-        await channel.send(embed=embed)
-        
-        await asyncio.sleep(10)
+async def back0():
+    await client.wait_until_ready()
+    
+    
+    channel = client.get_channel(844830680625184788)
+    msg = await channel.send("시작합니다!")
+    
+    while True:
+        try:
+            
+            Select(driver.find_element_by_xpath('//*[@id="selectRealTick"]')).select_by_visible_text('전일대비')
+    
+            list = "업데이트 시각 : " + str(datetime.datetime.now()) + "\n"
+            
+            si = driver.find_element_by_xpath('//*[@id="assetRealBTC_KRW"]').text
+            ch = driver.find_element_by_xpath('//*[@id="assetRealPriceBTC_KRW"]').text
+            chpu = driver.find_element_by_xpath('//*[@id="assetRealRateBTC_KRW"]').text
+            
+            list += "비트코인 정보 [변동률 전일대비]\n<비트코인>\n실시간 시세 : " + si  + "\n변동률 " + ch + " / " + chpu + "\n"
+            
+            si = driver.find_element_by_xpath('//*[@id="assetRealXRP_KRW"]').text
+            ch = driver.find_element_by_xpath('//*[@id="assetRealPriceXRP_KRW"]').text
+            chpu = driver.find_element_by_xpath('//*[@id="assetRealRateXRP_KRW"]').text
+            
+            list += "<리플>\n실시간 시세 : " + si  + "\n변동률 " + ch + " / " + chpu + "\n"
+            
+            si = driver.find_element_by_xpath('//*[@id="assetRealETH_KRW"]').text
+            ch = driver.find_element_by_xpath('//*[@id="assetRealPriceETH_KRW"]').text
+            chpu = driver.find_element_by_xpath('//*[@id="assetRealRateETH_KRW"]').text
+            
+            list += "<이더리움>\n실시간 시세 : " + si  + "\n변동률 " + ch + " / " + chpu + "\n"
+            
+            await msg.edit(content=list)
+            await asyncio.sleep(1)
+        except:
+            await msg.edit(content="오류 발생 재접속을 시도합니다")
+            driver.get("https://www.bithumb.com/")
+            driver.implicitly_wait(3)
         
 client.loop.create_task(back())
+client.loop.create_task(back1())
+#client.loop.create_task(back12())
+#client.loop.create_task(back24())
+#client.loop.create_task(back0())
 client.run(token)
