@@ -9,7 +9,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 import sys
-sys.path.insert(0, "D:/Desktop/bot-Amansa/noup")
+sys.path.insert(0, "D:/Desktop/중요파일/bot-Amansa/noup")
 import code
 import datetime
 from bs4 import BeautifulSoup
@@ -21,7 +21,7 @@ options.add_argument("disable-gpu")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
 
-driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
 driver.get("https://www.bithumb.com/")
 driver.implicitly_wait(3)
 

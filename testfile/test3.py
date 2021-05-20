@@ -4,7 +4,7 @@ from firebase_admin import credentials
 from firebase_admin import db
 
 #firebase
-cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.json")
+cred = credentials.Certificate("D:/Desktop/중요파일/bot-Amansa/noup/firebase-adminsdk.json")
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
 

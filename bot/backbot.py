@@ -20,7 +20,7 @@ import urllib
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 import sys
-sys.path.insert(0, "D:/Desktop/bot-Amansa/noup")
+sys.path.insert(0, "D:/Desktop/중요파일/bot-Amansa/noup")
 import code
 
 #clinet
@@ -32,7 +32,7 @@ client_id = code.client_id
 #Naver Open API application token
 client_secret = code.client_secret
 #firebase
-cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.json")
+cred = credentials.Certificate("D:/Desktop/중요파일/bot-Amansa/noup/firebase-adminsdk.json")
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
 options = webdriver.ChromeOptions()
@@ -41,7 +41,7 @@ options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
-driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
 
 async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나 명령어와 시스템 동일**
     await client.wait_until_ready()
