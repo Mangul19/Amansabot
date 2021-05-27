@@ -1,5 +1,6 @@
 #어만사 전용 디스코드 봇 백
 
+from typing import Text
 import discord
 import asyncio
 from discord.ext import commands
@@ -57,15 +58,11 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
 
                 embed = discord.Embed(title="코로나 정보", color=0x5CD1E5) #임베드 생성
 
-                einput = str(soup.select(
-                    'body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(1) > span.before'
-                ))
-                embed.add_field(name="질병관리청 공식 확진자 수 [전날 확진자 <AM 10시에 업데이트>]", value=einput[28:-9] + "명", inline=False) # 전날 확진자 선택 및 임베트 추가
+                einput = soup.select('body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(1) > span.before').text
+                embed.add_field(name="질병관리청 공식 확진자 수 [전날 확진자 <AM 10시에 업데이트>]", value=einput + "명", inline=False) # 전날 확진자 선택 및 임베트 추가
 
-                einput = str(soup.select(
-                    'body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(4) > span.before'
-                ))
-                embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput[23:-9] + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
+                einput = soup.select('body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(4) > span.before').text
+                embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
 
                 driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
                 driver.implicitly_wait(3)
@@ -73,11 +70,9 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
                 html = driver.page_source
                 soup = BeautifulSoup(html, 'html.parser')
 
-                einput = str(soup.select(
-                    '#ALL_decidecnt_increase > b'
-                ))
+                einput = soup.select('#ALL_decidecnt_increase > b').text
 
-                embed.add_field(name="실시간 코로나 확진자 수", value=einput[4:-5], inline=False)#실시간 확진자 선택 및 임베트 추가
+                embed.add_field(name="실시간 코로나 확진자 수", value=einput, inline=False)#실시간 확진자 선택 및 임베트 추가
 
                 channel = client.get_channel(832799360210436107)
                 await channel.send(embed=embed)
@@ -85,7 +80,10 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
                 channel = client.get_channel(833629507939467274)
                 await channel.send(embed=embed)
         except:
-            print("오류 발생 다음에 다시 시도합니다")
+            print("10시 코로나 시스템 오류 발생 다음에 다시 시도합니다")
+            driver.close()
+            global driver
+            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
 
         await asyncio.sleep(60*1)
 
@@ -104,7 +102,7 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
 
-            einput = str(soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(2) > span'))[7:-8] # 가져올 값 선택 
+            einput = soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(2) > span').text # 가져올 값 선택 
 
             if ji != einput and einput != "":
                 dirji.update({'jisin':einput})
@@ -116,7 +114,7 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
                 TFL = False
 
                 for insite in einlist:
-                    einput = str(soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(' + str(listin) + ') > span'))[7:-8]
+                    einput = soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(' + str(listin) + ') > span').text
                     embed.add_field(name=insite, value=einput, inline=TFL)
 
                     listin += 1
@@ -125,7 +123,7 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
                         listin = 7
                         TFL = False
                 
-                embed.set_image(url=str(soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(8) > a'))[10:-51])
+                embed.set_image(url=soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(8) > a').text)
 
                 channel = client.get_channel(832799360210436107)
                 await channel.send(embed=embed)
@@ -133,9 +131,13 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
                 channel = client.get_channel(833629507939467274)
                 await channel.send(embed=embed)
             elif einput == "":
-               print("불러오기 오류 다음에 다시 시도합니다") 
+               print("해외 지진 시스템 불러오기 오류 다음에 다시 시도합니다") 
         except:
-            print("오류 발생 다음에 다시 시도합니다")
+            print("해외 지진 시스템 오류 발생 다음에 다시 시도합니다")
+            driver.close()
+            global driver
+            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
+            
         await asyncio.sleep(60*1)
 
 async def background_backjisin():#지진 자동 감지 시스템 **!지진 시스템과 일치**
@@ -147,31 +149,34 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
             ji = dirji.get()
             ji = ji['jisin']
 
-            driver.get("https://www.weather.go.kr/w/eqk-vol/recent-eqk.do")# 사이트 열람
+            driver.get("https://www.weather.go.kr/w/eqk-vol/search/korea.do")# 사이트 열람
             driver.implicitly_wait(3)
 
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
 
-            einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(1) > td'))[17:-6] # 가져올 값 선택
+            einput = soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(2) > span').text # 가져올 값 선택
 
             if ji != einput and einput != "":
                 dirji.update({'jisin':einput})
                 
-                embed = discord.Embed(title="[경고! 지진이 발생하였습니다]", description="지진 자동 감지 시스템", color=0x5CD1E5)
+                embed = discord.Embed(title="경고! 국내에 지진이 발생하였습니다", description="지진 자동 감지 시스템", color=0x5CD1E5)
 
-                embed.add_field(name='발생시각', value=einput, inline=False)#임베드 추가
-                einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(2) > td > strong'))[9:-17] # 가져올 값 선택
-                embed.add_field(name='규모', value=einput, inline=True)#임베드 추가
-                einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(3) > td > strong > font:nth-child(1)'))[22:-8] # 가져올 값 선택
-                embed.add_field(name='최대진도', value=einput, inline=True)#임베드 추가
-                einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(4) > td:nth-child(4)'))[5:-6] # 가져올 값 선택
-                embed.add_field(name='발생깊이', value=einput, inline=True)#임베드 추가
-                einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(4) > td.td_loc'))[20:-48] # 가져올 값 선택
-                embed.add_field(name='위치', value=einput, inline=False)#임베드 추가
-                einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(5) > td'))[17:-6] # 가져올 값 선택
-                embed.add_field(name='안내사항', value=einput, inline=False)#임베드 추가
-                embed.set_image(url="https://www.weather.go.kr/" + str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div:nth-child(3) > div > img'))[32:-4])
+                einlist = ["발생시각", "규모", "발생 깊이","최대 진도" ,"위치"]
+                listin = 2
+                TFL = False
+
+                for insite in einlist:
+                    einput = soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(' + str(listin) + ') > span').text
+                    embed.add_field(name=insite, value=einput, inline=TFL)
+
+                    listin += 1
+                    TFL = True
+                    if listin == 6:
+                        listin = 8
+                        TFL = False
+                
+                embed.set_image(url=soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(9) > a').text)
 
                 channel = client.get_channel(832799360210436107)
                 await channel.send(embed=embed)
@@ -179,9 +184,12 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
                 channel = client.get_channel(833629507939467274)
                 await channel.send(embed=embed)
             elif einput == "":
-               print("불러오기 오류 다음에 다시 시도합니다") 
+               print("국내 지진 시스템 불러오기 오류 다음에 다시 시도합니다") 
         except:
-            print("오류 발생 다음에 다시 시도합니다")
+            print("국내 지진 시스템 오류 발생 다음에 다시 시도합니다")
+            driver.close()
+            global driver
+            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
 
         await asyncio.sleep(60*1)
 
@@ -254,7 +262,7 @@ async def background_backrank():#랭킹 지원금
             channel = client.get_channel(833629507939467274)
             await channel.send(embed=embed)
         except:
-            print("오류 발생 다음에 다시 시도합니다")
+            print("지원금 오류 발생 다음에 다시 시도합니다")
 
 async def background_amangochicdirt():#어만고치 청결도 시스템
     await client.wait_until_ready()
@@ -343,7 +351,7 @@ async def background_amangochicdirt():#어만고치 청결도 시스템
                         else:#경험치로 인한 레벨 변화가 없을시
                             diramangociin.update({'exp':exp}) #일반 업데이트
         except:
-            print("오류 발생 다음에 다시 시도합니다")
+            print("어만고치 청결도 시스템 오류 발생 다음에 다시 시도합니다")
 
 async def background_amangochichung():#어만고치 허기도 시스템 ** 어만고치 청결도 시스템과 구조가 같거나 비슷 **
     await client.wait_until_ready()
@@ -434,7 +442,7 @@ async def background_amangochichung():#어만고치 허기도 시스템 ** 어�
                         else:
                             diramangociin.update({'exp':exp}) 
         except:
-            print("오류 발생 다음에 다시 시도합니다")
+            print("어만고치 배고픔 시스템 오류 발생 다음에 다시 시도합니다")
 
 async def background_se(): #자동 세금 시스템 - 소지금
     await client.wait_until_ready()
@@ -487,7 +495,7 @@ async def background_se(): #자동 세금 시스템 - 소지금
                 channel = client.get_channel(833629507939467274)
                 await channel.send("소지금 세금을 납부하게 하였습니다") 
         except:
-            print("오류 발생 다음에 다시 시도합니다")
+            print("소지금 세금 오류 발생 다음에 다시 시도합니다")
         await asyncio.sleep(60*1)
 
 async def background_segum(): #자동 세금 시스템 - 보유금 ***자동 세금 시스템 - 소지금 과 일치하거나 비슷***
@@ -541,7 +549,7 @@ async def background_segum(): #자동 세금 시스템 - 보유금 ***자동 세
                 channel = client.get_channel(833629507939467274)
                 await channel.send("보유금 세금을 납부하게 하였습니다") 
         except:
-            print("오류 발생 다음에 다시 시도합니다")
+            print("보유금 세금 오류 발생 다음에 다시 시도합니다")
         await asyncio.sleep(60*1)
 
 async def background_ye(): #자동 예금 
@@ -563,7 +571,7 @@ async def background_ye(): #자동 예금
                 yegum = round(yegum + (yegum / 100 * 0.35), 3) #이자를 더한 후 정상 업데이트
                 diryegum.update({word:yegum})
         except:
-            print("오류 발생 다음에 다시 시도합니다")
+            print("자동 예금 이자 오류 발생 다음에 다시 시도합니다")
 
         await asyncio.sleep(60*30)
 
@@ -615,7 +623,7 @@ async def background_code00mukye(): #코드 00번 적금 자동 해지
                         channel = client.get_channel(833629507939467274)
                         await channel.send("ID : " + word[:-5] + "님의 사흘적금이 만기되었습니다 원금 + 이자 + 보너스  총 " + str(givemoney) + "원이 입금됩니다")
         except:
-            print("오류 발생 다음에 다시 시도합니다")
+            print("00 적금 해지 오류 발생 다음에 다시 시도합니다")
         
         await asyncio.sleep(60*1)      
 
@@ -666,7 +674,7 @@ async def background_code01mukye(): #코드 01번 적금 자동 해지 **코드 
                         channel = client.get_channel(833629507939467274)
                         await channel.send("ID : " + word[:-5] + "님의 닷새적금이 만기되었습니다 원금 + 이자 + 보너스 총 " + str(givemoney) + "원이 입금됩니다")
         except:
-            print("오류 발생 다음에 다시 시도합니다")
+            print("01 적금 해지 오류 발생 다음에 다시 시도합니다")
         
         await asyncio.sleep(60*1)
 
@@ -692,7 +700,7 @@ async def background_jusic():#주식 변환시스템
 
                 dirjusic.update({wordin:jusic}) #계산후 정상 업데이트
         except:
-            print("오류 발생 다음에 다시 시도합니다")
+            print("주식 시스템 오류 발생 다음에 다시 시도합니다")
 
         await asyncio.sleep(5) #5초 대기
 
@@ -711,10 +719,10 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
 
-            einput1 = str(soup.select("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(1) > b"))[29:-5]
+            einput1 = soup.select("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(1) > b").text
 
             if cov1 != einput1 and einput1 != "":
-                einput2 = str(soup.select("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(3)"))[117:-5]
+                einput2 = soup.select("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(3)").text
 
                 embed = discord.Embed(title="실시간 코로나 정보", description="[코로나 확진자 자동 알림]", color=0x5CD1E5) #임베드 생성
 
@@ -729,9 +737,12 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
                 channel = client.get_channel(833629507939467274)
                 await channel.send(embed=embed)
             elif einput1 == "":
-               print("불러오기 오류 다음에 다시 시도합니다") 
+               print("실시간 코로나 불러오기 오류 다음에 다시 시도합니다") 
         except:
-            print("오류 발생 다음에 다시 시도합니다")
+            print("실시간 코로나 시스템 오류 발생 다음에 다시 시도합니다")
+            driver.close()
+            global driver
+            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
 
         await asyncio.sleep(60*1)
 

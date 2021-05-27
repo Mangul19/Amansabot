@@ -2,7 +2,7 @@ import pandas as pd
 from tqdm import tqdm
 
 if __name__ == '__main__':
-    dataset = pd.read_csv('DTM/DTM2.csv')
+    dataset = pd.read_csv('DTM/HFACS_DTM.csv')
 
     column_list = dataset.columns[1:]
     word_length = len(column_list)
@@ -26,4 +26,4 @@ if __name__ == '__main__':
     df = df.sort_values(by=['freq'], ascending=False)
     df = df.reset_index(drop=True)
 
-    df.to_csv('DTM/networkx2.csv', encoding='utf-8-sig')
+    df.to_csv('DTM/HFACS_DTM2.csv', encoding='utf-8-sig')

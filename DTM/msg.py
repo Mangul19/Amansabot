@@ -10,7 +10,7 @@ if __name__ == '__main__':
     dataset = pd.read_csv('DTM/HFACS_DTM2.csv')
 
     G_centrality = nx.Graph()
-    for ind in range((len(np.where(dataset['freq'] >= 20000)[0]))):
+    for ind in range((len(np.where(dataset['freq'] >= 0)[0]))):
         G_centrality.add_edge(dataset['word1'][ind], dataset['word2'][ind], weight=int(dataset['freq'][ind]))
 
     dgr = nx.degree_centrality(G_centrality)        # 연결 중심성
@@ -34,11 +34,11 @@ if __name__ == '__main__':
     for i in range(len(sorted_pgr)):
         G.add_node(sorted_pgr[i][0], nodesize=sorted_dgr[i][1])
 
-    for ind in range((len(np.where(dataset['freq'] > 20000)[0]))):
+    for ind in range((len(np.where(dataset['freq'] > 0)[0]))):
         G.add_weighted_edges_from([(dataset['word1'][ind], dataset['word2'][ind], int(dataset['freq'][ind]))])
 
     # 노드 크기 조정
-    sizes = [G.nodes[node]['nodesize'] * 5000 for node in G]
+    sizes = [G.nodes[node]['nodesize'] * 500 for node in G]
 
     options = {
         'edge_color': '#FFDEA2',
