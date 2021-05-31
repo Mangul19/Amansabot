@@ -42,10 +42,11 @@ options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
-driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
 
 async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나 명령어와 시스템 동일**
     await client.wait_until_ready()
+    global driver
+    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
 
     while True:
         try:
@@ -53,24 +54,20 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
                 driver.get("http://ncov.mohw.go.kr/")# 사이트 열람
                 driver.implicitly_wait(3)
 
-                html = driver.page_source
-                soup = BeautifulSoup(html, 'html.parser')
-
+                
                 embed = discord.Embed(title="코로나 정보", color=0x5CD1E5) #임베드 생성
 
-                einput = soup.select('body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(1) > span.before').text
+                einput = driver.find_element_by_css_selector('body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(1) > span.before').text
                 embed.add_field(name="질병관리청 공식 확진자 수 [전날 확진자 <AM 10시에 업데이트>]", value=einput + "명", inline=False) # 전날 확진자 선택 및 임베트 추가
 
-                einput = soup.select('body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(4) > span.before').text
+                einput = driver.find_element_by_css_selector('body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(4) > span.before').text
                 embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
 
                 driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
                 driver.implicitly_wait(3)
 
-                html = driver.page_source
-                soup = BeautifulSoup(html, 'html.parser')
-
-                einput = soup.select('#ALL_decidecnt_increase > b').text
+                
+                einput = driver.find_element_by_css_selector('#ALL_decidecnt_increase > b').text
 
                 embed.add_field(name="실시간 코로나 확진자 수", value=einput, inline=False)#실시간 확진자 선택 및 임베트 추가
 
@@ -82,13 +79,15 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
         except:
             print("10시 코로나 시스템 오류 발생 다음에 다시 시도합니다")
             driver.close()
-            global driver
+            
             driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
 
         await asyncio.sleep(60*1)
 
 async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진 시스템과 대부분 일치**
     await client.wait_until_ready()
+    global driver
+    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
 
     while True:
         try:
@@ -102,7 +101,7 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
 
-            einput = soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(2) > span').text # 가져올 값 선택 
+            einput = driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(2) > span').text # 가져올 값 선택
 
             if ji != einput and einput != "":
                 dirji.update({'jisin':einput})
@@ -114,7 +113,7 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
                 TFL = False
 
                 for insite in einlist:
-                    einput = soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(' + str(listin) + ') > span').text
+                    einput = driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(' + str(listin) + ') > span').text
                     embed.add_field(name=insite, value=einput, inline=TFL)
 
                     listin += 1
@@ -123,7 +122,7 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
                         listin = 7
                         TFL = False
                 
-                embed.set_image(url=soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(8) > a').text)
+                #embed.set_image(url=driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(8) > a').text)
 
                 channel = client.get_channel(832799360210436107)
                 await channel.send(embed=embed)
@@ -135,13 +134,15 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
         except:
             print("해외 지진 시스템 오류 발생 다음에 다시 시도합니다")
             driver.close()
-            global driver
+            
             driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
             
         await asyncio.sleep(60*1)
 
 async def background_backjisin():#지진 자동 감지 시스템 **!지진 시스템과 일치**
     await client.wait_until_ready()
+    global driver
+    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
 
     while True:
         try:
@@ -155,7 +156,7 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
 
-            einput = soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(2) > span').text # 가져올 값 선택
+            einput = driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(2) > span').text # 가져올 값 선택
 
             if ji != einput and einput != "":
                 dirji.update({'jisin':einput})
@@ -167,7 +168,7 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
                 TFL = False
 
                 for insite in einlist:
-                    einput = soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(' + str(listin) + ') > span').text
+                    einput = driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(' + str(listin) + ') > span').text
                     embed.add_field(name=insite, value=einput, inline=TFL)
 
                     listin += 1
@@ -176,7 +177,7 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
                         listin = 8
                         TFL = False
                 
-                embed.set_image(url=soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(9) > a').text)
+                #embed.set_image(url=driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(9) > a').text)
 
                 channel = client.get_channel(832799360210436107)
                 await channel.send(embed=embed)
@@ -188,7 +189,7 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
         except:
             print("국내 지진 시스템 오류 발생 다음에 다시 시도합니다")
             driver.close()
-            global driver
+            
             driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
 
         await asyncio.sleep(60*1)
@@ -706,6 +707,8 @@ async def background_jusic():#주식 변환시스템
 
 async def background_backcovlive(): # 실시간 코로나 정보 조회 시스템 **!코로나 명령어와 시스템 동일**
     await client.wait_until_ready()
+    global driver
+    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
 
     while True:
         try:
@@ -719,10 +722,10 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
 
-            einput1 = soup.select("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(1) > b").text
+            einput1 = driver.find_element_by_css_selector("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(1) > b").text
 
             if cov1 != einput1 and einput1 != "":
-                einput2 = soup.select("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(3)").text
+                einput2 = driver.find_element_by_css_selector("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(3)").text
 
                 embed = discord.Embed(title="실시간 코로나 정보", description="[코로나 확진자 자동 알림]", color=0x5CD1E5) #임베드 생성
 
@@ -741,13 +744,15 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
         except:
             print("실시간 코로나 시스템 오류 발생 다음에 다시 시도합니다")
             driver.close()
-            global driver
+            
             driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
 
         await asyncio.sleep(60*1)
 
 async def background_jisinle(): #상위의 지진 시스템과 거의 동일
     await client.wait_until_ready()
+    global driver
+    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
 
     while True:
         try:
@@ -771,7 +776,7 @@ async def background_jisinle(): #상위의 지진 시스템과 거의 동일
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
 
-            einput1 = str(soup.select("#gridTbody > tr:nth-child(1)"))
+            einput1 = str(driver.find_element_by_css_selector("#gridTbody > tr:nth-child(1)"))
             print(einput1)
         except:
             print("오류 발생 다음에 다시 시도합니다")

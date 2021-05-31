@@ -161,7 +161,7 @@ async def on_message(message):
             embed.add_field(name="설명", value="Language1에는 번역할 언어의 코드를 Language2에는 번역될 언어의 코드를 적고 그 뒤(content)에 내용을 작성하면 AI가 판별 후 번역을 해줍니다", inline=False)
             embed.add_field(name="explanation", value="in Language1, write the code of the language that will be translated, and write the code of the language you want to translate in Language2 ou write down the contents after that, AI will judge and translate", inline=False)
             embed.add_field(name="Language Code", value="언어 코드는 하단 참고 \nLanguage code is at the bottom of the note", inline=False)
-            embed.set_image(url="https://cdn.discordapp.com/attachments/718436389062180917/819230778113523732/a048c2a829301878.PNG")
+            #embed.set_image(url="https://cdn.discordapp.com/attachments/718436389062180917/819230778113523732/a048c2a829301878.PNG")
             embed.add_field(name="EX", value="!TRS ko*ja 안녕하세요", inline=False)
             await message.channel.send('번역은 일반 채팅방에 쳐도 괜찮습니다', embed=embed)
 
@@ -647,7 +647,7 @@ async def on_message(message):
             embed.add_field(name='위치', value=einput, inline=False)#임베드 추가
             einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(5) > td'))[17:-6] # 가져올 값 선택
             embed.add_field(name='안내사항', value=einput, inline=False)#임베드 추가
-            embed.set_image(url="https://www.weather.go.kr/" + str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div:nth-child(3) > div > img'))[32:-4])
+            #embed.set_image(url="https://www.weather.go.kr/" + str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div:nth-child(3) > div > img'))[32:-4])
 
             await message.channel.send(embed=embed)
 

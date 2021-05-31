@@ -50,17 +50,15 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
                 driver.get("http://ncov.mohw.go.kr/")# 사이트 열람
                 driver.implicitly_wait(3)
 
-                html = driver.page_source
-                soup = BeautifulSoup(html, 'html.parser')
-
+                
                 embed = discord.Embed(title="코로나 정보", color=0x5CD1E5) #임베드 생성
 
-                einput = str(soup.select(
+                einput = str(driver.find_element_by_css_selector(
                     'body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(1) > span.before'
                 ))
                 embed.add_field(name="질병관리청 공식 확진자 수 [전날 확진자 <AM 10시에 업데이트>]", value=einput[28:-9] + "명", inline=False) # 전날 확진자 선택 및 임베트 추가
 
-                einput = str(soup.select(
+                einput = str(driver.find_element_by_css_selector(
                     'body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(4) > span.before'
                 ))
                 embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput[23:-9] + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
@@ -68,10 +66,8 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
                 driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
                 driver.implicitly_wait(3)
 
-                html = driver.page_source
-                soup = BeautifulSoup(html, 'html.parser')
-
-                einput = str(soup.select(
+                
+                einput = str(driver.find_element_by_css_selector(
                     '#ALL_decidecnt_increase > b'
                 ))
 
@@ -102,7 +98,7 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
 
-            einput = str(soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(2) > span'))[7:-8] # 가져올 값 선택 
+            einput = str(driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(2) > span'))[7:-8] # 가져올 값 선택 
 
             if ji != einput and einput != "":
                 dirji.update({'jisin':einput})
@@ -114,7 +110,7 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
                 TFL = False
 
                 for insite in einlist:
-                    einput = str(soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(' + str(listin) + ') > span'))[7:-8]
+                    einput = str(driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(' + str(listin) + ') > span'))[7:-8]
                     embed.add_field(name=insite, value=einput, inline=TFL)
 
                     listin += 1
@@ -123,7 +119,7 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
                         listin = 7
                         TFL = False
                 
-                embed.set_image(url=str(soup.select('#excel_body > tbody > tr:nth-child(1) > td:nth-child(8) > a'))[10:-51])
+                embed.set_image(url=str(driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(8) > a'))[10:-51])
 
                 channel = client.get_channel(832799360210436107)
                 await channel.send(embed=embed)
@@ -151,7 +147,7 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
 
-            einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(1) > td'))[17:-6] # 가져올 값 선택
+            einput = str(driver.find_element_by_css_selector('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(1) > td'))[17:-6] # 가져올 값 선택
 
             if ji != einput and einput != "":
                 dirji.update({'jisin':einput})
@@ -159,17 +155,17 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
                 embed = discord.Embed(title="[경고! 지진이 발생하였습니다]", description="지진 자동 감지 시스템", color=0x5CD1E5)
 
                 embed.add_field(name='발생시각', value=einput, inline=False)#임베드 추가
-                einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(2) > td > strong'))[9:-17] # 가져올 값 선택
+                einput = str(driver.find_element_by_css_selector('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(2) > td > strong'))[9:-17] # 가져올 값 선택
                 embed.add_field(name='규모', value=einput, inline=True)#임베드 추가
-                einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(3) > td > strong > font:nth-child(1)'))[22:-8] # 가져올 값 선택
+                einput = str(driver.find_element_by_css_selector('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(3) > td > strong > font:nth-child(1)'))[22:-8] # 가져올 값 선택
                 embed.add_field(name='최대진도', value=einput, inline=True)#임베드 추가
-                einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(4) > td:nth-child(4)'))[5:-6] # 가져올 값 선택
+                einput = str(driver.find_element_by_css_selector('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(4) > td:nth-child(4)'))[5:-6] # 가져올 값 선택
                 embed.add_field(name='발생깊이', value=einput, inline=True)#임베드 추가
-                einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(4) > td.td_loc'))[20:-48] # 가져올 값 선택
+                einput = str(driver.find_element_by_css_selector('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(4) > td.td_loc'))[20:-48] # 가져올 값 선택
                 embed.add_field(name='위치', value=einput, inline=False)#임베드 추가
-                einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(5) > td'))[17:-6] # 가져올 값 선택
+                einput = str(driver.find_element_by_css_selector('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(5) > td'))[17:-6] # 가져올 값 선택
                 embed.add_field(name='안내사항', value=einput, inline=False)#임베드 추가
-                embed.set_image(url="https://www.weather.go.kr/" + str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div:nth-child(3) > div > img'))[32:-4])
+                embed.set_image(url="https://www.weather.go.kr/" + str(driver.find_element_by_css_selector('#eqk-report > div.cont-box02 > div:nth-child(3) > div:nth-child(3) > div > img'))[32:-4])
 
                 channel = client.get_channel(832799360210436107)
                 await channel.send(embed=embed)
@@ -709,10 +705,10 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
 
-            einput1 = str(soup.select("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(1) > b"))[29:-5]
+            einput1 = str(driver.find_element_by_css_selector("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(1) > b"))[29:-5]
 
             if cov1 != einput1 and einput1 != "":
-                einput2 = str(soup.select("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(3)"))[117:-5]
+                einput2 = str(driver.find_element_by_css_selector("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(3)"))[117:-5]
 
                 embed = discord.Embed(title="실시간 코로나 정보", description="[코로나 확진자 자동 알림]", color=0x5CD1E5) #임베드 생성
 
@@ -758,7 +754,7 @@ async def background_jisinle(): #상위의 지진 시스템과 거의 동일
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
 
-            einput1 = str(soup.select("#gridTbody > tr:nth-child(1)"))
+            einput1 = str(driver.find_element_by_css_selector("#gridTbody > tr:nth-child(1)"))
             print(einput1)
         except:
             print("오류 발생 다음에 다시 시도합니다")
