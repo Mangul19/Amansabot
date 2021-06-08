@@ -719,9 +719,6 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
             driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
             driver.implicitly_wait(3)
 
-            html = driver.page_source
-            soup = BeautifulSoup(html, 'html.parser')
-
             einput1 = driver.find_element_by_css_selector("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(1) > b").text
 
             if cov1 != einput1 and einput1 != "":
@@ -743,9 +740,6 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
                print("실시간 코로나 불러오기 오류 다음에 다시 시도합니다") 
         except:
             print("실시간 코로나 시스템 오류 발생 다음에 다시 시도합니다")
-            driver.close()
-            
-            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
 
         await asyncio.sleep(60*1)
 
