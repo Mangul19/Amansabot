@@ -10,7 +10,6 @@ def doc(args):
         tmp_list = i.split(" ")
 
         for inpu in tmp_list:
-            print(inpu)
             for biin in bi:
                 if biin in inpu:
                     # 리스트 결합
@@ -34,7 +33,7 @@ def doc(args):
     return df
 
 #아래는 개발 후 수정하면 됨
-dataset = pd.read_excel('DTM/30_.xlsx')
+dataset = pd.read_excel('DTM/비계사례DB.xlsx')
 data = dataset['재해개요']
 
 result = doc(data)
