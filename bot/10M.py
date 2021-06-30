@@ -10,7 +10,11 @@ options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) Apple
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
 
 global driver
+<<<<<<< HEAD
 driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+=======
+driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 
 driver.get("https://www.youtube.com/watch?v=0ZVLvRenGl8")# 사이트 열람
 driver.implicitly_wait(3)

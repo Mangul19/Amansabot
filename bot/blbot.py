@@ -4,7 +4,11 @@ import discord
 import asyncio
 from discord.ext import commands
 import sys
+<<<<<<< HEAD
 sys.path.insert(0, "D:/Desktop/bot-Amansa/noup")
+=======
+sys.path.insert(0, "D:/Desktop/중요파일/bot-Amansa/noup")
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 import code
 
 #clinet

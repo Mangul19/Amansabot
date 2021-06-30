@@ -5,11 +5,15 @@ bi = ["도장", "해체", "설치", "양중", "굴착", "정리", "매설", "기
 def doc(args):
     doc_list = []
     df = pd.DataFrame()
+<<<<<<< HEAD
         
+=======
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
     for i in args:
         # 단어 분해
         tmp_list = i.split(" ")
 
+<<<<<<< HEAD
         
         #분해한 단어 하나씩 넣기
         for inpu in tmp_list:
@@ -47,6 +51,27 @@ def doc(args):
                 for biin in bi:
                     tmp.append(biin.count(i))
                     
+=======
+        for inpu in tmp_list:
+            for biin in bi:
+                if biin in inpu:
+                    # 리스트 결합
+                    doc_list.append(biin)
+                    doc_list = list(set(doc_list))
+                    break
+
+    for i in doc_list:
+        tmp = []
+        for j in args:
+            # 단어 분해
+            tmp_list = j.split(' ')
+            # 단어 세기
+            for inpu in tmp_list:
+                for biin in bi:
+                    if biin in inpu:
+                        tmp.append(biin.count(i))
+                        break
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
         # 데이터 프레임 추가
         df[i] = tmp
     return df

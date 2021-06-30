@@ -10,7 +10,11 @@ from firebase_admin import credentials
 from firebase_admin import db
 from selenium.webdriver.chrome.options import Options
 import sys
+<<<<<<< HEAD
 sys.path.insert(0, "D:/Desktop/bot-Amansa/noup")
+=======
+sys.path.insert(0, "D:/Desktop/중요파일/bot-Amansa/noup")
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 import code
 
 #clinet
@@ -18,7 +22,11 @@ client = discord.Client()
 #discord bot tokken
 token = code.cotoken
 #firebase
+<<<<<<< HEAD
 cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.json")
+=======
+cred = credentials.Certificate("D:/Desktop/중요파일/bot-Amansa/noup/firebase-adminsdk.json")
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
 options = webdriver.ChromeOptions()
@@ -44,7 +52,11 @@ webdriver.DesiredCapabilities.CHROME['proxy'] = {
     "proxyType": "MANUAL",
 }
 webdriver.DesiredCapabilities.CHROME['acceptSslCerts']=True
+<<<<<<< HEAD
 driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+=======
+driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 
 #준비 될 시 시작
 @client.event
@@ -140,7 +152,11 @@ async def on_message(message):
                     while alertin == "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                         await message.channel.send("데브 사이트 서버 오류 확인 재시작합니다")
                         driver.close()
+<<<<<<< HEAD
                         driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+=======
+                        driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
                         driver.get("https://game.devplay.com/coupon/ck/ko")
                         driver.implicitly_wait(3)
                         driver.find_element_by_id('email-box').send_keys(trsText)
@@ -231,7 +247,11 @@ async def on_message(message):
                     while alertin == "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                         await message.channel.send("데브 사이트 서버 오류 확인 재시작합니다")
                         driver.close()
+<<<<<<< HEAD
                         driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+=======
+                        driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
                         driver.get("https://game.devplay.com/coupon/ck/ko")
                         driver.implicitly_wait(3)
                         driver.find_element_by_id('email-box').send_keys(inpu)
@@ -306,7 +326,11 @@ async def on_message(message):
                 while alertin == "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                     await message.channel.send("데브 사이트 서버 오류 확인 재시작합니다")
                     driver.close()
+<<<<<<< HEAD
                     driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+=======
+                    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
                     driver.get("https://game.devplay.com/coupon/ck/ko")
                     driver.implicitly_wait(3)
                     driver.find_element_by_id('email-box').send_keys(trsText)

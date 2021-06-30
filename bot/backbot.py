@@ -21,7 +21,11 @@ import urllib
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 import sys
+<<<<<<< HEAD
 sys.path.insert(0, "D:/Desktop/bot-Amansa/noup")
+=======
+sys.path.insert(0, "D:/Desktop/중요파일/bot-Amansa/noup")
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 import code
 
 #clinet
@@ -33,7 +37,11 @@ client_id = code.client_id
 #Naver Open API application token
 client_secret = code.client_secret
 #firebase
+<<<<<<< HEAD
 cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.json")
+=======
+cred = credentials.Certificate("D:/Desktop/중요파일/bot-Amansa/noup/firebase-adminsdk.json")
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
 options = webdriver.ChromeOptions()
@@ -46,7 +54,11 @@ options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) Appl
 async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나 명령어와 시스템 동일**
     await client.wait_until_ready()
     global driver
+<<<<<<< HEAD
     driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+=======
+    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 
     while True:
         try:
@@ -80,14 +92,22 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
             print("10시 코로나 시스템 오류 발생 다음에 다시 시도합니다")
             driver.close()
             
+<<<<<<< HEAD
             driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+=======
+            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 
         await asyncio.sleep(60*1)
 
 async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진 시스템과 대부분 일치**
     await client.wait_until_ready()
     global driver
+<<<<<<< HEAD
     driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+=======
+    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 
     while True:
         try:
@@ -135,14 +155,22 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
             print("해외 지진 시스템 오류 발생 다음에 다시 시도합니다")
             driver.close()
             
+<<<<<<< HEAD
             driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+=======
+            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
             
         await asyncio.sleep(60*1)
 
 async def background_backjisin():#지진 자동 감지 시스템 **!지진 시스템과 일치**
     await client.wait_until_ready()
     global driver
+<<<<<<< HEAD
     driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+=======
+    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 
     while True:
         try:
@@ -190,7 +218,11 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
             print("국내 지진 시스템 오류 발생 다음에 다시 시도합니다")
             driver.close()
             
+<<<<<<< HEAD
             driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+=======
+            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 
         await asyncio.sleep(60*1)
 
@@ -708,7 +740,11 @@ async def background_jusic():#주식 변환시스템
 async def background_backcovlive(): # 실시간 코로나 정보 조회 시스템 **!코로나 명령어와 시스템 동일**
     await client.wait_until_ready()
     global driver
+<<<<<<< HEAD
     driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+=======
+    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 
     while True:
         try:
@@ -746,7 +782,11 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
 async def background_jisinle(): #상위의 지진 시스템과 거의 동일
     await client.wait_until_ready()
     global driver
+<<<<<<< HEAD
     driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+=======
+    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
+>>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 
     while True:
         try:
