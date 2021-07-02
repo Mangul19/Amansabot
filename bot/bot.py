@@ -20,11 +20,7 @@ import urllib
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 import sys
-<<<<<<< HEAD
 sys.path.insert(0, "D:/Desktop/bot-Amansa/noup")
-=======
-sys.path.insert(0, "D:/Desktop/중요파일/bot-Amansa/noup")
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 import code
 
 #clinet
@@ -36,11 +32,7 @@ client_id = code.client_id
 #Naver Open API application token
 client_secret = code.client_secret
 #firebase
-<<<<<<< HEAD
 cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.json")
-=======
-cred = credentials.Certificate("D:/Desktop/중요파일/bot-Amansa/noup/firebase-adminsdk.json")
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
 options = webdriver.ChromeOptions()
@@ -497,11 +489,7 @@ async def on_message(message):
             await message.channel.send(message.author.mention + "님이" + " 현재 보유중인 돈은 : " + str(ye) + "원입니다")
 
         if message.content == "!코로나":#코로나 정보
-<<<<<<< HEAD
             driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
-=======
-            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
             driver.get("http://ncov.mohw.go.kr/")# 사이트 열람
             driver.implicitly_wait(3)
 
@@ -637,11 +625,7 @@ async def on_message(message):
                 await message.channel.send("벌금을 낼 수 있는 금액보다 너무 큰 금액입니다. 배팅 금액을 다시 입력해주세요\n신용 금액은 평균 금액인 배팅액 * 7 원으로 측정됩니다")
 
         if message.content == "!지진": #최근 지진 정보 접속 및 안내
-<<<<<<< HEAD
             driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
-=======
-            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
             driver.get("https://www.weather.go.kr/w/eqk-vol/recent-eqk.do")# 사이트 열람
             driver.implicitly_wait(3)
 
