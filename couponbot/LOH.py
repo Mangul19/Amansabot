@@ -12,11 +12,7 @@ from firebase_admin import credentials
 from firebase_admin import db
 from selenium.webdriver.chrome.options import Options
 import sys
-<<<<<<< HEAD
 sys.path.insert(0, "D:/Desktop/bot-Amansa/noup")
-=======
-sys.path.insert(0, "D:/Desktop/중요파일/bot-Amansa/noup")
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 import code
 
 #clinet
@@ -24,11 +20,7 @@ client = discord.Client()
 #discord bot tokken
 token = code.lohtoken
 #firebase
-<<<<<<< HEAD
 cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.json")
-=======
-cred = credentials.Certificate("D:/Desktop/중요파일/bot-Amansa/noup/firebase-adminsdk.json")
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
 options = webdriver.ChromeOptions()
@@ -37,11 +29,7 @@ options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
-<<<<<<< HEAD
 driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
-=======
-driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 
 #준비 될 시 시작
 @client.event
@@ -127,16 +115,12 @@ async def on_message(message):
                                 alertin = driver.find_element_by_xpath('//*[@id="comp-keb5nt711"]/p/span/span/span/span/span').text
                                 driver.find_element_by_id('comp-keb5nt7b1').click()
                             except:
-<<<<<<< HEAD
                                 try:
                                     WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.ID, "comp-k7bli2ek")))
                                     alertin = driver.find_element_by_xpath('//*[@id="comp-k7bli2fi"]/p/span/span/span/span/span').text
                                     driver.find_element_by_id('comp-k7bli2ek').click()
                                 except:
                                     await message.channel.send(message.author.mention + "님 명령어 실행 중 오류가 발생하였습니다 관리자에게 문의하여주세요")
-=======
-                                await message.channel.send(message.author.mention + "님 명령어 실행 중 오류가 발생하였습니다 관리자에게 문의하여주세요")
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
                                 
                     embed.add_field(name=trsText[:2] + "----- 님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
 
@@ -172,11 +156,7 @@ async def on_message(message):
             irua = True
                      
             await message.channel.send("쿠폰 등록을 실행합니다 잠시만 기다려 주세요\n시간이 다소 걸리니 처리 완료까지 기다려주세요")
-<<<<<<< HEAD
             trsText = str(message.content.split(" ")[1])
-=======
-            trsText = message.content.split(" ")[1]
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 
             dirlohcu = db.reference('lohcu/') #로오히 쿠폰 리스트 가져오기
             lohcuch = dirlohcu.get()
@@ -214,16 +194,12 @@ async def on_message(message):
                                 alertin = driver.find_element_by_xpath('//*[@id="comp-keb5nt711"]/p/span/span/span/span/span').text
                                 driver.find_element_by_id('comp-keb5nt7b1').click()
                             except:
-<<<<<<< HEAD
                                 try:
-                                    WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.ID,"comp-keb5oovo1")))
-                                    alertin = driver.find_element_by_xpath('//*[@id="comp-keb5oovi2"]/p/span/span/span/span/span').text
-                                    driver.find_element_by_id('comp-keb5oovo1').click()
+                                    WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.ID,"comp-k7blqpqk")))
+                                    alertin = driver.find_element_by_xpath('//*[@id="comp-k7bli2fi"]/p/span/span/span/span/span').text
+                                    driver.find_element_by_id('comp-k7blqpqk').click()
                                 except:
                                     await message.channel.send(message.author.mention + "님 명령어 실행 중 오류가 발생하였습니다 관리자에게 문의하여주세요 대기열 오류")
-=======
-                                await message.channel.send(message.author.mention + "님 명령어 실행 중 오류가 발생하였습니다 관리자에게 문의하여주세요")
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
                                        
                     embed.add_field(name=trsText[:2] + "----- 님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
 
@@ -250,11 +226,7 @@ async def on_message(message):
                 embed.add_field(name= "@everyone" + "쿠폰 지급 최종 안내", value=str(len(lohch)) + "명 계정에 새로 등록된 쿠폰 지급 신청을 완료하였습니다", inline=False)
                 await message.channel.send(embed=embed)
                 
-<<<<<<< HEAD
                 channel = client.get_channel(836612578444181504)
-=======
-                channel = client.get_channel(836191919935324170)
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
                 await channel.send("@everyone 새로운 " + trsText + " 쿠폰이 등록되어 쿠폰을 일괄 지급하였습니다 확인하여주세요\n쿠폰을 입력해주신 " + message.author.mention + "님 감사합니다\n 귀하의 입력에 " + str(len(lohch)) + "분이 자동 수령을 받으셨습니다")
             else:
                 await message.channel.send("이미 등록된 쿠폰입니다")
