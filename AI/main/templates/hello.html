@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript">
+            function ready() {
+                var jbString = document.getElementById('result').innerText;
+                var jbSplit = jbString.split('^');
+                var jbinSplit = jbSplit[0].split(' ');
+                jbSplit = jbSplit.slice(1)
+
+                document.write('<div id = explanation> 검색 양식 : [주소]/장르.번호<br>');
+                document.write('장르 목록 : blues, classical, country, disco, hiphop, jazz, metal, pop, reggae, rock<br>');
+                document.write('번호 범위 : 00000 ~ 00099<br>');
+                document.write('ex) mangul.iptime.org/country.00052 </div>');
+
+                document.write('<div id = recommend>');
+                document.write( '<p id = ' + String.fromCharCode(97) + '>' + jbSplit[0] + '</p> <ul style="list-style-type: decimal">' );
+                for ( var i in jbinSplit ) {
+                    if (i % 2 == 0 && i > 2) {
+                        //aca += (jbinSplit[i] * 100).toFixed(3)
+                        //document.write( '<li id = ' + String.fromCharCode(parseInt(i) + 97) + '>' + aca + ' %</li>' );
+                        //aca = ""
+                    } else if (i > 2) {
+                        //aca += jbinSplit[i] + " : "
+                        document.write( '<li id = ' + String.fromCharCode(parseInt(i) + 97) + '>' + jbinSplit[i].split('.wav')[0] + ' </li>' );
+                    }
+                }
+
+                document.write('</ul></div> <div id = genre>');
+                document.write('<p> 장르 분석 결과</p><ul style="list-style-type: none">');
+                var aca = ""
+                for ( var i in jbSplit ) {
+                    if (i % 2 == 0 && i > 0) {
+                        aca += jbSplit[i]
+                        document.write( '<li id = ' + String.fromCharCode(parseInt(i) + 97) + '>' + aca + '</li>' );
+                        aca = ""
+                    } else if (i > 0) {
+                        aca += jbSplit[i] + "<br>"
+                    }
+                    if (i == jbSplit.length - 4)
+                        break;
+                }
+                document.write('</ul>');
+
+                document.write( '<p><span id = MID>' + jbSplit[jbSplit.length - 2] + '</span><br>' );
+                document.write( '<span id = final>' + jbSplit[jbSplit.length - 1] + '</span></p></div>' );
+                document.write( '<link rel="shortcut icon" href="#">');
+            }
+            document.addEventListener("DOMContentLoaded", ready);
+        </script>
+    </head>
+    <body>
+        <div id='result'>{{song}}</div>
+    </body>
+</html>
