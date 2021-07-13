@@ -11,8 +11,8 @@ def output_keypoints(frame, proto_file, weights_file, threshold, model_name, BOD
     net = cv2.dnn.readNetFromCaffe(proto_file, weights_file)
 
     # 입력 이미지의 사이즈 정의
-    image_height = 480
-    image_width = 720
+    image_height = 720
+    image_width = 1280
 
     # 네트워크에 넣기 위한 전처리
     input_blob = cv2.dnn.blobFromImage(frame, 1.0 / 255, (image_width, image_height), (0, 0, 0), swapRB=False, crop=False)
@@ -62,13 +62,9 @@ def output_keypoints(frame, proto_file, weights_file, threshold, model_name, BOD
             points.append(None)
             #print(f"[not pointed] {BODY_PARTS[i]} ({i}) => prob: {prob:.5f} / x: {x} / y: {y}")
 
-    
-    #cv2.imshow("Output_Keypoints", frame)
-    #cv2.waitKey(0)
     return frame
 
 def output_keypoints_with_lines(frame, POSE_PAIRS):
-    #print()
     for pair in POSE_PAIRS:
         part_a = pair[0]  # 0 (Head)
         part_b = pair[1]  # 1 (Neck)
