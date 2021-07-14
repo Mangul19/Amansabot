@@ -1,8 +1,13 @@
-from selenium import webdriver
+import datetime
 
-global driver
-driver = webdriver.Chrome(executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
-driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
-driver.implicitly_wait(3)
+date1 = datetime.datetime.strptime("2021-07-14_10-59-22", "%Y-%m-%d_%H-%M-%S")
+date2 = datetime.datetime.strptime("2021-07-14_10-59-31", "%Y-%m-%d_%H-%M-%S")
+print(date2 - date1)
 
-print(driver.find_element_by_xpath("/html/body/div[2]/b/div[5]/div[1]/div/span/p[1]/b").get_attribute("innerHTML"))
+date1 = datetime.datetime.strptime("2021-07-14_10-59-31", "%Y-%m-%d_%H-%M-%S")
+date2 = datetime.datetime.strptime("2021-07-14_10-59-42", "%Y-%m-%d_%H-%M-%S")
+print(date2 - date1)
+
+date1 = datetime.datetime.strptime("2021-07-14_10-59-42", "%Y-%m-%d_%H-%M-%S")
+date2 = datetime.datetime.strptime("2021-07-14_10-59-57", "%Y-%m-%d_%H-%M-%S")
+print(date2 - date1)

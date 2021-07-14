@@ -1,8 +1,8 @@
 import cv2
 import cv2 as cv
 import os
-import np
 from PIL import Image
+import time
 
 def output_keypoints(frame, proto_file, weights_file, threshold, model_name, BODY_PARTS):
     global points
@@ -10,9 +10,9 @@ def output_keypoints(frame, proto_file, weights_file, threshold, model_name, BOD
     # 네트워크 불러오기
     net = cv2.dnn.readNetFromCaffe(proto_file, weights_file)
 
-    # 입력 이미지의 사이즈 정의
-    image_height = 720
-    image_width = 1280
+    # 입력 이미지의 사이즈 정의 368, 215, 235
+    image_height = 235
+    image_width = 235
 
     # 네트워크에 넣기 위한 전처리
     input_blob = cv2.dnn.blobFromImage(frame, 1.0 / 255, (image_width, image_height), (0, 0, 0), swapRB=False, crop=False)
@@ -75,7 +75,23 @@ def output_keypoints_with_lines(frame, POSE_PAIRS):
             #print(f"[not linked] {part_a} {points[part_a]} <=> {part_b} {points[part_b]}")
 
     cv2.imshow("output_keypoints_with_lines", frame)
-    cv2.imwrite('images/rt'+str(captured_num)+'.jpg', frame)
+    cv2.imwrite('pose/images/' + str(captured_num) + '.jpg', frame)
+
+BODY_PARTS_MPI = {0: "Head", 1: "Neck", 2: "RShoulder", 3: "RElbow", 4: "RWrist",
+                  5: "LShoulder", 6: "LElbow", 7: "LWrist", 8: "RHip", 9: "RKnee",
+                  10: "RAnkle", 11: "LHip", 12: "LKnee", 13: "LAnkle", 14: "Chest",
+                  15: "Background"}
+
+POSE_PAIRS_MPI = [[0, 1], [1, 2], [1, 5], [1, 14], [2, 3], [3, 4], [5, 6],
+                  [6, 7], [8, 9], [9, 10], [11, 12], [12, 13], [14, 8], [14, 11]]
+
+BODY_PARTS_COCO = {0: "Nose", 1: "Neck", 2: "RShoulder", 3: "RElbow", 4: "RWrist",
+                   5: "LShoulder", 6: "LElbow", 7: "LWrist", 8: "RHip", 9: "RKnee",
+                   10: "RAnkle", 11: "LHip", 12: "LKnee", 13: "LAnkle", 14: "REye",
+                   15: "LEye", 16: "REar", 17: "LEar", 18: "Background"}
+
+POSE_PAIRS_COCO = [[0, 1], [0, 14], [0, 15], [1, 2], [1, 5], [1, 8], [1, 11], [2, 3], [3, 4],
+                   [5, 6], [6, 7], [8, 9], [9, 10], [12, 13], [11, 12], [14, 16], [15, 17]]
 
 
 BODY_PARTS_BODY_25 = {0: "Nose", 1: "Neck", 2: "RShoulder", 3: "RElbow", 4: "RWrist",
@@ -107,23 +123,22 @@ print("시작")
 
 while(True):
     status, frame = cam.read()
-    frame = cv2.resize(frame, (1280, 720))
+    frame = cv2.resize(frame, (1000, 720))
 
     captured_num = captured_num + 1
-    cv2.imwrite('images/'+str(captured_num)+'.jpg', frame)
+    cv2.imwrite('pose/images/'+str(captured_num)+'.jpg', frame)
 
     if captured_num > 1:
-        os.remove('images/'+str(captured_num - 1)+'.jpg')
-
-    # 이미지 읽어오기
-    img = cv2.imread("images/" + str(captured_num)+'.jpg')
+        os.remove('pose/images/'+str(captured_num - 1)+'.jpg')
 
     # 키포인트를 저장할 빈 리스트
     points = []
 
-    frame_mpii = img
+    frame_mpii = frame
     frame_coco = frame_mpii.copy()
     frame_body_25 = frame_mpii.copy()
+
+    print(time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())))
 
     # BODY_25 Model
     frame_BODY_25 = output_keypoints(frame=frame_body_25, proto_file=protoFile_body_25, weights_file=weightsFile_body_25,
@@ -133,37 +148,21 @@ while(True):
     if cv.waitKey(1) & 0xFF == 27: # esc 키를 누르면 닫음
         break
     
-
 cam.release()
 cv.destroyAllWindows()
 
+
 '''
-# 이미지 경로
-man = "pose/man.jpg"
-
-BODY_PARTS_MPI = {0: "Head", 1: "Neck", 2: "RShoulder", 3: "RElbow", 4: "RWrist",
-                  5: "LShoulder", 6: "LElbow", 7: "LWrist", 8: "RHip", 9: "RKnee",
-                  10: "RAnkle", 11: "LHip", 12: "LKnee", 13: "LAnkle", 14: "Chest",
-                  15: "Background"}
-
-POSE_PAIRS_MPI = [[0, 1], [1, 2], [1, 5], [1, 14], [2, 3], [3, 4], [5, 6],
-                  [6, 7], [8, 9], [9, 10], [11, 12], [12, 13], [14, 8], [14, 11]]
-
-BODY_PARTS_COCO = {0: "Nose", 1: "Neck", 2: "RShoulder", 3: "RElbow", 4: "RWrist",
-                   5: "LShoulder", 6: "LElbow", 7: "LWrist", 8: "RHip", 9: "RKnee",
-                   10: "RAnkle", 11: "LHip", 12: "LKnee", 13: "LAnkle", 14: "REye",
-                   15: "LEye", 16: "REar", 17: "LEar", 18: "Background"}
-
-POSE_PAIRS_COCO = [[0, 1], [0, 14], [0, 15], [1, 2], [1, 5], [1, 8], [1, 11], [2, 3], [3, 4],
-                   [5, 6], [6, 7], [8, 9], [9, 10], [12, 13], [11, 12], [14, 16], [15, 17]]
+print(time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())))
 
 # MPII Model
 frame_MPII = output_keypoints(frame=frame_mpii, proto_file=protoFile_mpi_faster, weights_file=weightsFile_mpi,
-                             threshold=0.2, model_name="MPII", BODY_PARTS=BODY_PARTS_MPI)
+                            threshold=0.2, model_name="MPII", BODY_PARTS=BODY_PARTS_MPI)
 output_keypoints_with_lines(frame=frame_MPII, POSE_PAIRS=POSE_PAIRS_MPI)
+
+print(time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())))
 
 # COCO Model
 frame_COCO = output_keypoints(frame=frame_coco, proto_file=protoFile_coco, weights_file=weightsFile_coco,
-                             threshold=0.2, model_name="COCO", BODY_PARTS=BODY_PARTS_COCO)
-output_keypoints_with_lines(frame=frame_COCO, POSE_PAIRS=POSE_PAIRS_COCO)
-'''
+                            threshold=0.2, model_name="COCO", BODY_PARTS=BODY_PARTS_COCO)
+output_keypoints_with_lines(frame=frame_COCO, POSE_PAIRS=POSE_PAIRS_COCO)'''
