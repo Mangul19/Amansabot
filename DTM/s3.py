@@ -5,7 +5,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 
 
 if __name__ == '__main__':
-    t_file_name = open('List.txt', 'r', encoding='utf-8')
+    t_file_name = open('DTM/List.txt', 'r', encoding='utf-8')
 
     title_list = []
     for line in t_file_name.readlines():
@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
     t_file_name.close()
 
-    dataset = pd.read_excel('data.xlsx')
+    dataset = pd.read_excel('DTM/data.xlsx')
 
     tagger = Okt()
 
@@ -41,4 +41,4 @@ if __name__ == '__main__':
         DTM_DataFrmae = pd.DataFrame(DTM_Array, columns=feature_names)
 
         # 최종적으로 DTM을 csv 파일로 저장한다.
-        DTM_DataFrmae.to_csv('DTM.csv', encoding='utf-8-sig')
+        DTM_DataFrmae.to_csv('DTM/DTM.csv', encoding='utf-8-sig')

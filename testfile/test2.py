@@ -3,7 +3,7 @@ import requests, json
 couponCode = "XYOKSPZLLUJYFKJN"
 
 data = {
-  "email": "test@gmail.com",
+  "email": "mulmangul19@gmail.com",
   "coupon_code": couponCode,
   "recaptcha_token": "03AGdBq27yCQSdWQiP0pwYBVVyL6aqJ5RGBgA3GzHx2eRcNpdkolspZibdhYMV4xMuI-9U6xuPQTs_A3Fa670MTErhtmp9TwS-5k97EXwowT9K-m-ZiGo2L7B1VxH0WVuGOJDrnL0t6m3iJv6L68k8r8_oz0rQV-5jWqa_vjaW15ldLxdT3qYGqedV0YYCH7zp_s_nik8Cs0RFyXxbwTj4uOu62WH8_OSJkPn-X9pd3niyF7r0sUEm5b23fOf9fBahKEL-3MFuxiMPSiyAGCyNF_II-xRBzt3SgLtfyWX8fkP6jsyEfQ2xPrpFfg-uP8HxgVQTxzExSESzsQn4ql0Tmk_P1HrWlq0-OhiAsbqI-4NJgKWA03S7pD4n2zvSIrk-DzdFzbcJcRw9mc0V_oC6UzBvn9KvOSFib8uJKU-bmYgnMhzof33Jj5ziosmvbWJdvaG75JkoH31T"
 }
