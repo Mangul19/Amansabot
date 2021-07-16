@@ -10,11 +10,7 @@ from firebase_admin import credentials
 from firebase_admin import db
 from selenium.webdriver.chrome.options import Options
 import sys
-<<<<<<< HEAD
 sys.path.insert(0, "D:/Desktop/bot-Amansa/noup")
-=======
-sys.path.insert(0, "D:/Desktop/중요파일/bot-Amansa/noup")
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 import code
 
 #clinet
@@ -22,41 +18,16 @@ client = discord.Client()
 #discord bot tokken
 token = code.cotoken
 #firebase
-<<<<<<< HEAD
 cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.json")
-=======
-cred = credentials.Certificate("D:/Desktop/중요파일/bot-Amansa/noup/firebase-adminsdk.json")
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
 options = webdriver.ChromeOptions()
 options.add_argument('headless')
 options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")
-options.add_argument("start-maximized")
-options.add_experimental_option("excludeSwitches", ["enable-automation"])
-options.add_experimental_option('useAutomationExtension', False)
-options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.24 Safari/537.36")
-options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.24 Safari/537.36")
-options.add_argument("--incognito")
-options.add_argument("disable-infobars")
-options.add_argument("--js-flags=--expose-gc")
-options.add_argument("--enable-precise-memory-info")
-options.add_argument("--disable-popup-blocking")
-options.add_argument("--disable-default-apps")
-PROXY="192.168.0.1:8080"
-webdriver.DesiredCapabilities.CHROME['proxy'] = {
-    "httpProxy": PROXY,
-    "ftpProxy": PROXY,
-    "sslProxy": PROXY,
-    "proxyType": "MANUAL",
-}
-webdriver.DesiredCapabilities.CHROME['acceptSslCerts']=True
-<<<<<<< HEAD
+options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
+options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
 driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
-=======
-driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 
 #준비 될 시 시작
 @client.event
@@ -98,19 +69,16 @@ async def on_message(message):
         if message.content == "!!help":
             await message.delete()
             embed = discord.Embed(title="명령어", color=0x5CD1E5)
-            embed.add_field(name="<사용불가>!!등록 ID", value="'ID'를 등록하고 만료되지 않은 모든 쿠폰 수령을 시도합니다\nEX) !!등록 TEST@gmail.com", inline=False)
-            embed.add_field(name="<사용불가>!!게스트 ID", value="ID에 만료되지 않은 모든 쿠폰 수령을 시도합니다\n게스트 아이디 전용\nEX) !!게스트 GUEST-123456", inline=False)
-            embed.add_field(name="<사용불가>!!쿠폰등록 쿠폰번호", value="쿠폰번호를 등록합니다 등록하면 ID 리스트에 등록된 모든 사람들에게 쿠폰 수령을 시도합니다\nEX) !!쿠폰등록 KINGDOMWELOVEYOU", inline=False)
+            embed.add_field(name="!!등록 ID", value="'ID'를 등록하고 만료되지 않은 모든 쿠폰 수령을 시도합니다\nEX) !!등록 TEST@gmail.com", inline=False)
+            embed.add_field(name="!!게스트 ID", value="ID에 만료되지 않은 모든 쿠폰 수령을 시도합니다\n게스트 아이디 전용\nEX) !!게스트 GUEST-123456", inline=False)
+            embed.add_field(name="!!쿠폰등록 쿠폰번호", value="쿠폰번호를 등록합니다 등록하면 ID 리스트에 등록된 모든 사람들에게 쿠폰 수령을 시도합니다\nEX) !!쿠폰등록 KINGDOMWELOVEYOU", inline=False)
             embed.add_field(name="!!쿠폰리스트", value="쿠폰번호를 리스트를 안내해드립니다", inline=False)
-            embed.add_field(name="!!당첨확인 MID", value="10억 감사제 당첨 내역을 조회해드립니다\n주의사항 : 계정 ID가 아닌 MID를 입력하여야합니다\nMID는 게임 접속 후 계정 ID 아래에 위치해있습니다", inline=False)
+            embed.add_field(name="<이벤트 종료>!!당첨확인 MID", value="10억 감사제 당첨 내역을 조회해드립니다\n주의사항 : 계정 ID가 아닌 MID를 입력하여야합니다\nMID는 게임 접속 후 계정 ID 아래에 위치해있습니다", inline=False)
             await message.channel.send( embed=embed)
 
         if message.content.startswith("!!등록"): #쿠킹덤 ID 리스트에 사용자 등록
             trsText = message.content.split(" ")[1]
             await message.delete()
-            
-            await message.channel.send(message.author.mention + "님 해당 명령어는 현재 사용이 불가능합니다")
-            return
 
             dircooking = db.reference('cooking/') #ID 리스트 가져오기
             cookingch = dircooking.get()
@@ -152,11 +120,7 @@ async def on_message(message):
                     while alertin == "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                         await message.channel.send("데브 사이트 서버 오류 확인 재시작합니다")
                         driver.close()
-<<<<<<< HEAD
                         driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
-=======
-                        driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
                         driver.get("https://game.devplay.com/coupon/ck/ko")
                         driver.implicitly_wait(3)
                         driver.find_element_by_id('email-box').send_keys(trsText)
@@ -201,9 +165,6 @@ async def on_message(message):
         if message.content.startswith("!!쿠폰등록"): #쿠킹덤 ID 리스트에 사용자 등록
             await message.channel.send("쿠폰 등록을 실행합니다 잠시만 기다려 주세요\n시간이 다소 걸리니 처리 완료까지 기다려주세요")
             trsText = message.content.split(" ")[1].upper()
-            
-            await message.channel.send(message.author.mention + "님 해당 명령어는 현재 사용이 불가능합니다")
-            return
 
             dircoocu = db.reference('coocu/') #쿠키 리스트 가져오기
             coocuch = dircoocu.get()
@@ -247,11 +208,7 @@ async def on_message(message):
                     while alertin == "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                         await message.channel.send("데브 사이트 서버 오류 확인 재시작합니다")
                         driver.close()
-<<<<<<< HEAD
                         driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
-=======
-                        driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
                         driver.get("https://game.devplay.com/coupon/ck/ko")
                         driver.implicitly_wait(3)
                         driver.find_element_by_id('email-box').send_keys(inpu)
@@ -277,7 +234,7 @@ async def on_message(message):
                 embed.add_field(name= "쿠폰 지급 최종 안내", value=str(len(cookingch)) + "명 계정에 새로 등록된 쿠폰 지급 신청을 완료하였습니다", inline=False)
                 await message.channel.send(embed=embed)
 
-                channel = client.get_channel(836191919935324170)
+                channel = client.get_channel(865421064398045184)
                 await channel.send("@everyone 새로운 " + trsText + " 쿠폰이 등록되어 쿠폰을 일괄 지급하였습니다 확인하여주세요\n쿠폰을 입력해주신 " + message.author.mention + "님 감사합니다\n 귀하의 입력에 " + str(len(cookingch)) + "분이 자동 수령을 받으셨습니다")
             else:
                 await message.channel.send(message.author.mention + "님 해당 쿠폰은 이미 등록된 쿠폰입니다")
@@ -285,9 +242,6 @@ async def on_message(message):
         if message.content.startswith("!!게스트"): #게스트 아이디 사용
             trsText = message.content.split(" ")[1]
             await message.delete()
-            
-            await message.channel.send(message.author.mention + "님 해당 명령어는 현재 사용이 불가능합니다")
-            return
 
             await message.channel.send(message.author.mention + "님 쿠폰 작업을 시작합니다\n보안을 위해 ID가 포함된 메시지는 삭제됩니다\n게스트 계정 쿠폰 수령은 1회성으로 ID 등록이 되진 않습니다")
 
@@ -326,11 +280,7 @@ async def on_message(message):
                 while alertin == "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                     await message.channel.send("데브 사이트 서버 오류 확인 재시작합니다")
                     driver.close()
-<<<<<<< HEAD
                     driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
-=======
-                    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
                     driver.get("https://game.devplay.com/coupon/ck/ko")
                     driver.implicitly_wait(3)
                     driver.find_element_by_id('email-box').send_keys(trsText)
@@ -389,7 +339,10 @@ async def on_message(message):
             await message.channel.send(embed=embed)
             
         if message.content.startswith("!!당첨확인"): #당첨확인
-            await message.channel.send(message.author.mention + "님의 10억 감사제 조회를 시작합니다")
+            await message.channel.send(message.author.mention + "님의 해당이벤트는 현재 종료되었습니다")
+            return
+
+
             trsText = message.content.split(" ")[1]
             await message.delete()
             
