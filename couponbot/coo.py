@@ -87,6 +87,23 @@ async def on_message(message):
             if trsText in cookingch: #해당 ID가 있다면
                 await message.channel.send(message.author.mention + "님 해당 아이디는 이미 등록되어있습니다")
             else:# 없다면 리스트로 저장
+                dircookingcou = db.reference('cookingcou/') #ID 리스트 가져오기
+                cookingcou = dircookingcou.get()
+                cookingcouch = list(cookingcou.keys())
+
+                send = str(message.author)
+                send = send.split("#")
+                send = send[0] + "*" + send[1] # 송출자 ID 설정
+                idput = 0
+                if send in cookingcouch: #해당 ID가 있다면
+                    idput = cookingcou[send] + 1
+                else:
+                    print("새로운 유저입니다")
+
+                if idput >= 3:
+                    await message.channel.send(message.author.mention + "님 등록 가능 ID수가 초과되었습니다")
+                    return
+
                 await message.channel.send(message.author.mention + "님 등록과 함께 쿠폰 작업을 시작합니다\n보안을 위해 ID가 포함된 메시지는 삭제됩니다")
                 irua = True
                 
@@ -158,7 +175,19 @@ async def on_message(message):
                         for inin in coochcu[1:]:
                             dircoocu.update({count:inin})
                             count += 1
+
+                dircookingcou.update({send:idput})
+
+                dircoosend = db.reference('cooinlist/' + send) #쿠키 리스트 가져오기
+                coosend = dircoosend.get()
                 
+                if coosend == None:
+                    coosend = 00
+                else:
+                    coosend = len(coosend)
+
+                dircoosend.update({str(coosend):trsText})
+
                 embed.add_field(name="ID를 정상적으로 등록하였습니다",value="앞으로 누군가 쿠폰을 최초 등록하면 이 계정에 쿠폰이 자동 수령됩니다", inline=False)
                 await message.channel.send(embed=embed)
 

@@ -3,11 +3,13 @@
     <head>
         <script type="text/javascript">
             function ready() {
+                const songlist = [];
                 var jbString = document.getElementById('result').innerText;
                 var jbSplit = jbString.split('^');
                 var jbinSplit = jbSplit[0].split(' ');
                 jbSplit = jbSplit.slice(1)
 
+                document.write('<head><title>Music Bot</title></head>')
                 document.write('<div id = explanation> 검색 양식 : [주소]/장르.번호<br>');
                 document.write('장르 목록 : blues, classical, country, disco, hiphop, jazz, metal, pop, reggae, rock<br>');
                 document.write('번호 범위 : 00000 ~ 00099<br>');
@@ -23,6 +25,7 @@
                     } else if (i > 2) {
                         //aca += jbinSplit[i] + " : "
                         document.write( '<li id = ' + String.fromCharCode(parseInt(i) + 97) + '>' + jbinSplit[i].split('.wav')[0] + ' </li>' );
+                        songlist.push(jbinSplit[i].split('.wav')[0]);
                     }
                 }
 
@@ -43,8 +46,13 @@
                 document.write('</ul>');
 
                 document.write( '<p><span id = MID>' + jbSplit[jbSplit.length - 2] + '</span><br>' );
-                document.write( '<span id = final>' + jbSplit[jbSplit.length - 1] + '</span></p></div>' );
-                document.write( '<link rel="shortcut icon" href="#">');
+                document.write( '<span id = final>' + jbSplit[jbSplit.length - 1] + '</span></p></div><div id = songlit>' );
+
+                for (insong in songlist){ 
+                    document.write("<p>추천리스트 " + insong + "번 : " + songlist[insong] + '</br>')
+                    document.write('<audio controls><source src="/song/'+ songlist[insong] +'" type="audio/mpeg">해당 오디오는 사용이 불가능합니다</audio></p>');
+                }
+                document.write('<div>');
             }
             document.addEventListener("DOMContentLoaded", ready);
         </script>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Music Bot</title>
+    </head>
+
+    <script>
+        function ready() {
+            var jbString = document.getElementById('result').innerText;
+            console.log(jbString)
+            var audio = new Audio('D:/Desktop/TEAM.IT/AI/main/song/blues/' + jbString);
+        }
+        document.addEventListener("DOMContentLoaded", ready);
+    </script>
+
+    <body>
+        <div id='result'>{{name}}</div>
+        <input type="button" onclick="audio.play();" value="PLAY"> <!--재생-->
+        <input type="button" onclick="audio.pause();" value="PAUSE"> <!--일시정지-->
+        </br>
+        <audio id="musicplayer" autoplay>
+            <source src="/songst/blues.00015.wav">
+        </audio>
+    </body>
+</html>

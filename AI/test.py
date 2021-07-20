@@ -3,7 +3,9 @@ from bs4 import BeautifulSoup
 import random
 import time
 
-while(True):
+html = urlopen("http://mangul.iptime.org/bordform/admin") 
+
+for i in range(200):
     listin = ["blues", "classical", "country", "disco", "hiphop", "jazz", "metal", "pop", "reggae", "rock"]
 
     rand = random.randint(0, 99)
@@ -18,4 +20,4 @@ while(True):
 
     print(bsObject)
 
-    time.sleep(0.5)
+    #time.sleep(1)
