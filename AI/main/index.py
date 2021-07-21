@@ -1,7 +1,7 @@
 import pandas as pd
 import sklearn
 from sklearn.metrics.pairwise import cosine_similarity
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for, redirect
 import os
 from flask import send_from_directory
 from flask import request
@@ -116,14 +116,25 @@ def song_sendin(song):
 
 @app.route('/upload')
 def render_file():
-   return render_template('up.html')
+   return render_template('/up.html')
 
 @app.route('/uploader', methods=['GET', 'POST'])
 def uploader_file():
-   if request.method == 'POST':
-      f = request.files['file']
-      f.save("AI/main/song/upload" + secure_filename(f.filename))
-      return 'file uploaded successfully'
+   try:
+      if request.method == 'POST':
+         f = request.files['file']
+         fname = ""
+         for inname in secure_filename(f.filename).split(".")[:-1]:
+            fname += inname 
+         f.save("AI/main/song/upload/" + fname + ".wav")
+
+         return redirect(url_for('pagein'))
+   except:
+      return '파일 업로드에 오류가 발생하였습니다'
+
+@app.route('/page')
+def pagein():
+   return render_template('list.html')
 
 if __name__ == '__main__':
    app.run(debug = True, host='0.0.0.0', threaded=True, port=80)
