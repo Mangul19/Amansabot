@@ -26,7 +26,7 @@ def songCH(song):
       def inputing (songname):
          destFile = "AI/main/project.log"
          with open(destFile, 'a', encoding='utf-8') as f:
-            f.write("---------------------------------------------\n" + songname + "분석 요청\n---------------------------------------------")
+            f.write("---------------------------------------------\n" + songname + "분석 요청\n---------------------------------------------\n")
          mera = ""
          
          series = sim_df[songname].sort_values(ascending=False)
@@ -81,7 +81,7 @@ def songCH(song):
          mera += "^해당 음악은 " + panel + "장르와 흡사합니다^또한 해당  음악은 " + high[1] + "장르와 가장 흡사합니다"
          destFile = "AI/main/project.log"
          with open(destFile, 'a', encoding='utf-8') as f:
-            f.write("해당  음악은 " + high[1] + "장르와 가장 흡사합니다")
+            f.write("해당  음악은 " + high[1] + "장르와 가장 흡사합니다\n")
          return(mera)
 
       def chzero (num):
@@ -93,9 +93,9 @@ def songCH(song):
       x = inputing(song)
       return render_template('/hello.html', song = x)
    except KeyError:
-      estFile = "AI/main/project.log"
+      destFile = "AI/main/project.log"
       with open(destFile, 'a', encoding='utf-8') as f:
-         f.write("해킹시도 가능성 높음 OR 오입력 오류 페이지 출력")
+         f.write("해킹시도 가능성 높음 OR 오입력 오류 페이지 출력\n")
       return render_template('/error.html')
 
 @app.route('/')
@@ -106,7 +106,7 @@ def main():
 def not_found_error(error):
    destFile = "AI/main/project.log"
    with open(destFile, 'a', encoding='utf-8') as f:
-      f.write("해킹시도 가능성 높음 OR 오입력 오류 페이지 출력")
+      f.write("해킹시도 가능성 높음 OR 오입력 오류 페이지 출력\n")
    return render_template('error.html')
 
 @app.route('/favicon.ico')
@@ -145,7 +145,7 @@ def uploader_file():
 def pagein():
    return render_template('/list.html')
 
-@app.route('/logv')
+@app.route('/logv6894')
 def logv():
    return send_from_directory(os.path.join(app.root_path, ''), 'project.log', mimetype='text/plain')
 

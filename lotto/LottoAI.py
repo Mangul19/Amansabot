@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 
-rows = np.loadtxt("/lotto.csv", delimiter=",")
+rows = np.loadtxt("lotto/lotto.csv", delimiter=",")
 row_count = len(rows)
 print(row_count)
 

@@ -1,0 +1,127 @@
+---------------------------------------------
+test.wav분석 요청
+---------------------------------------------
+해킹시도 가능성 높음 OR 오입력 오류 페이지 출력
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:26:33] "[37mGET /test HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:26:33] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+---------------------------------------------
+blues.00052.wav분석 요청
+---------------------------------------------
+해당  음악은 blues장르와 가장 흡사합니다
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:26:35] "[37mGET /blues.00052 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:26:35] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:26:36] "[37mGET /logv HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:26:36] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:28:22] "[37mGET /song/blues.00052 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:28:22] "[37mGET /song/blues.00052 HTTP/1.1[0m" 200 -
+해킹시도 가능성 높음 OR 오입력 오류 페이지 출력
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:28:46] "[37mGET /songin/EHCO HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:29:10] "[37mGET /songin/ECHO HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:29:10] "[37mGET /songin/ECHO HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:29:42] "[37mGET /logv HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:29:42] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:30:09] "[37mGET /logv HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:30:09] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:30:50] "[37mGET /songin/ECHO HTTP/1.1[0m" 206 -
+---------------------------------------------
+blues.00000.wav분석 요청
+---------------------------------------------
+해당  음악은 jazz장르와 가장 흡사합니다
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:32:08] "[37mGET /blues.00000 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:32:08] "[37mGET /song/disco.00088 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:32:08] "[37mGET /song/rock.00074 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:32:08] "[37mGET /song/country.00055 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:32:08] "[37mGET /song/jazz.00011 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:32:08] "[37mGET /song/jazz.00018 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:32:08] "[37mGET /song/jazz.00012 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:32:08] "[37mGET /song/rock.00083 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:32:08] "[37mGET /song/jazz.00098 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:32:08] "[37mGET /song/blues.00050 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:32:08] "[37mGET /song/rock.00008 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:32:21] "[37mGET / HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:32:26] "[37mGET /upload HTTP/1.1[0m" 200 -
+INFO:werkzeug:74.116.180.85 - - [23/Jul/2021 12:34:02] "[37mGET / HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:38:09] "[32mPOST /uploader HTTP/1.1[0m" 302 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:38:09] "[37mGET /page HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:38:16] "[37mGET /logv HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:38:16] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+INFO:werkzeug:198.98.59.211 - - [23/Jul/2021 12:45:27] "[37mGET / HTTP/1.1[0m" 200 -
+해킹시도 가능성 높음 OR 오입력 오류 페이지 출력
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:53:57] "[37mGET /test/adminform HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:54:00] "[37mGET /logv HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:54:00] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:57:46] "[37mGET /logv HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:57:46] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+---------------------------------------------
+blues.00001.wav분석 요청
+---------------------------------------------
+해당  음악은 reggae장르와 가장 흡사합니다
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:02] "[37mGET /blues.00001 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:02] "[37mGET /song/rock.00014 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:02] "[37mGET /song/reggae.00006 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:02] "[37mGET /song/hiphop.00002 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:02] "[37mGET /song/reggae.00036 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:02] "[37mGET /song/reggae.00009 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:02] "[37mGET /song/reggae.00025 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:02] "[37mGET /song/reggae.00038 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:02] "[37mGET /song/reggae.00008 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:02] "[37mGET /song/country.00078 HTTP/1.1[0m" 200 -
+---------------------------------------------
+blues.00081.wav분석 요청
+---------------------------------------------
+해당  음악은 blues장르와 가장 흡사합니다
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:10] "[37mGET /blues.00081 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:10] "[37mGET /song/country.00099 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:10] "[37mGET /song/blues.00084 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:10] "[37mGET /song/blues.00077 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:10] "[37mGET /song/blues.00078 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:10] "[37mGET /song/metal.00048 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:10] "[37mGET /song/blues.00079 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:10] "[37mGET /song/metal.00047 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:10] "[37mGET /song/metal.00046 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:10] "[37mGET /song/blues.00073 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:10] "[37mGET /song/metal.00031 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:14] "[37mGET /logv HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 12:58:14] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+INFO:werkzeug:189.127.145.207 - - [23/Jul/2021 13:13:36] "[37mGET / HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 13:15:53] "[37mGET /logv HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 13:15:53] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 13:16:50] "[37mGET /logv6894 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 13:16:55] "[37mGET /logv6894 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 13:16:55] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 13:16:58] "[37mGET /logv6894 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 13:16:58] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+---------------------------------------------
+logv.wav분석 요청
+---------------------------------------------
+해킹시도 가능성 높음 OR 오입력 오류 페이지 출력
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 13:17:06] "[37mGET /logv HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 13:17:06] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+---------------------------------------------
+logv.wav분석 요청
+---------------------------------------------
+해킹시도 가능성 높음 OR 오입력 오류 페이지 출력
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 13:17:07] "[37mGET /logv HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 13:17:07] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+---------------------------------------------
+logv.wav분석 요청
+---------------------------------------------
+해킹시도 가능성 높음 OR 오입력 오류 페이지 출력
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 13:17:09] "[37mGET /logv HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 13:17:09] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 13:17:37] "[37mGET /logv6894 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 13:18:59] "[37mGET /logv6894 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 13:18:59] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+INFO:werkzeug:59.95.95.19 - - [23/Jul/2021 13:37:20] "[37mGET / HTTP/1.1[0m" 200 -
+INFO:werkzeug:59.126.139.199 - - [23/Jul/2021 14:03:07] "[37mGET / HTTP/1.1[0m" 200 -
+INFO:werkzeug:68.132.88.216 - - [23/Jul/2021 14:10:44] "[37mGET / HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 14:24:09] "[37mGET /logv6894 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 14:24:09] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 14:33:27] "[37mGET /logv6894 HTTP/1.1[0m" 200 -
+INFO:werkzeug:210.101.247.4 - - [23/Jul/2021 14:33:27] "[37mGET /favicon.ico HTTP/1.1[0m" 200 -
+해킹시도 가능성 높음 OR 오입력 오류 페이지 출력
+INFO:werkzeug:205.185.115.135 - - [23/Jul/2021 14:36:35] "[37mPOST /boaform/admin/formLogin HTTP/1.1[0m" 200 -
+INFO:werkzeug:185.189.182.234 - - [23/Jul/2021 14:51:42] "[37mGET / HTTP/1.1[0m" 200 -
+INFO:werkzeug:117.195.29.93 - - [23/Jul/2021 15:00:14] "[37mGET / HTTP/1.1[0m" 200 -
+INFO:werkzeug:180.254.123.251 - - [23/Jul/2021 15:04:15] "[37mGET / HTTP/1.1[0m" 200 -
+해킹시도 가능성 높음 OR 오입력 오류 페이지 출력
+INFO:werkzeug:209.141.47.35 - - [23/Jul/2021 15:22:57] "[37mGET /config/getuser?index=0 HTTP/1.1[0m" 200 -
