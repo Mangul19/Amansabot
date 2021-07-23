@@ -10,7 +10,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 class Trainer(object):
     def __init__(self, config, train_set, train_loader, eval_set, eval_loader, test_set,
-test_loader):
+            test_loader):
         self.config = config
         self.train_set= train_set 
         self.train_loader = train_loader 
@@ -32,8 +32,8 @@ test_loader):
 
         if len(self.config.kernel_sizes) == 1: 
             self.channels = "single"
-         else:
-             self.channels = "multi"
+        else:
+            self.channels = "multi"
 
         self.build_net() 
     
@@ -45,7 +45,7 @@ test_loader):
 
         if self.mode == 'test': 
             model.load_state_dict(torch.load(os.path.join(self.save_dir, 'best_acc.pth'),
-lambda storage, loc: storage))
+            lambda storage, loc: storage))
 
         self.model = model.to(device) 
         print("[*] Prepare model completed!")
@@ -67,7 +67,8 @@ lambda storage, loc: storage))
                 feature = feature.to(device).long()
                 target = target.to(device).long()
                 
-                logits = self.model(feature) loss = criterion(logits, target)
+                logits = self.model(feature)
+                loss = criterion(logits, target)
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
@@ -90,8 +91,9 @@ lambda storage, loc: storage))
                         print("Save model completed!")
          
             print("Learning finished!")
-            torch.save(self.model.state_dict(), os.path.join(self.save_dir, 'final.pth')) # save model
+            torch.save(self.model.state_dict(), os.path.join(self.save_dir, 'final.pht')) # save model
             print("Save model completed!")
+
     def eval(self):
         self.model.eval()
 
@@ -116,8 +118,8 @@ lambda storage, loc: storage))
         avg_loss += loss.item() / len(self.train_loader) 
         avg_acc += accuracy / len(self.train_loader)
 
-    rint("Evaluation- loss: %.3f accuracy: %.3f"% (avg_loss, avg_acc)) 
-    return avg_acc
+        print("Evaluation- loss: %.3f accuracy: %.3f"% (avg_loss, avg_acc)) 
+        return avg_acc
 
     def test(self):
         self.model.eval()

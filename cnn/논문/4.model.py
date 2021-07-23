@@ -30,10 +30,8 @@ class CNNTextClassifier(nn.Module):
     def forward(self, x):
         h = self.embedding(x)
         h = h.unsqueeze(1) # (batch, 1, vocab_size, embedding_dim)
-        h = [F.relu(conv(h)).squeeze(3) for conv in self.conv1] # [(batch, channel_out,
-vocab_size)] * len(kernel_sizes)
-        h = [F.max_pool1d(i, i.size(2)).squeeze(2) for i in h] # [(batch, channel_out)]
-* len(kernel_sizes)
+        h = [F.relu(conv(h)).squeeze(3) for conv in self.conv1] # [(batch, channel_out, vocab_size)] * len(kernel_sizes)
+        h = [F.max_pool1d(i, i.size(2)).squeeze(2) for i in h] # [(batch, channel_out)] * len(kernel_sizes)
         h = torch.cat(h, 1) # (batch, channel_out * len(kernel_sizes) h = self.dropout(h)
         logit = self.fc1(h) # (batch, num_classes)
         return logit
