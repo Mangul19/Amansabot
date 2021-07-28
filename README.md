@@ -148,3 +148,7 @@ https://fancim.me/celeb/profile.aspx?cu_id=mulmangul19
 7. 실시간으로 발생한 오류 수정
 
 ----
+
+1. 어만사 봇 주식 시스템 정식 업데이트
+2. 기타 오류 수정
+3. CNN 시스템 기존 논문에서 다운로드 후 사용가능하게 수정
