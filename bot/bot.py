@@ -53,7 +53,7 @@ async def on_ready():
         "\n시스템을 시작합니다" + 
         "\n==========================================")
     # 이 기능을 이용하여 봇의 상태를 출력
-    mssg = discord.Game("!help|Made by Han_MangUl")
+    mssg = discord.Game("!help|Made by MangUl")
     await client.change_presence(status=discord.Status.online, activity=mssg)
 
 #새로운 사람이 들어오면
@@ -119,7 +119,7 @@ async def on_message(message):
             embed = discord.Embed(title="명령어", color=0x5CD1E5)
             embed.add_field(name="일반", value="!translation, !레벨, !업데이트, !지진, !코로나, !날씨, !출첵", inline=False)
             embed.add_field(name="게임", value="!주사위, !게임, !랭킹", inline=False)
-            embed.add_field(name="어만머니", value="!bank 비밀번호, !돈확인, !돈받기,  !세금, !예적금, !송금, !코드발급, !주식", inline=False)
+            embed.add_field(name="어만머니", value="!bank 비밀번호, !돈확인, !돈받기,  !세금, !예적금, !송금, !코드발급, !주식, !주식확인", inline=False)
             embed.add_field(name="어만고치", value="!어만고치, !상점, !인벤토리, !먹이, !고치샤워", inline=False)
             embed.add_field(name="게임&닉네임 등록 관리", value="!게임정보", inline=False)
 
@@ -206,12 +206,12 @@ async def on_message(message):
                 intstr = str(message.content) # 메세지를 String값으로 변환
                 intstr = len(intstr) # 길이 계산
 
-                ranin = random.uniform(1.0, 1.5)
-                ran = ranin * intstr / 2
+                ranin = random.uniform(1.0, 10.0)
+                ran = ranin * intstr / level
                 ran = math.ceil(ran) # 길이에 랜덤값 계산후 정수값 저장
 
-                if ran > 50: # 한번에 많은 경험치 부여 방지를 위해 최대값을 50으로 설정
-                    ran = 50
+                if ran > (1000 / level): # 한번에 많은 경험치 부여 방지를 위해 최대값을 100으로 설정
+                    ran = 1000 / level
 
                 exp = exp + ran
 
@@ -1709,7 +1709,7 @@ async def on_message(message):
         if message.content == "!주식":#주식 안내
             jusiclist = ["ju01","ju02","ju03"] #조회할 주식 초기화
 
-            embed = discord.Embed(title="주식 현황" ,description="주식은 1만 ~ 10만까지 있습니다" , color=0x5CD1E5)
+            embed = discord.Embed(title="주식 현황" ,description="주식은 1만 ~ 20만까지 변동합니다" , color=0x5CD1E5)
             for wordin in jusiclist:
                 dirjusic = db.reference('ju/')
                 jusic = dirjusic.get()
@@ -1717,7 +1717,7 @@ async def on_message(message):
 
                 embed.add_field(name="주식 번호 " + wordin[-2:], value= str(jusic) + "원", inline=False)
 
-            embed.set_footer(text="주식 구입 방법 >> !주식구입 ju'주식번호' EX)!주식구입 ju01")
+            embed.set_footer(text="주식 구입 방법 \n !주식구입 ju'주식번호'\nEX)!주식구입 ju01")
             await message.channel.send(embed=embed)
 
         if message.content.startswith("!주식구입"): #주식 구입하기
@@ -1737,10 +1737,10 @@ async def on_message(message):
             trswhat = trs[1]
 
             dirjusic = db.reference('ju/') # 해당 주식 가격 조회
-            jusic = dirjusic.get()
-            jusic = jusic[trswhat]
+            jusicm = dirjusic.get()
+            jusicm = jusicm[trswhat]
 
-            if money >= jusic: #돈이 충분하다면
+            if money >= jusicm: #돈이 충분하다면
                 dirjusicin = db.reference(trswhat + '/' + send) # 해당 사용자 주식 정보 조회
                 jusic = dirjusicin.get()
 
@@ -1752,12 +1752,69 @@ async def on_message(message):
 
                 dirjusicin.update({send:jusic + 1}) # 해당 사용자에게 해당 주식 1주 추가
 
-                money = money - jusic #돈 정상 계산 후 업데이트
+                money = money - jusicm #돈 정상 계산 후 업데이트
                 dirmoney.update({send:money})
 
                 await message.channel.send(message.author.mention + "님 주식 구입이 완료되었습니다")
             else:#돈이 부족할시 거부
                 await message.channel.send(message.author.mention + "님 소지 금액이 부족합니다")
+
+        if message.content == "!주식확인":#구입한 주식 안내
+            jusiclist = ["ju01","ju02","ju03"] #변화시킬 주식 미리 저장
+
+            embed = discord.Embed(title="소유 주식" , color=0x5CD1E5)
+            for wordin in jusiclist:
+                dirjusicin = db.reference(wordin + '/' + send) # 해당 사용자 주식 정보 조회
+                jusic = dirjusicin.get()
+
+                if jusic == None: # 정보가 없다면 초기화
+                    dirjusicin.update({send:0})
+                    jusic = 0
+                else:
+                    jusic = jusic[send]
+
+                embed.add_field(name="주식 번호 " + wordin[-2:], value= str(jusic) + "개", inline=False)
+            embed.set_footer(text="주식 판매 방법 \n !주식판매 ju'주식번호'\nEX)!주식판매 ju01")
+            await message.channel.send(embed=embed)
+
+        if message.content.startswith("!주식판매"): #주식 구입하기
+            send = str(message.author)
+            send = send.split("#")
+            send = send[0] + "*" + send[1] #구입 요청자 ID 확인
+
+            dirmoney = db.reference('money/' + send) #돈확인
+            money = dirmoney.get()
+
+            if money == None: #정보가 없다면 초기화 후 저장
+                dirmoney.update({send:50000.0})
+            else:
+                money = money[send]
+
+            trs = message.content.split(" ") #구입하고자 하는 주식코드 확인
+            trswhat = trs[1]
+
+            dirjusicin = db.reference(trswhat + '/' + send) # 해당 사용자 주식 정보 조회
+            jusic = dirjusicin.get()
+
+            if jusic == None: # 정보가 없다면 초기화
+                dirjusicin.update({send:0})
+                jusic = 0
+            else:
+                jusic = jusic[send]
+
+            if jusic > 0: #갯수가 충분하다면
+                dirjusic = db.reference('ju/') # 해당 주식 가격 조회
+                jusicm = dirjusic.get()
+                jusicm = jusicm[trswhat]
+
+                dirjusicin.update({send:jusic - 1}) # 해당 사용자에게 해당 주식 1주 삭제
+
+                money = money + jusicm #돈 정상 계산 후 업데이트
+                dirmoney.update({send:money})
+
+                await message.channel.send(message.author.mention + "님 주식 판매가 완료되었습니다")
+            else:#갯수가 부족할시 거부
+                await message.channel.send(message.author.mention + "님 보유 중인 주식 갯수가 부족합니다") 
     except:
         await message.channel.send(message.author.mention + "님 명령어 실행 중 오류가 발생하였습니다 명령어를 확인하여 주세요")
 

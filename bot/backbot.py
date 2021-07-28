@@ -689,14 +689,14 @@ async def background_jusic():#주식 변환시스템
                 jusic = dirjusic.get()
                 jusic = jusic[wordin] # 변화시킬 주식의 가격을 조회
 
-                ran = round(random.uniform(-100, 100), 3) #랜덤 %지정
+                ran = round(random.uniform(-20000, 20000), 3) #랜덤 %지정
 
-                jusic = round(jusic + (10 * ran), 3) #정상 계산
+                jusic = round(jusic + ran, 3) #정상 계산
 
                 if jusic <= 10000: # 주식의 가격이 폭등하거나 폭락하지 않도록 제한 선 설정
                     jusic = round(random.uniform(10000, 25000), 3)
-                elif jusic >= 100000:
-                    jusic = round(random.uniform(85000, 100000), 3)
+                elif jusic >= 200000:
+                    jusic = round(random.uniform(185000, 200000), 3)
 
                 dirjusic.update({wordin:jusic}) #계산후 정상 업데이트
         except:

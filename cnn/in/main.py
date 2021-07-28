@@ -1,8 +1,7 @@
 import os
 import time
 import datetime
-#from tensorflow import flags
-#from absl import flags
+import tensorflow.compat.v1 as tf
 import tensorflow as tf
 import numpy as np
 import cnn_tool as tool
@@ -172,7 +171,7 @@ with tf.Graph().as_default():
 
         # Output directory for models and summaries
         timestamp = str(int(time.time()))
-        out_dir = os.path.abspath(os.path.join(os.path.curdir, "runs", timestamp))
+        out_dir = os.path.abspath(os.path.join(os.path.curdir, "cnn", timestamp))
         print("Writing to {}\n".format(out_dir))
 
         # Summaries for loss and accuracy
