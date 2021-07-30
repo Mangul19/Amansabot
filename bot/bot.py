@@ -150,8 +150,8 @@ async def on_message(message):
 
         if message.content == "!예적금":
             embed = discord.Embed(title="명령어", color=0x5CD1E5)
-            embed.add_field(name="!예금 '금액'", value="'금액'원을 예금 통장에 입금합니다", inline=False)
-            embed.add_field(name="!출금예금 '금액'", value="'금액'원을 예금 통장에서 출금합니다", inline=False)
+            embed.add_field(name="!예금 '금액'", value="'금액'원을 예금 통장에 입금합니다\n전부 예금하고 싶다면 금액 대신 '전부'를 입력하세요", inline=False)
+            embed.add_field(name="!출금예금 '금액'", value="'금액'원을 예금 통장에서 출금합니다\n전부 출금하고 싶다면 금액 대신 '전부'를 입력하세요", inline=False)
             embed.add_field(name="!통장확인", value="통장 잔고를 확인합니다\n예금 이율은 시간당 0.3%이며 시스템이 업데이트 될때도 지급됩니다", inline=False)
             embed.add_field(name="!적금", value="적금관련 명령어를 확인합니다", inline=False)
             await message.channel.send(embed=embed)
@@ -354,6 +354,7 @@ async def on_message(message):
             else:
                 money = money[send]
             
+            money = round(money, 3)
             await message.channel.send(message.author.mention + "님이" + " 현재 소지중인 돈은 : " + str(money) + "원입니다")
 
         if message.content.startswith("!홀짝"): # 홀짝 게임
@@ -493,33 +494,21 @@ async def on_message(message):
             driver.get("http://ncov.mohw.go.kr/")# 사이트 열람
             driver.implicitly_wait(3)
 
-            html = driver.page_source
-            soup = BeautifulSoup(html, 'html.parser')
+            
+            embed = discord.Embed(title="코로나 정보", color=0x5CD1E5) #임베드 생성
 
-            embed = discord.Embed(title="코로나 정보", description="", color=0x5CD1E5) #임베드 생성
+            einput = driver.find_element_by_css_selector('body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(1) > span.before').text
+            embed.add_field(name="질병관리청 공식 확진자 수 [전날 확진자 <AM 10시에 업데이트>]", value=einput + "명", inline=False) # 전날 확진자 선택 및 임베트 추가
 
-            einput = str(soup.select(
-                'body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(1) > span.before'
-            ))
-            embed.add_field(name="질병관리청 공식 확진자 수 [전날 확진자 <AM 10시에 업데이트>]", value=einput[28:-9] + "명", inline=False) # 전날 확진자 선택 및 임베트 추가
-
-            einput = str(soup.select(
-                'body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(4) > span.before'
-            ))
-            embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput[23:-9] + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
+            einput = driver.find_element_by_css_selector('body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(4) > span.before').text
+            embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
 
             driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
             driver.implicitly_wait(3)
+            
+            einput = driver.find_element_by_css_selector('#ALL_decidecnt_increase > b').text
 
-            html = driver.page_source
-            driver.quit()
-            soup = BeautifulSoup(html, 'html.parser')
-
-            einput = str(soup.select(
-                '#ALL_decidecnt_increase > b'
-            ))
-
-            embed.add_field(name="실시간 코로나 확진자 수", value=einput[4:-5], inline=False)#실시간 확진자 선택 및 임베트 추가
+            embed.add_field(name="실시간 코로나 확진자 수", value=einput, inline=False)#실시간 확진자 선택 및 임베트 추가
 
             await message.channel.send(embed=embed)
 
@@ -900,6 +889,16 @@ async def on_message(message):
                 money = money[send]
 
             trsText = message.content.split(" ")
+
+            if trsText[1] == "전부":
+                ye = round(ye + money, 3) # 정상 계산 처리 후 정보 업데이트
+
+                dirmoney.update({send:0})
+                dirye.update({send:ye})
+
+                await message.channel.send("예금 통장에 " + str(money) + "원을 입금하였습니다")
+                return
+
             yein = round(float(trsText[1]), 3) # 입금 요청 금액 확인
 
             if money >= yein: # 요청 금액이 소지금 보다 적다면
@@ -937,6 +936,16 @@ async def on_message(message):
                 money = money[send]
 
             trsText = message.content.split(" ")
+
+            if trsText[1] == "전부":
+                money = round(money + ye, 3)
+
+                dirmoney.update({send:money})
+                dirye.update({send:0})
+
+                await message.channel.send("예금 통장에서 " + str(ye) + "원을 출금하였습니다")
+                return
+
             yein = round(float(trsText[1]), 3)
 
             if ye >= yein:
@@ -1447,6 +1456,8 @@ async def on_message(message):
                 else:#해당 조건이 아닐시
                     await message.channel.send(message.author.mention + "님의 어만고치가 먹이를 맛있게 먹습니다")
                     diramangociin.update({'hung':hungwi}) # 일반 저장
+            else:
+                await message.channel.send(message.author.mention + "님의 해당 먹이가 없거나 수치가 올바르지 않습니다")
 
         if message.content == "!세금": #세금 안내
             send = str(message.author)
@@ -1465,7 +1476,7 @@ async def on_message(message):
                 segum = segum[send] # 누적 세금
                 lastsegum = lastsegum[send] # 제일 최근 납부 금액
 
-                await message.channel.send("[세금 기준]\n10만원 이하 5.5% 20만원 이하 10% 30만원 이하 23.5% 40만원 이하 35% 50만원 이하 40% 그외 50%\n세금은 00시, 12시에 납부됩니다\n내신 세금의 총합은 : " + str(segum) + "원입니다\n제일 최근에 낸 세금액은 " + str(lastsegum) + " 원입니다")
+                await message.channel.send("[세금 기준]\n100만원 이하 5.5% 250만원 이하 10.5% 500만원 이하 16% 750만원 이하 21.5% 1000만원 이하 27% 그외 35%\n세금은 00시, 12시에 납부됩니다\n내신 세금의 총합은 : " + str(segum) + "원입니다\n제일 최근에 낸 세금액은 " + str(lastsegum) + " 원입니다")
 
         if message.content == "!업데이트": #업데이트 안내 시스템
             dirupdata = db.reference('updata/') #업데이트 정보 조회
@@ -1707,17 +1718,17 @@ async def on_message(message):
                 await message.channel.send(message.author.mention + "님 소지금액이 부족하여 상품 구입이 불가합니다")
 
         if message.content == "!주식":#주식 안내
-            jusiclist = ["ju01","ju02","ju03"] #조회할 주식 초기화
+            jusiclist = ["어만코인","달주식","투자주식","점핑주식","단단주식"] #조회할 주식 초기화
 
-            embed = discord.Embed(title="주식 현황" ,description="주식은 1만 ~ 20만까지 변동합니다" , color=0x5CD1E5)
+            embed = discord.Embed(title="주식 현황" ,description="주식은 1만 ~ 1000만까지 변동합니다" , color=0x5CD1E5)
             for wordin in jusiclist:
                 dirjusic = db.reference('ju/')
                 jusic = dirjusic.get()
                 jusic = jusic[wordin] #특정 주식 조회 및 값 저장
 
-                embed.add_field(name="주식 번호 " + wordin[-2:], value= str(jusic) + "원", inline=False)
+                embed.add_field(name="주식명 : " + wordin, value= str(jusic) + "원", inline=False)
 
-            embed.set_footer(text="주식 구입 방법 \n !주식구입 ju'주식번호'\nEX)!주식구입 ju01")
+            embed.set_footer(text="주식 구입 방법 \n !주식구입 '주식이름' '갯수'\nEX)!주식구입 투자주식 2")
             await message.channel.send(embed=embed)
 
         if message.content.startswith("!주식구입"): #주식 구입하기
@@ -1735,12 +1746,13 @@ async def on_message(message):
 
             trs = message.content.split(" ") #구입하고자 하는 주식코드 확인
             trswhat = trs[1]
+            trscou = int(float(trs[2]))
 
             dirjusic = db.reference('ju/') # 해당 주식 가격 조회
             jusicm = dirjusic.get()
             jusicm = jusicm[trswhat]
 
-            if money >= jusicm: #돈이 충분하다면
+            if money >= (jusicm * trscou): #돈이 충분하다면
                 dirjusicin = db.reference(trswhat + '/' + send) # 해당 사용자 주식 정보 조회
                 jusic = dirjusicin.get()
 
@@ -1750,9 +1762,13 @@ async def on_message(message):
                 else:
                     jusic = jusic[send]
 
-                dirjusicin.update({send:jusic + 1}) # 해당 사용자에게 해당 주식 1주 추가
+                if jusic + trscou > 20:
+                    await message.channel.send(message.author.mention + "님 주식은 최대 20개까지만 소유가 가능합니다")
+                    return
 
-                money = money - jusicm #돈 정상 계산 후 업데이트
+                dirjusicin.update({send:jusic + trscou}) # 해당 사용자에게 해당 주식 주 추가
+
+                money = round(money - (jusicm * trscou), 3) #돈 정상 계산 후 업데이트
                 dirmoney.update({send:money})
 
                 await message.channel.send(message.author.mention + "님 주식 구입이 완료되었습니다")
@@ -1760,7 +1776,7 @@ async def on_message(message):
                 await message.channel.send(message.author.mention + "님 소지 금액이 부족합니다")
 
         if message.content == "!주식확인":#구입한 주식 안내
-            jusiclist = ["ju01","ju02","ju03"] #변화시킬 주식 미리 저장
+            jusiclist = ["어만코인","달주식","투자주식","점핑주식","단단주식"] #조회할 주식 미리 저장
 
             embed = discord.Embed(title="소유 주식" , color=0x5CD1E5)
             for wordin in jusiclist:
@@ -1773,8 +1789,8 @@ async def on_message(message):
                 else:
                     jusic = jusic[send]
 
-                embed.add_field(name="주식 번호 " + wordin[-2:], value= str(jusic) + "개", inline=False)
-            embed.set_footer(text="주식 판매 방법 \n !주식판매 ju'주식번호'\nEX)!주식판매 ju01")
+                embed.add_field(name="주식 번호 " + wordin, value= str(jusic) + "개", inline=False)
+            embed.set_footer(text="주식 판매 방법 \n !주식판매 '주식이름' '갯수'\nEX)!주식판매 단단주식 2")
             await message.channel.send(embed=embed)
 
         if message.content.startswith("!주식판매"): #주식 구입하기
@@ -1792,6 +1808,7 @@ async def on_message(message):
 
             trs = message.content.split(" ") #구입하고자 하는 주식코드 확인
             trswhat = trs[1]
+            trscou = int(float(trs[2]))
 
             dirjusicin = db.reference(trswhat + '/' + send) # 해당 사용자 주식 정보 조회
             jusic = dirjusicin.get()
@@ -1802,14 +1819,19 @@ async def on_message(message):
             else:
                 jusic = jusic[send]
 
-            if jusic > 0: #갯수가 충분하다면
+            if jusic - trscou >= 0: #갯수가 충분하다면
                 dirjusic = db.reference('ju/') # 해당 주식 가격 조회
                 jusicm = dirjusic.get()
                 jusicm = jusicm[trswhat]
 
-                dirjusicin.update({send:jusic - 1}) # 해당 사용자에게 해당 주식 1주 삭제
+                dirjusicin.update({send:jusic - trscou}) # 해당 사용자에게 해당 주식 주 삭제
 
-                money = money + jusicm #돈 정상 계산 후 업데이트
+
+                if (jusicm * trscou) >= 5000000:
+                    money = round(money + (jusicm * trscou / 100 * 80), 3) #돈 정상 계산 후 업데이트 80%지급
+                else:
+                    money = round(money + (jusicm * trscou / 100 * 90), 3) #돈 정상 계산 후 업데이트 90%지급
+
                 dirmoney.update({send:money})
 
                 await message.channel.send(message.author.mention + "님 주식 판매가 완료되었습니다")

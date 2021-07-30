@@ -197,7 +197,7 @@ async def background_backrank():#랭킹 지원금
     await client.wait_until_ready()
 
     while True:
-        timeran = random.randint(4, 5)
+        timeran = random.randint(5, 6)
         timeranbun = random.randint(0, 60)
         await asyncio.sleep(60*60*timeran + 60*timeranbun)#랜덤 시간동안 기다리기
 
@@ -230,7 +230,7 @@ async def background_backrank():#랭킹 지원금
                 usname[max_i], usname[size] = usname[size], usname[max_i]
                 trs[max_i], trs[size] = trs[size], trs[max_i]
 
-            embed = discord.Embed(title="랭킹 지원금", description="랭킹 지원금은 1~10등까지만 지원됩니다\n랭킹 지원금은 4시간 ~ 6시간 간격으로 랜덤 지급됩니다", color=0x5CD1E5)
+            embed = discord.Embed(title="랭킹 지원금", description="랭킹 지원금은 1~10등까지만 지원됩니다\n랭킹 지원금은 5시간 ~ 6시간 간격으로 랜덤 지급됩니다\n상금이 최대 5백만원을 넘지 못합니다", color=0x5CD1E5)
             for scor in range(0, len(ussc)):
                 meyin = ussc[scor] / 100 * (100 / (scor + 1) / 4) # 레벨에 따라 본인 금액에 따른 기본 지급 금액 계싼
 
@@ -243,8 +243,8 @@ async def background_backrank():#랭킹 지원금
                 
                 meyin = round(meyin, 3)
 
-                if meyin > 10000000.0: # 상금이 100만원을 넘지 못하게 설정
-                    meyin = 10000000.0
+                if meyin > 5000000.0: # 상금이 500만원을 넘지 못하게 설정
+                    meyin = 5000000.0
 
                 embed.add_field(name=str(scor + 1) + "등 ID : " + usname[scor], value=str(ussc[scor]) + "원\n" + str(meyin) + " 원을 지급합니다", inline=True)
 
@@ -360,7 +360,7 @@ async def background_amangochichung():#어만고치 허기도 시스템 ** 어�
         await asyncio.sleep(60 * random.randint(5, 15))
 
         try:
-            channel = client.get_channel(751716285129424897)
+            channel = client.get_channel(832799360210436107)
 
             diramangoci = db.reference('amangoci/')
             amangoci = diramangoci.get()
@@ -444,7 +444,7 @@ async def background_amangochichung():#어만고치 허기도 시스템 ** 어�
         except:
             print("어만고치 배고픔 시스템 오류 발생 다음에 다시 시도합니다")
 
-async def background_se(): #자동 세금 시스템 - 소지금
+async def background_se(): #자동 세금 시스템 - 소지금, 보유금 동시 실행
     await client.wait_until_ready()
 
     while True:
@@ -461,18 +461,18 @@ async def background_se(): #자동 세금 시스템 - 소지금
 
                     mey = 0
 
-                    if money <= 100000.00: #소지금액에 따른 세금 계산
+                    if money <= 1000000.0: #소지금액에 따른 세금 계산
                         mey = round(money / 100 * 5.5, 3)
-                    elif money <= 200000.00:
-                        mey = round(money / 100 * 10, 3)
-                    elif money <= 300000.00:
-                        mey = round(money / 100 * 23.5, 3)
-                    elif money <= 400000.00:
-                        mey = round(money / 100 * 35, 3)
-                    elif money <= 500000.00:
-                        mey = round(money / 100 * 40, 3)
+                    elif money <= 2500000.0:
+                        mey = round(money / 100 * 10.5, 3)
+                    elif money <= 5000000.0:
+                        mey = round(money / 100 * 16, 3)
+                    elif money <= 7500000:
+                        mey = round(money / 100 * 21.5, 3)
+                    elif money <= 10000000.0:
+                        mey = round(money / 100 * 27, 3)
                     else:
-                        mey = round(money / 100 * 50, 3)
+                        mey = round(money / 100 * 35, 3)
 
                     money = round(money - mey, 3) #세금 제한 금액 계산 후 업데이트
                     dirmoney.update({word:money})
@@ -494,41 +494,32 @@ async def background_se(): #자동 세금 시스템 - 소지금
 
                 channel = client.get_channel(833629507939467274)
                 await channel.send("소지금 세금을 납부하게 하였습니다") 
-        except:
-            print("소지금 세금 오류 발생 다음에 다시 시도합니다")
-        await asyncio.sleep(60*1)
 
-async def background_segum(): #자동 세금 시스템 - 보유금 ***자동 세금 시스템 - 소지금 과 일치하거나 비슷***
-    await client.wait_until_ready()
-
-    while True:
-        try:
-            if "00:00" ==  time.strftime('%H:%M', time.localtime(time.time())) or "12:00" ==  time.strftime('%H:%M', time.localtime(time.time())) :#해당 시간에만 작동하게 설정
-                dirmoney = db.reference('ye/')
+                irmoney = db.reference('ye/') #소지금이 있는 모든 사람 조회
                 money = dirmoney.get()
                 moneykey = list(money.keys())
 
                 for word in moneykey:
-                    dirmoney = db.reference('ye/' + word)
+                    dirmoney = db.reference('ye/' + word) #조회된 사람의 소지금 개별 조회
                     money = dirmoney.get()
                     money = money[word]
 
                     mey = 0
 
-                    if money <= 100000.00:
+                    if money <= 1000000.0: #소지금액에 따른 세금 계산
                         mey = round(money / 100 * 5.5, 3)
-                    elif money <= 200000.00:
-                        mey = round(money / 100 * 10, 3)
-                    elif money <= 300000.00:
-                        mey = round(money / 100 * 23.5, 3)
-                    elif money <= 400000.00:
-                        mey = round(money / 100 * 35, 3)
-                    elif money <= 500000.00:
-                        mey = round(money / 100 * 40, 3)
+                    elif money <= 2500000.0:
+                        mey = round(money / 100 * 10.5, 3)
+                    elif money <= 5000000.0:
+                        mey = round(money / 100 * 16, 3)
+                    elif money <= 7500000:
+                        mey = round(money / 100 * 21.5, 3)
+                    elif money <= 10000000.0:
+                        mey = round(money / 100 * 27, 3)
                     else:
-                        mey = round(money / 100 * 50, 3)
+                        mey = round(money / 100 * 35, 3)
 
-                    money = round(money - mey, 3)
+                    money = round(money - mey, 3) #세금 제한 금액 계산 후 업데이트
                     dirmoney.update({word:money})
 
                     dirsegum = db.reference('segum/' + word) #파일 존재 유무를 *소지금 세금에서 계산하기 때문에 처리할 필요가 없음
@@ -549,12 +540,13 @@ async def background_segum(): #자동 세금 시스템 - 보유금 ***자동 세
                 channel = client.get_channel(833629507939467274)
                 await channel.send("보유금 세금을 납부하게 하였습니다") 
         except:
-            print("보유금 세금 오류 발생 다음에 다시 시도합니다")
+            print("세금 오류 발생 다음에 다시 시도합니다")
+
         await asyncio.sleep(60*1)
 
 async def background_ye(): #자동 예금 
     await client.wait_until_ready()
-    stratran = random.randint(10, 30)
+    stratran = random.randint(10, 25)
     await asyncio.sleep(60*stratran) #시작후 일정 시간 대기
 
     while True: # 계속 반복
@@ -568,12 +560,12 @@ async def background_ye(): #자동 예금
                 yegum = diryegum.get()
                 yegum = yegum[word]
 
-                yegum = round(yegum + (yegum / 100 * 0.35), 3) #이자를 더한 후 정상 업데이트
+                yegum = round(yegum + (yegum / 100 * 0.375), 3) #이자를 더한 후 정상 업데이트
                 diryegum.update({word:yegum})
         except:
             print("자동 예금 이자 오류 발생 다음에 다시 시도합니다")
 
-        await asyncio.sleep(60*30)
+        await asyncio.sleep(60*25)
 
 async def background_code00mukye(): #코드 00번 적금 자동 해지
     await client.wait_until_ready()
@@ -680,7 +672,7 @@ async def background_code01mukye(): #코드 01번 적금 자동 해지 **코드 
 
 async def background_jusic():#주식 변환시스템
     await client.wait_until_ready()
-    jusiclist = ["ju01","ju02","ju03"] #변화시킬 주식 미리 저장
+    jusiclist = ["어만코인","달주식","투자주식","점핑주식","단단주식"] #변화시킬 주식 미리 저장
 
     while True:
         try: 
@@ -689,16 +681,30 @@ async def background_jusic():#주식 변환시스템
                 jusic = dirjusic.get()
                 jusic = jusic[wordin] # 변화시킬 주식의 가격을 조회
 
-                ran = round(random.uniform(-20000, 20000), 3) #랜덤 %지정
+                ran = round(random.uniform(-25000, 25000), 3) #랜덤 %지정
 
                 jusic = round(jusic + ran, 3) #정상 계산
 
                 if jusic <= 10000: # 주식의 가격이 폭등하거나 폭락하지 않도록 제한 선 설정
                     jusic = round(random.uniform(10000, 25000), 3)
-                elif jusic >= 200000:
-                    jusic = round(random.uniform(185000, 200000), 3)
+                elif jusic >= 10000000:
+                    jusic = round(random.uniform(9500000, 10000000), 3)
 
                 dirjusic.update({wordin:jusic}) #계산후 정상 업데이트
+
+            Rando = random.randint(1, 100)
+            if Rando == 1:
+                CHju = jusiclist[random.randint(0, 4)]
+                dirjusic = db.reference('ju/')
+                jusic = dirjusic.get()
+                jusic = jusic[CHju]
+
+                faw = random.uniform(10, 20)
+                jusic = round(jusic - (jusic / 2 / 100 * faw), 3)
+                dirjusic.update({wordin:jusic}) #계산후 정상 업데이트
+
+                channel = client.get_channel(832799360210436107)
+                await channel.send("주식명 : " + CHju + " 관련 악평발생 주식이 급락합니다 악평코드 : " + Rando + "하락 % : " + str(round(faw, 3)))
         except:
             print("주식 시스템 오류 발생 다음에 다시 시도합니다")
 
@@ -730,7 +736,7 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
 
                 dircov.update({'cov1':einput1})
 
-                channel = client.get_channel(832799360210436107)
+                channel = client.get_channel(869937397591322675)
                 await channel.send(embed=embed)
 
                 channel = client.get_channel(833629507939467274)
@@ -780,11 +786,10 @@ async def background_jisinle(): #상위의 지진 시스템과 거의 동일
 client.loop.create_task(background_backcov())
 client.loop.create_task(background_heijisin())
 client.loop.create_task(background_backjisin())
-#client.loop.create_task(background_backrank())
+client.loop.create_task(background_backrank())
 client.loop.create_task(background_amangochichung())
 client.loop.create_task(background_amangochicdirt())
-#client.loop.create_task(background_se())
-#client.loop.create_task(background_segum())
+client.loop.create_task(background_se())
 client.loop.create_task(background_ye())
 client.loop.create_task(background_code00mukye())
 client.loop.create_task(background_code01mukye())

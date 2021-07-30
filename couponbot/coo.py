@@ -29,6 +29,8 @@ options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) Apple
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
 driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
 
+iruain = True
+
 #준비 될 시 시작
 @client.event
 async def on_ready():
@@ -51,6 +53,7 @@ async def on_message(message):
     print(str(message.author) + str(message.author.mention) + " : " + str(message.content))
 
     global driver
+
 
     try:
         CHin = str(message.channel)
@@ -122,6 +125,7 @@ async def on_message(message):
                     driver.find_element_by_id('code-box').send_keys(inpu)
                     driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
                     WebDriverWait(driver, 1).until(EC.alert_is_present())
+
                     alertin = driver.switch_to_alert().text
                     if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
                         embed.add_field(name=trsText[:2] + "-----@" + trsText.split('@')[1] + "님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
@@ -192,6 +196,10 @@ async def on_message(message):
                 await message.channel.send(embed=embed)
 
         if message.content.startswith("!!쿠폰등록"): #쿠킹덤 ID 리스트에 사용자 등록
+            if iruain == False:
+                await message.channel.send("해당명령어는 다른분이 사용중 입니다 잠시 후 다시 시도해주세요")
+                return
+            
             await message.channel.send("쿠폰 등록을 실행합니다 잠시만 기다려 주세요\n시간이 다소 걸리니 처리 완료까지 기다려주세요")
             trsText = message.content.split(" ")[1].upper()
 
@@ -200,7 +208,6 @@ async def on_message(message):
             coocuch = list(coocuch.values())
 
             if trsText not in coocuch: #해당 쿠폰이 없다면 실행
-                irua = True
                 
                 dircooking = db.reference('cooking/') #ID 리스트 가져오기
                 cookingch = dircooking.get()
@@ -256,15 +263,17 @@ async def on_message(message):
                         embed = discord.Embed(title="처리내용", color=0x5CD1E5)
                         count = 0
                     
-                    if irua:
+                    if iruain:
                         dircoocu.update({str(len(coocuch)):trsText})
-                        irua = False
+                        iruain = False
                 
                 embed.add_field(name= "쿠폰 지급 최종 안내", value=str(len(cookingch)) + "명 계정에 새로 등록된 쿠폰 지급 신청을 완료하였습니다", inline=False)
                 await message.channel.send(embed=embed)
 
                 channel = client.get_channel(865421064398045184)
                 await channel.send("@everyone 새로운 " + trsText + " 쿠폰이 등록되어 쿠폰을 일괄 지급하였습니다 확인하여주세요\n쿠폰을 입력해주신 " + message.author.mention + "님 감사합니다\n 귀하의 입력에 " + str(len(cookingch)) + "분이 자동 수령을 받으셨습니다")
+
+                iruain = True
             else:
                 await message.channel.send(message.author.mention + "님 해당 쿠폰은 이미 등록된 쿠폰입니다")
         
