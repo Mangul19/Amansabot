@@ -461,18 +461,18 @@ async def background_se(): #자동 세금 시스템 - 소지금, 보유금 동�
 
                     mey = 0
 
-                    if money <= 1000000.0: #소지금액에 따른 세금 계산
+                    if money <= 10000000.0: #소지금액에 따른 세금 계산
                         mey = round(money / 100 * 5.5, 3)
-                    elif money <= 2500000.0:
+                    elif money <= 25000000.0:
                         mey = round(money / 100 * 10.5, 3)
-                    elif money <= 5000000.0:
+                    elif money <= 50000000.0:
                         mey = round(money / 100 * 16, 3)
-                    elif money <= 7500000:
+                    elif money <= 75000000.0:
                         mey = round(money / 100 * 21.5, 3)
-                    elif money <= 10000000.0:
-                        mey = round(money / 100 * 27, 3)
+                    elif money <= 100000000.0:
+                        mey = round(money / 100 * 25.5, 3)
                     else:
-                        mey = round(money / 100 * 35, 3)
+                        mey = round(money / 100 * 29.5, 3)
 
                     money = round(money - mey, 3) #세금 제한 금액 계산 후 업데이트
                     dirmoney.update({word:money})
@@ -506,18 +506,18 @@ async def background_se(): #자동 세금 시스템 - 소지금, 보유금 동�
 
                     mey = 0
 
-                    if money <= 1000000.0: #소지금액에 따른 세금 계산
+                    if money <= 10000000.0: #보유금액에 따른 세금 계산
                         mey = round(money / 100 * 5.5, 3)
-                    elif money <= 2500000.0:
+                    elif money <= 25000000.0:
                         mey = round(money / 100 * 10.5, 3)
-                    elif money <= 5000000.0:
+                    elif money <= 50000000.0:
                         mey = round(money / 100 * 16, 3)
-                    elif money <= 7500000:
+                    elif money <= 75000000.0:
                         mey = round(money / 100 * 21.5, 3)
-                    elif money <= 10000000.0:
-                        mey = round(money / 100 * 27, 3)
+                    elif money <= 100000000.0:
+                        mey = round(money / 100 * 25.5, 3)
                     else:
-                        mey = round(money / 100 * 35, 3)
+                        mey = round(money / 100 * 29.5, 3)
 
                     money = round(money - mey, 3) #세금 제한 금액 계산 후 업데이트
                     dirmoney.update({word:money})
@@ -672,43 +672,98 @@ async def background_code01mukye(): #코드 01번 적금 자동 해지 **코드 
 
 async def background_jusic():#주식 변환시스템
     await client.wait_until_ready()
-    jusiclist = ["어만코인","달주식","투자주식","점핑주식","단단주식"] #변화시킬 주식 미리 저장
+    jusiclist = ["어만코인","달주식","투자주식","점핑주식","단단주식","꽃주식","기계주식","도비코인"] #변화시킬 주식 미리 저장
+
+    channel = client.get_channel(871004552869056512)
+    msg = await channel.send("로딩중입니다 잠시만 기다려주세요")
 
     while True:
         try: 
+            await msg.edit(content="로딩중입니다 잠시만 기다려주세요")
+
+            embed = discord.Embed(title="주식 실시간 현황" ,description="주식은 1만 ~ 1000만까지 변동합니다" , color=0x5CD1E5)
+
             for wordin in jusiclist:
                 dirjusic = db.reference('ju/')
                 jusic = dirjusic.get()
                 jusic = jusic[wordin] # 변화시킬 주식의 가격을 조회
 
-                ran = round(random.uniform(-25000, 25000), 3) #랜덤 %지정
+                embed.add_field(name="주식명 : " + wordin, value= str(jusic) + "원", inline=False)
+
+                ran = round(random.uniform(-10000, 10000), 3) #랜덤 %지정
 
                 jusic = round(jusic + ran, 3) #정상 계산
 
                 if jusic <= 10000: # 주식의 가격이 폭등하거나 폭락하지 않도록 제한 선 설정
-                    jusic = round(random.uniform(10000, 25000), 3)
+                    jusic = round(random.uniform(10000, 20000), 3)
                 elif jusic >= 10000000:
-                    jusic = round(random.uniform(9500000, 10000000), 3)
+                    jusic = round(random.uniform(9990000, 10000000), 3)
 
                 dirjusic.update({wordin:jusic}) #계산후 정상 업데이트
 
-            Rando = random.randint(1, 100)
-            if Rando == 1:
-                CHju = jusiclist[random.randint(0, 4)]
+            channel = client.get_channel(832799360210436107)
+
+            Rando = random.randint(1, 10000)
+            if Rando == 2 or Rando == 1:
+                CHju = jusiclist[random.randint(0, 7)]
                 dirjusic = db.reference('ju/')
                 jusic = dirjusic.get()
                 jusic = jusic[CHju]
 
-                faw = random.uniform(10, 20)
-                jusic = round(jusic - (jusic / 2 / 100 * faw), 3)
+                faw = random.uniform(0.1, 10)
+                jusic = round(jusic - (jusic / 100 * faw), 3)
+
+                if jusic <= 10000: # 주식의 가격이 폭등하거나 폭락하지 않도록 제한 선 설정
+                    jusic = round(random.uniform(10000, 20000), 3)
+                elif jusic >= 10000000:
+                    jusic = round(random.uniform(9990000, 10000000), 3)
+
                 dirjusic.update({wordin:jusic}) #계산후 정상 업데이트
 
-                channel = client.get_channel(832799360210436107)
-                await channel.send("주식명 : " + CHju + " 관련 악평발생 주식이 급락합니다 악평코드 : " + Rando + "하락 % : " + str(round(faw, 3)))
+                await channel.send("주식명 : " + CHju + " 관련 악평발생 주식이 급락합니다 악평코드(1, 2) : " + str(Rando) + " 하락 % : " + str(round(faw, 3)))
+            elif Rando == 3:
+                CHju = jusiclist[random.randint(0, 7)]
+                dirjusic = db.reference('ju/')
+                jusic = dirjusic.get()
+                jusic = jusic[CHju]
+
+                faw = random.uniform(2.5, 20)
+                jusic = round(jusic - (jusic / 100 * faw), 3)
+
+                if jusic <= 10000: # 주식의 가격이 폭등하거나 폭락하지 않도록 제한 선 설정
+                    jusic = round(random.uniform(10000, 20000), 3)
+                elif jusic >= 10000000:
+                    jusic = round(random.uniform(9990000, 10000000), 3)
+
+                dirjusic.update({wordin:jusic}) #계산후 정상 업데이트
+
+                await channel.send("주식명 : " + CHju + " 관련 심각한 악평발생 주식이 급락합니다 악평코드(3) : " + str(Rando) + " 하락 % : " + str(round(faw, 3)))
+            elif Rando == 4:
+                CHju = jusiclist[random.randint(0, 7)]
+                dirjusic = db.reference('ju/')
+                jusic = dirjusic.get()
+                jusic = jusic[CHju]
+
+                faw = random.uniform(0.1, 5)
+                jusic = round(jusic + (jusic / 100 * faw), 3)
+
+                if jusic <= 10000: # 주식의 가격이 폭등하거나 폭락하지 않도록 제한 선 설정
+                    jusic = round(random.uniform(10000, 20000), 3)
+                elif jusic >= 10000000:
+                    jusic = round(random.uniform(9990000, 10000000), 3)
+
+                dirjusic.update({wordin:jusic}) #계산후 정상 업데이트
+
+                await channel.send("주식명 : " + CHju + " 관련 호평발생 주식이 급상합니다 상평코드(4) : " + str(Rando) + " 상승 % : " + str(round(faw, 3)))
+
+            await msg.edit(embed=embed)
         except:
             print("주식 시스템 오류 발생 다음에 다시 시도합니다")
 
-        await asyncio.sleep(5) #5초 대기
+        for i in range(0, 3):
+            await msg.edit(content="재로딩 까지 앞으로 : " + str(3 - i) + "초")
+            await asyncio.sleep(1)
+
 
 async def background_backcovlive(): # 실시간 코로나 정보 조회 시스템 **!코로나 명령어와 시스템 동일**
     await client.wait_until_ready()

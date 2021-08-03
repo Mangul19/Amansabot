@@ -181,7 +181,7 @@ async def on_message(message):
             embed.add_field(name="!경마 번호 매수", value="번호는 1~5번 이내로 지정해주세요 \n매수는 1매당 1천 5백원이며 최대 10매까지 구입이 가능합니다", inline=False)
             await message.channel.send( embed=embed)
 
-        if message.content.startswith(""): #개인 레벨 경험치 부여
+        if message.content.startswith("") and str(message.channel.id) != "871251097988235275": #개인 레벨 경험치 부여
             send = str(message.author)  #메세지 송신자 ID 설정
             send = send.split("#")
             send = send[0] + "*" + send[1]
@@ -460,11 +460,12 @@ async def on_message(message):
                 else:
                     money = money[send]
 
-                if money + ye < 3000.0: # 통장과 돈의 합이 3천원 미만일때
-                    give = round(random.uniform(100.00, 500.00) * 100, 3) #랜덤 만큼의 돈을 지급
+                if (money + ye) < 3000.0: # 통장과 돈의 합이 3천원 미만일때
+                    give = round(random.uniform(10000.00, 50000.00), 3) #랜덤 만큼의 돈을 지급
 
                     await message.channel.send(message.author.mention + "님에게" + " 지원금 : " + str(give) + "원을 지급합니다")
-                    dirmoney.update({send:money + give})
+                    money += give
+                    dirmoney.update({send:money})
 
                     times = str(datetime.datetime.now() + datetime.timedelta(minutes=15)) # 15분후의 시간을 저장
                     dirtime.update({send:times})
@@ -1476,7 +1477,7 @@ async def on_message(message):
                 segum = segum[send] # 누적 세금
                 lastsegum = lastsegum[send] # 제일 최근 납부 금액
 
-                await message.channel.send("[세금 기준]\n100만원 이하 5.5% 250만원 이하 10.5% 500만원 이하 16% 750만원 이하 21.5% 1000만원 이하 27% 그외 35%\n세금은 00시, 12시에 납부됩니다\n내신 세금의 총합은 : " + str(segum) + "원입니다\n제일 최근에 낸 세금액은 " + str(lastsegum) + " 원입니다")
+                await message.channel.send("[세금 기준]\n~1000만원 5.5%, ~2500만원 10.5%, ~5000만원 16%, ~7500만원 21.5%, ~1억원 25.5%, 1억원 초과 29.5%\n세금은 00시, 12시에 납부됩니다\n내신 세금의 총합은 : " + str(segum) + "원입니다\n제일 최근에 낸 세금액은 " + str(lastsegum) + " 원입니다")
 
         if message.content == "!업데이트": #업데이트 안내 시스템
             dirupdata = db.reference('updata/') #업데이트 정보 조회
@@ -1718,7 +1719,7 @@ async def on_message(message):
                 await message.channel.send(message.author.mention + "님 소지금액이 부족하여 상품 구입이 불가합니다")
 
         if message.content == "!주식":#주식 안내
-            jusiclist = ["어만코인","달주식","투자주식","점핑주식","단단주식"] #조회할 주식 초기화
+            jusiclist = ["어만코인","달주식","투자주식","점핑주식","단단주식","꽃주식","기계주식","도비코인"] #조회할 주식 초기화
 
             embed = discord.Embed(title="주식 현황" ,description="주식은 1만 ~ 1000만까지 변동합니다" , color=0x5CD1E5)
             for wordin in jusiclist:
@@ -1762,8 +1763,8 @@ async def on_message(message):
                 else:
                     jusic = jusic[send]
 
-                if jusic + trscou > 20:
-                    await message.channel.send(message.author.mention + "님 주식은 최대 20개까지만 소유가 가능합니다")
+                if jusic + trscou > 5:
+                    await message.channel.send(message.author.mention + "님 주식은 최대 5개까지만 소유가 가능합니다")
                     return
 
                 dirjusicin.update({send:jusic + trscou}) # 해당 사용자에게 해당 주식 주 추가
@@ -1776,7 +1777,7 @@ async def on_message(message):
                 await message.channel.send(message.author.mention + "님 소지 금액이 부족합니다")
 
         if message.content == "!주식확인":#구입한 주식 안내
-            jusiclist = ["어만코인","달주식","투자주식","점핑주식","단단주식"] #조회할 주식 미리 저장
+            jusiclist = ["어만코인","달주식","투자주식","점핑주식","단단주식","꽃주식","기계주식","도비코인"] #조회할 주식 미리 저장
 
             embed = discord.Embed(title="소유 주식" , color=0x5CD1E5)
             for wordin in jusiclist:
@@ -1789,7 +1790,8 @@ async def on_message(message):
                 else:
                     jusic = jusic[send]
 
-                embed.add_field(name="주식 번호 " + wordin, value= str(jusic) + "개", inline=False)
+                if jusic != 0:
+                    embed.add_field(name="주식 번호 " + wordin, value= str(jusic) + "개", inline=False)
             embed.set_footer(text="주식 판매 방법 \n !주식판매 '주식이름' '갯수'\nEX)!주식판매 단단주식 2")
             await message.channel.send(embed=embed)
 
@@ -1836,7 +1838,65 @@ async def on_message(message):
 
                 await message.channel.send(message.author.mention + "님 주식 판매가 완료되었습니다")
             else:#갯수가 부족할시 거부
-                await message.channel.send(message.author.mention + "님 보유 중인 주식 갯수가 부족합니다") 
+                await message.channel.send(message.author.mention + "님 보유 중인 주식 갯수가 부족합니다")
+
+        if str(message.channel.id) == "871251097988235275":
+            if message.content.startswith(""): #끝말잇기 테스트
+                msg = await message.channel.send("해당 단어를 검사중입니다")
+                try:
+                    if len(message.content) <= 1:
+                        await msg.edit(content=message.author.mention + "님 두글자 이상만 가능합니다")
+                        return
+
+                    dirmallist = db.reference('mallist/')
+                    mallist = dirmallist.get()
+                    mallist = mallist['mallist']
+
+                    if message.content[-1:] in mallist:
+                        await msg.edit(content=message.author.mention + "님 한방단어는 불가능합니다")
+                        return
+
+                    send = str(message.author)
+                    send = send.split("#")
+                    send = send[0] + "*" + send[1] #참여자 ID 확인
+
+                    dirmallist = db.reference('mallist/')
+                    mallist = dirmallist.get()
+                    mallist = mallist['last']
+
+                    if send == mallist:
+                        await msg.edit(content=message.author.mention + "님은 방금 하셨습니다")
+                        return
+
+                    dirmallist = db.reference('mallist/')
+                    inmallist = dirmallist.get()
+                    inmallist = inmallist['inmallist']
+
+                    if message.content in inmallist:
+                        await msg.edit(content=message.author.mention + "님 해당 단어는 이미 사용한 단어입니다")
+                        return
+
+                    dirdan = db.reference('dan/') # 끝말 조회
+                    danm = dirdan.get()
+                    danm = danm["dan"]
+
+                    if message.content[:1] != danm:
+                        await msg.edit(content=message.author.mention + "님 끝말이 이어지지 않습니다")
+                        return
+
+                    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+                    driver.get("https://opendict.korean.go.kr/search/searchResult?focus_name=query&query=" + message.content + "&dicType=1&wordMatch=Y")# 사이트 열람
+                    driver.implicitly_wait(3)
+                    einput = driver.find_element_by_xpath("//*[@id='searchPaging']/div[1]/div[2]/ul[2]/li/div/div[1]/dl/dd[1]/a/span[4]").get_attribute("innerHTML")
+                    print(einput + "성공")
+                    await msg.edit(content=message.author.mention + "님 성공!\n단어 의미 : " + einput)
+
+                    dirdan.update({"dan":message.content[-1:]})
+                    dirmallist.update({"last":send})
+                    dirmallist = db.reference('mallist/inmallist')
+                    dirmallist.update({str(len(inmallist)):message.content})
+                except:
+                   await msg.edit(content="해당 단어는 존재하지 않습니다")
     except:
         await message.channel.send(message.author.mention + "님 명령어 실행 중 오류가 발생하였습니다 명령어를 확인하여 주세요")
 
