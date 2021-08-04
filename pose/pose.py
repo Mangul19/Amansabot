@@ -8,7 +8,7 @@ def output_keypoints(frame, proto_file, weights_file, threshold, model_name, BOD
     global points
     net = cv2.dnn.readNetFromCaffe(proto_file, weights_file)
 
-    # 입력 이미지의 사이즈 정의 368, 215, 235
+    # 입력 이미지의 사이즈 정의 368, 215, 235 (215 이미지 밀림현상 심함, 235 이미지 밀림 현상 조금 있음, 245 or 250 Test 필요, 368 이미지 딜레이 3 ~ 5초 기기에 따라 다름)
     image_height = 235
     image_width = 235
 
@@ -71,6 +71,8 @@ def output_keypoints_with_lines(frame, POSE_PAIRS):
     cv2.imshow("output_keypoints_with_lines", frame)
     cv2.imwrite('pose/images/' + str(time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time()))) + '.jpg', frame)
 
+
+#모델 Parts Body 25번 모델 사용 아래에 2개의 모델이 있지만 해당 모델 보다는 분석할 수 있는 단계가 낮음
 BODY_PARTS_BODY_25 = {0: "Nose", 1: "Neck", 2: "RShoulder", 3: "RElbow", 4: "RWrist",
                       5: "LShoulder", 6: "LElbow", 7: "LWrist", 8: "MidHip", 9: "RHip",
                       10: "RKnee", 11: "RAnkle", 12: "LHip", 13: "LKnee", 14: "LAnkle",
@@ -83,6 +85,7 @@ POSE_PAIRS_BODY_25 = [[0, 1], [0, 15], [0, 16], [1, 2], [1, 5], [1, 8], [8, 9], 
 
 # 신경 네트워크의 구조를 지정하는 prototxt 파일 (다양한 계층이 배열되는 방법 등)
 protoFile_body_25 = "noup/models/pose/body_25/pose_deploy.prototxt"
+
 # 훈련된 모델의 weight 를 저장하는 caffemodel 파일
 weightsFile_body_25 = "noup/models/pose/body_25/pose_iter_584000.caffemodel"
 
@@ -117,6 +120,7 @@ protoFile_coco = "noup/models/pose/coco/pose_deploy_linevec.prototxt"
 weightsFile_mpi = "noup/models/pose/mpi/pose_iter_160000.caffemodel"
 weightsFile_coco = "noup/models/pose/coco/pose_iter_440000.caffemodel"
 
+#Body Parts MPI 기본 모델 해당 모델이 제일 간단하고 모던하게 신체 표현을 해줌
 BODY_PARTS_MPI = {0: "Head", 1: "Neck", 2: "RShoulder", 3: "RElbow", 4: "RWrist",
                   5: "LShoulder", 6: "LElbow", 7: "LWrist", 8: "RHip", 9: "RKnee",
                   10: "RAnkle", 11: "LHip", 12: "LKnee", 13: "LAnkle", 14: "Chest",
@@ -142,6 +146,7 @@ output_keypoints_with_lines(frame=frame_MPII, POSE_PAIRS=POSE_PAIRS_MPI)
 
 print(time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(time.time())))
 
+#CoCo 모델 분석 모델 기본적인 핵심적인 분석 시스템은 모두 사용할 수 있음
 # COCO Model
 frame_COCO = output_keypoints(frame=frame_coco, proto_file=protoFile_coco, weights_file=weightsFile_coco,
                             threshold=0.2, model_name="COCO", BODY_PARTS=BODY_PARTS_COCO)

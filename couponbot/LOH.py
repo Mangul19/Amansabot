@@ -197,6 +197,8 @@ async def on_message(message):
                 await message.channel.send(embed=embed)
 
         if message.content.startswith("!!쿠폰등록"): #로오히 ID 리스트에 사용자 등록
+            global iruain
+
             if iruain == False:
                 await message.channel.send("해당명령어는 다른분이 사용중 입니다 잠시 후 다시 시도해주세요")
                 return
@@ -225,27 +227,13 @@ async def on_message(message):
                     driver.find_element_by_xpath("//*[@id='comp-k7bces4d']/button").click()
                     
                     alertin = ""
+                    
                     try:
-                        WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.ID, "comp-k7cr9hox")))
-                        alertin = driver.find_element_by_xpath('//*[@id="comp-k7cr9hor1"]/p/span/span/span/span/span').text
-                        driver.find_element_by_id('comp-k7cr9hox').click()
+                        WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.ID, "POPUPS_ROOT")))
+                        alertin = driver.find_element_by_xpath('/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[1]/p/span/span/span/span/span').text
+                        driver.find_element_by_xpath('/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[3]').click()
                     except:
-                        try:
-                            WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.ID,"comp-keb5oovo1")))
-                            alertin = driver.find_element_by_xpath('//*[@id="comp-keb5oovi2"]/p/span/span/span/span/span').text
-                            driver.find_element_by_id('comp-keb5oovo1').click()
-                        except:
-                            try:
-                                WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.ID, "comp-keb5nt7b1")))
-                                alertin = driver.find_element_by_xpath('//*[@id="comp-keb5nt711"]/p/span/span/span/span/span').text
-                                driver.find_element_by_id('comp-keb5nt7b1').click()
-                            except:
-                                try:
-                                    WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.ID,"comp-k7blqpqk")))
-                                    alertin = driver.find_element_by_xpath('//*[@id="comp-k7bli2fi"]/p/span/span/span/span/span').text
-                                    driver.find_element_by_id('comp-k7blqpqk').click()
-                                except:
-                                    await message.channel.send(message.author.mention + "님 명령어 실행 중 오류가 발생하였습니다 관리자에게 문의하여주세요 대기열 오류")
+                        await message.channel.send(message.author.mention + "님 명령어 실행 중 오류가 발생하였습니다 관리자에게 문의하여주세요 대기열 오류")
                                        
                     embed.add_field(name=inpu[:2] + "----- 님에게 " + trsText + " 지급 신청", value=alertin, inline=False)
 
@@ -257,7 +245,7 @@ async def on_message(message):
                         embed.add_field(name="쿠폰 번호 확인 요청", value="쿠폰 번호를 다시 확인하여주세요", inline=False)
                         await message.channel.send(embed=embed)
                         return
-                    
+
                     if iruain:
                         iruain = False
                         dirlohcu.update({str(len(lohcuch)):trsText})

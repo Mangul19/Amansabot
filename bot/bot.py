@@ -182,9 +182,8 @@ async def on_message(message):
             await message.channel.send( embed=embed)
 
         if message.content.startswith("") and str(message.channel.id) != "871251097988235275": #개인 레벨 경험치 부여
-            send = str(message.author)  #메세지 송신자 ID 설정
-            send = send.split("#")
-            send = send[0] + "*" + send[1]
+            send = str(message.author.id)  #메세지 송신자 ID 설정
+
             
             dirlevel = db.reference('level/' + send) #레벨 값 가져오기
             level = dirlevel.get()
@@ -274,9 +273,8 @@ async def on_message(message):
             await message.channel.send(message.author.mention + "님의 주사위 수는 : " + str(x) + " 입니다.")
 
         if message.content == "!레벨": #개인 레벨 안내
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1]
+            send = str(message.author.id)
+
 
             dirlevel = db.reference('level/' + send)
             level = dirlevel.get()
@@ -290,9 +288,8 @@ async def on_message(message):
             await message.channel.send(message.author.mention + " 님은 현재 총 " + str(exp) + "exp 가 있으며 레벨은 " + str(level) + "입니다")    
 
         if message.content == "!도박":
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1]
+            send = str(message.author.id)
+
 
             dirdobak = db.reference('money/' + send) # 돈 정보 값 가져오기
             dobak = dirdobak.get()
@@ -341,9 +338,8 @@ async def on_message(message):
                 dirdobak.update({send:dobak})
 
         if message.content == "!돈확인": #돈 확인
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1]
+            send = str(message.author.id)
+
 
             dirmoney = db.reference('money/' + send)
             money = dirmoney.get()
@@ -358,9 +354,8 @@ async def on_message(message):
             await message.channel.send(message.author.mention + "님이" + " 현재 소지중인 돈은 : " + str(money) + "원입니다")
 
         if message.content.startswith("!홀짝"): # 홀짝 게임
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1]
+            send = str(message.author.id)
+
 
             dirmoney = db.reference('money/' + send)
             money = dirmoney.get()
@@ -425,9 +420,8 @@ async def on_message(message):
                 await message.channel.send("홀과 짝중 하나만 입력하여 주세요")
 
         if message.content == "!돈받기":#돈지급
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1]
+            send = str(message.author.id)
+
 
             dirtime = db.reference('moneytime/' + send) # 수령 받은 시간 정보 받기
             times = dirtime.get()
@@ -475,9 +469,8 @@ async def on_message(message):
                 await message.channel.send(message.author.mention + "님 지원금 수령 가능 시간이 되지 않았습니다")
 
         if message.content == "!통장확인": #예금확인
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1]
+            send = str(message.author.id)
+
 
             dirye = db.reference('ye/' + send) #통장값
             ye = dirye.get()
@@ -561,9 +554,8 @@ async def on_message(message):
                     await message.channel.send("Error Code : " + responsedCode)
 
         if message.content.startswith("!로토도박"): #도박
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1]
+            send = str(message.author.id)
+
 
             dirmoney = db.reference('money/' + send)#돈 값 받기
             money = dirmoney.get()
@@ -652,7 +644,7 @@ async def on_message(message):
             code = dircode.get()['code']
             
             if message.content.split(" ")[1] == code: # 사용자가 작성한 비밀 코드 가져온후 저장된 비밀코드와 비교
-                send = str(message.author)#메세지 송출자 확인
+                send = str(message.author.id)#메세지 송출자 확인
                 send = send.split("#")
                 send = send[0] + "*" + send[1]
 
@@ -676,7 +668,7 @@ async def on_message(message):
         if message.content.startswith("!경마"): # 경마 게임
             global loto_mal # 경마 변수 사용 설정
             if loto_mal: # 경마가 진행 중이지 않을 시
-                send = str(message.author)
+                send = str(message.author.id)
                 send = send.split("#")
                 send = send[0] + "*" + send[1]#송출자 ID 확인
 
@@ -867,9 +859,8 @@ async def on_message(message):
             await message.channel.send(embed=embed)
 
         if message.content.startswith("!예금"): #예금 입금 시스템
-            send = str(message.author) #송출자 ID 확인
-            send = send.split("#")
-            send = send[0] + "*" + send[1]
+            send = str(message.author.id) #송출자 ID 확인
+
 
             dirmoney = db.reference('money/' + send) #돈 가져오기
             money = dirmoney.get()
@@ -914,9 +905,8 @@ async def on_message(message):
                 await message.channel.send("소지금 보다 많습니다 다시 입력하여주세요")
 
         if message.content.startswith("!출금예금"): #예금 출금 시스템 **위 시스템과 완전 일치**
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1]
+            send = str(message.author.id)
+
 
             dirmoney = db.reference('money/' + send)
             money = dirmoney.get()
@@ -961,9 +951,8 @@ async def on_message(message):
                 await message.channel.send("보유금 보다 많습니다 다시 입력하여주세요")
 
         if message.content.startswith("!이체"): #돈을 이체합니다
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1] #송출자 ID 확인
+            send = str(message.author.id)
+ #송출자 ID 확인
 
             dirmoney = db.reference('money/' + send) #돈 가져오기
             money = dirmoney.get()
@@ -995,9 +984,8 @@ async def on_message(message):
                 await message.channel.send("이체 금액이 소지 금액보다 많습니다")
 
         if message.content.startswith("!수령이체"): #이체 예약 수령
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1] # 송출자 ID 확인
+            send = str(message.author.id)
+ # 송출자 ID 확인
 
             dirmoney = db.reference('money/' + send) # 송출자의 돈 값 불러오기
             money = dirmoney.get()
@@ -1141,9 +1129,8 @@ async def on_message(message):
                 await message.channel.send(combineword + " 은/는 게임리스트에 존재하지 않습니다 새로 등록하여주세요")
 
         if message.content == "!어만고치": #어만고치 만들기 및 상태확인
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1] # 송출자 ID 설정
+            send = str(message.author.id)
+ # 송출자 ID 설정
 
             dirgoci = db.reference('amangoci/' + send) # 어만고치 저장 위치로 이동 및 조회
             goci = dirgoci.get()
@@ -1174,9 +1161,8 @@ async def on_message(message):
             await message.channel.send(embed=embed)
 
         if message.content.startswith("!구입체다치즈"): #체다치즈 구입 도우미
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1] # 송출자 ID 확인
+            send = str(message.author.id)
+ # 송출자 ID 확인
 
             dirmoney = db.reference('money/' + send)# 돈확인
             money = dirmoney.get()
@@ -1211,9 +1197,8 @@ async def on_message(message):
                 await message.channel.send("돈이 부족합니다")
 
         if message.content.startswith("!구입우유"): #우유 구입 도우미 **위 코딩과 구조 일치**
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1]
+            send = str(message.author.id)
+
 
             dirmoney = db.reference('money/' + send)
             money = dirmoney.get()
@@ -1248,9 +1233,8 @@ async def on_message(message):
                 await message.channel.send("돈이 부족합니다")
 
         if message.content.startswith("!구입묶음라면"): #라면1봉 구입 도우미**위 코딩과 구조 일치**
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1]
+            send = str(message.author.id)
+
 
             dirmoney = db.reference('money/' + send)
             money = dirmoney.get()
@@ -1285,9 +1269,8 @@ async def on_message(message):
                 await message.channel.send("돈이 부족합니다")
 
         if message.content.startswith("!구입라면"): #라면1개 구입 도우미 **위 코딩과 구조 일치**
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1]
+            send = str(message.author.id)
+
 
             dirmoney = db.reference('money/' + send)
             money = dirmoney.get()
@@ -1322,9 +1305,8 @@ async def on_message(message):
                 await message.channel.send("돈이 부족합니다")
 
         if message.content == "!인벤토리":#인벤토리 확인
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1] #송출자 ID 확인
+            send = str(message.author.id)
+ #송출자 ID 확인
 
             embed = discord.Embed(title="인벤토리 열람", description=message.author.mention, color=0x5CD1E5)
 
@@ -1358,9 +1340,8 @@ async def on_message(message):
             await message.channel.send(embed=embed)
 
         if message.content == "!고치샤워": #어만고치 샤워하기
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1] #송출자 Id 확인
+            send = str(message.author.id)
+ #송출자 Id 확인
 
             dirgoci = db.reference('amangoci/' + send) #청결도 조회
             goci = dirgoci.get()
@@ -1407,9 +1388,7 @@ async def on_message(message):
             await message.channel.send( embed=embed)
 
         if message.content.startswith("!먹이주기"): #어만고치 먹이주기
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1] # 송출자 ID 저장
+            send = str(message.author.id)
 
             trs = message.content.split(" ") 
             trswhat = trs[1] # 주고자하는 먹이 확인
@@ -1461,9 +1440,8 @@ async def on_message(message):
                 await message.channel.send(message.author.mention + "님의 해당 먹이가 없거나 수치가 올바르지 않습니다")
 
         if message.content == "!세금": #세금 안내
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1] # 조회자 ID 확인
+            send = str(message.author.id)
+ # 조회자 ID 확인
 
             dirsegum = db.reference('segum/' + send) # 세금 조회
             segum = dirsegum.get()
@@ -1505,9 +1483,7 @@ async def on_message(message):
             await message.channel.send(embed=embed)
 
         if message.content == "!출첵": #출석체크
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1] # 출첵 송출자 ID 확인
+            send = str(message.author.id)
 
             dirtime = db.reference('sekitime/' + send) # 해당일 출석체크 정보 조회
             times = dirtime.get()
@@ -1557,9 +1533,7 @@ async def on_message(message):
                 await message.channel.send(message.author.mention + "님 오늘은 이미 출석하셨습니다")
 
         if message.content == "!적금가입 00":#적금 00상품 가입
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1] # 송출자 ID 저장
+            send = str(message.author.id)
 
             dirmoney = db.reference('money/' + send) #돈확인
             money = dirmoney.get()
@@ -1593,9 +1567,8 @@ async def on_message(message):
                 await message.channel.send(message.author.mention + "님 소지금액이 부족하여 상품 구입이 불가합니다")
             
         if message.content == "!적금납부 00":#적금 00상품 납부
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1] # 송출자 ID 확인
+            send = str(message.author.id)
+ # 송출자 ID 확인
 
             dirmoney = db.reference('money/' + send) # 돈확인
             money = dirmoney.get()
@@ -1638,9 +1611,8 @@ async def on_message(message):
                 await message.channel.send(message.author.mention + "님 소지금액이 부족하여 상품 구입이 불가합니다")
 
         if message.content == "!적금가입 01":#적금 01상품 가입 **적금가입 00과 코드 일치**
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1]
+            send = str(message.author.id)
+
 
             dirmoney = db.reference('money/' + send)
             money = dirmoney.get()
@@ -1674,9 +1646,8 @@ async def on_message(message):
                 await message.channel.send(message.author.mention + "님 소지금액이 부족하여 상품 구입이 불가합니다")
             
         if message.content == "!적금납부 01":#적금 01상품 납부 **적금납부 00과 코드 일치**
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1]
+            send = str(message.author.id)
+
 
             dirmoney = db.reference('money/' + send)
             money = dirmoney.get()
@@ -1733,9 +1704,8 @@ async def on_message(message):
             await message.channel.send(embed=embed)
 
         if message.content.startswith("!주식구입"): #주식 구입하기
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1] #구입 요청자 ID 확인
+            send = str(message.author.id)
+ #구입 요청자 ID 확인
 
             dirmoney = db.reference('money/' + send) #돈확인
             money = dirmoney.get()
@@ -1796,9 +1766,8 @@ async def on_message(message):
             await message.channel.send(embed=embed)
 
         if message.content.startswith("!주식판매"): #주식 구입하기
-            send = str(message.author)
-            send = send.split("#")
-            send = send[0] + "*" + send[1] #구입 요청자 ID 확인
+            send = str(message.author.id)
+ #구입 요청자 ID 확인
 
             dirmoney = db.reference('money/' + send) #돈확인
             money = dirmoney.get()
@@ -1840,63 +1809,11 @@ async def on_message(message):
             else:#갯수가 부족할시 거부
                 await message.channel.send(message.author.mention + "님 보유 중인 주식 갯수가 부족합니다")
 
-        if str(message.channel.id) == "871251097988235275":
-            if message.content.startswith(""): #끝말잇기 테스트
-                msg = await message.channel.send("해당 단어를 검사중입니다")
-                try:
-                    if len(message.content) <= 1:
-                        await msg.edit(content=message.author.mention + "님 두글자 이상만 가능합니다")
-                        return
-
-                    dirmallist = db.reference('mallist/')
-                    mallist = dirmallist.get()
-                    mallist = mallist['mallist']
-
-                    if message.content[-1:] in mallist:
-                        await msg.edit(content=message.author.mention + "님 한방단어는 불가능합니다")
-                        return
-
-                    send = str(message.author)
-                    send = send.split("#")
-                    send = send[0] + "*" + send[1] #참여자 ID 확인
-
-                    dirmallist = db.reference('mallist/')
-                    mallist = dirmallist.get()
-                    mallist = mallist['last']
-
-                    if send == mallist:
-                        await msg.edit(content=message.author.mention + "님은 방금 하셨습니다")
-                        return
-
-                    dirmallist = db.reference('mallist/')
-                    inmallist = dirmallist.get()
-                    inmallist = inmallist['inmallist']
-
-                    if message.content in inmallist:
-                        await msg.edit(content=message.author.mention + "님 해당 단어는 이미 사용한 단어입니다")
-                        return
-
-                    dirdan = db.reference('dan/') # 끝말 조회
-                    danm = dirdan.get()
-                    danm = danm["dan"]
-
-                    if message.content[:1] != danm:
-                        await msg.edit(content=message.author.mention + "님 끝말이 이어지지 않습니다")
-                        return
-
-                    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
-                    driver.get("https://opendict.korean.go.kr/search/searchResult?focus_name=query&query=" + message.content + "&dicType=1&wordMatch=Y")# 사이트 열람
-                    driver.implicitly_wait(3)
-                    einput = driver.find_element_by_xpath("//*[@id='searchPaging']/div[1]/div[2]/ul[2]/li/div/div[1]/dl/dd[1]/a/span[4]").get_attribute("innerHTML")
-                    print(einput + "성공")
-                    await msg.edit(content=message.author.mention + "님 성공!\n단어 의미 : " + einput)
-
-                    dirdan.update({"dan":message.content[-1:]})
-                    dirmallist.update({"last":send})
-                    dirmallist = db.reference('mallist/inmallist')
-                    dirmallist.update({str(len(inmallist)):message.content})
-                except:
-                   await msg.edit(content="해당 단어는 존재하지 않습니다")
+        if message.content.startswith("!청소"): #채팅방 청소 기능
+            send = str(message.author.id)
+            
+            if send == "265725373843636224": #관리자만 사용 가능하도록 설정
+                await message.channel.purge(limit=1)
     except:
         await message.channel.send(message.author.mention + "님 명령어 실행 중 오류가 발생하였습니다 명령어를 확인하여 주세요")
 

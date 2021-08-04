@@ -196,6 +196,8 @@ async def on_message(message):
                 await message.channel.send(embed=embed)
 
         if message.content.startswith("!!쿠폰등록"): #쿠킹덤 ID 리스트에 사용자 등록
+            global iruain
+            
             if iruain == False:
                 await message.channel.send("해당명령어는 다른분이 사용중 입니다 잠시 후 다시 시도해주세요")
                 return

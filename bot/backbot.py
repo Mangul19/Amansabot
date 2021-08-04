@@ -285,7 +285,7 @@ async def background_amangochicdirt():#어만고치 청결도 시스템
                 hungin = round(hungin - randomhung, 3)
 
                 if hungin <= -100: # 계산된 수가 100이하일시
-                    await channel.send("ID : " + word[:-5] + "님의 어만고치가 병사하였습니다 벌금 50%를 부과합니다")
+                    await channel.send("ID : <@!" + word + "> 님의 어만고치가 병사하였습니다 벌금 50%를 부과합니다")
                     diramangociin.delete() #해당 어만고치의 정보 삭제
 
                     dirmoney = db.reference('money/' + word) # 돈 조회
@@ -344,10 +344,10 @@ async def background_amangochicdirt():#어만고치 청결도 시스템
                             dirmoney.update({word:money})
 
                             channel = client.get_channel(832799360210436107)
-                            await channel.send("ID : " + word[:-5] + "님의 어만고치의 레벨이 상승하였습니다 상금 " + str(10 * level) + "만원을 지급합니다")
+                            await channel.send("ID : <@!" + word + "> 님의 어만고치의 레벨이 상승하였습니다 상금 " + str(10 * level) + "만원을 지급합니다")
 
                             channel = client.get_channel(833629507939467274)
-                            await channel.send("ID : " + word[:-5] + "님의 어만고치의 레벨이 상승하였습니다 상금 " + str(10 * level) + "만원을 지급합니다")  
+                            await channel.send("ID : <@!" + word + ">님의 어만고치의 레벨이 상승하였습니다 상금 " + str(10 * level) + "만원을 지급합니다")  
                         else:#경험치로 인한 레벨 변화가 없을시
                             diramangociin.update({'exp':exp}) #일반 업데이트
         except:
@@ -376,7 +376,7 @@ async def background_amangochichung():#어만고치 허기도 시스템 ** 어�
                 hungin = round(hungin - randomhung, 3)
 
                 if hungin <= -100:
-                    await channel.send("ID : " + word[:-5] + "님의 어만고치가 병사하였습니다 벌금 50%를 부과합니다")
+                    await channel.send("ID : <@!" + word + ">님의 어만고치가 병사하였습니다 벌금 50%를 부과합니다")
                     diramangociin.delete()
 
                     dirmoney = db.reference('money/' + word)
@@ -435,10 +435,10 @@ async def background_amangochichung():#어만고치 허기도 시스템 ** 어�
                             dirmoney.update({word:money})
 
                             channel = client.get_channel(832799360210436107)
-                            await channel.send("ID : " + word[:-5] + "님의 어만고치의 레벨이 상승하였습니다 상금 " + str(10 * level) + "만원을 지급합니다")
+                            await channel.send("ID : <@!" + word + "> 님의 어만고치의 레벨이 상승하였습니다 상금 " + str(10 * level) + "만원을 지급합니다")
 
                             channel = client.get_channel(833629507939467274)
-                            await channel.send("ID : " + word[:-5] + "님의 어만고치의 레벨이 상승하였습니다 상금 " + str(10 * level) + "만원을 지급합니다")
+                            await channel.send("ID : <@!" + word + "> 님의 어만고치의 레벨이 상승하였습니다 상금 " + str(10 * level) + "만원을 지급합니다")
                         else:
                             diramangociin.update({'exp':exp}) 
         except:
@@ -610,10 +610,10 @@ async def background_code00mukye(): #코드 00번 적금 자동 해지
 
 
                         channel = client.get_channel(832799360210436107)
-                        await channel.send("ID : " + word[:-5] + "님의 사흘적금이 만기되었습니다 원금 + 이자 + 보너스  총 " + str(givemoney) + "원이 입금됩니다")
+                        await channel.send("ID : <@!" + word + "> 님의 사흘적금이 만기되었습니다 원금 + 이자 + 보너스  총 " + str(givemoney) + "원이 입금됩니다")
 
                         channel = client.get_channel(833629507939467274)
-                        await channel.send("ID : " + word[:-5] + "님의 사흘적금이 만기되었습니다 원금 + 이자 + 보너스  총 " + str(givemoney) + "원이 입금됩니다")
+                        await channel.send("ID : <@!" + word + "> 님의 사흘적금이 만기되었습니다 원금 + 이자 + 보너스  총 " + str(givemoney) + "원이 입금됩니다")
         except:
             print("00 적금 해지 오류 발생 다음에 다시 시도합니다")
         
@@ -661,10 +661,10 @@ async def background_code01mukye(): #코드 01번 적금 자동 해지 **코드 
                         dirmukye01in.delete() #해당 유저에 대한 주식 01번 정보 삭제
 
                         channel = client.get_channel(832799360210436107)
-                        await channel.send("ID : " + word[:-5] + "님의 닷새적금이 만기되었습니다 원금 + 이자 + 보너스 총 " + str(givemoney) + "원이 입금됩니다")
+                        await channel.send("ID : <@!" + word + "> 님의 닷새적금이 만기되었습니다 원금 + 이자 + 보너스 총 " + str(givemoney) + "원이 입금됩니다")
 
                         channel = client.get_channel(833629507939467274)
-                        await channel.send("ID : " + word[:-5] + "님의 닷새적금이 만기되었습니다 원금 + 이자 + 보너스 총 " + str(givemoney) + "원이 입금됩니다")
+                        await channel.send("ID : <@!" + word + "> 님의 닷새적금이 만기되었습니다 원금 + 이자 + 보너스 총 " + str(givemoney) + "원이 입금됩니다")
         except:
             print("01 적금 해지 오류 발생 다음에 다시 시도합니다")
         
