@@ -212,7 +212,7 @@ async def on_message(message):
                 if ran > (1000 / level): # 한번에 많은 경험치 부여 방지를 위해 최대값을 100으로 설정
                     ran = 1000 / level
 
-                exp = exp + ran
+                exp = round(exp + ran, 3)
 
                 if exp > 1000: #경험치 값이 1천이 넘었을때
                     exp = exp - 1000 # 경험치에 1천을 제하고 저장
@@ -421,19 +421,16 @@ async def on_message(message):
 
         if message.content == "!돈받기":#돈지급
             send = str(message.author.id)
-
-
             dirtime = db.reference('moneytime/' + send) # 수령 받은 시간 정보 받기
             times = dirtime.get()
 
             if times == None: # 시간정보가 없을시
-                times = str(datetime.datetime.now()) # 현재 시간 저장 및 불러오기
-                dirtime.update({send:times})
+                times = datetime.datetime.strptime(str(datetime.datetime.now()), '%Y-%m-%d %H:%M:%S.%f') # 현재 시간 저장 및 불러오기
             else:
                 times = times[send]
                 times = datetime.datetime.strptime(times, "%Y-%m-%d %H:%M:%S.%f") # 시간값이 있다면 시간정보를 가져오고 계산가능한 값으로 변환
 
-            now = datetime.datetime.strptime(str(datetime.datetime.now()), "%Y-%m-%d %H:%M:%S.%f") # 현재 계산 가능한 값으로 시각 가져오기
+            now = datetime.datetime.strptime(str(datetime.datetime.now()), '%Y-%m-%d %H:%M:%S.%f')
 
             if times < now: # 수령 가능시간이 지났을경우
                 dirmoney = db.reference('money/' + send) # 돈 값 가져오기
@@ -486,7 +483,7 @@ async def on_message(message):
         if message.content == "!코로나":#코로나 정보
             driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
             driver.get("http://ncov.mohw.go.kr/")# 사이트 열람
-            driver.implicitly_wait(3)
+            
 
             
             embed = discord.Embed(title="코로나 정보", color=0x5CD1E5) #임베드 생성
@@ -498,7 +495,7 @@ async def on_message(message):
             embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
 
             driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
-            driver.implicitly_wait(3)
+            
             
             einput = driver.find_element_by_css_selector('#ALL_decidecnt_increase > b').text
 
@@ -609,7 +606,7 @@ async def on_message(message):
         if message.content == "!지진": #최근 지진 정보 접속 및 안내
             driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
             driver.get("https://www.weather.go.kr/w/eqk-vol/recent-eqk.do")# 사이트 열람
-            driver.implicitly_wait(3)
+            
 
             html = driver.page_source
             driver.quit()
@@ -667,10 +664,9 @@ async def on_message(message):
 
         if message.content.startswith("!경마"): # 경마 게임
             global loto_mal # 경마 변수 사용 설정
+
             if loto_mal: # 경마가 진행 중이지 않을 시
                 send = str(message.author.id)
-                send = send.split("#")
-                send = send[0] + "*" + send[1]#송출자 ID 확인
 
                 dirmoney = db.reference('money/' + send)#돈 가져오기
                 money = dirmoney.get()
@@ -952,7 +948,6 @@ async def on_message(message):
 
         if message.content.startswith("!이체"): #돈을 이체합니다
             send = str(message.author.id)
- #송출자 ID 확인
 
             dirmoney = db.reference('money/' + send) #돈 가져오기
             money = dirmoney.get()
@@ -985,7 +980,6 @@ async def on_message(message):
 
         if message.content.startswith("!수령이체"): #이체 예약 수령
             send = str(message.author.id)
- # 송출자 ID 확인
 
             dirmoney = db.reference('money/' + send) # 송출자의 돈 값 불러오기
             money = dirmoney.get()
@@ -1130,7 +1124,6 @@ async def on_message(message):
 
         if message.content == "!어만고치": #어만고치 만들기 및 상태확인
             send = str(message.author.id)
- # 송출자 ID 설정
 
             dirgoci = db.reference('amangoci/' + send) # 어만고치 저장 위치로 이동 및 조회
             goci = dirgoci.get()
@@ -1162,7 +1155,6 @@ async def on_message(message):
 
         if message.content.startswith("!구입체다치즈"): #체다치즈 구입 도우미
             send = str(message.author.id)
- # 송출자 ID 확인
 
             dirmoney = db.reference('money/' + send)# 돈확인
             money = dirmoney.get()
@@ -1306,7 +1298,6 @@ async def on_message(message):
 
         if message.content == "!인벤토리":#인벤토리 확인
             send = str(message.author.id)
- #송출자 ID 확인
 
             embed = discord.Embed(title="인벤토리 열람", description=message.author.mention, color=0x5CD1E5)
 
@@ -1341,7 +1332,6 @@ async def on_message(message):
 
         if message.content == "!고치샤워": #어만고치 샤워하기
             send = str(message.author.id)
- #송출자 Id 확인
 
             dirgoci = db.reference('amangoci/' + send) #청결도 조회
             goci = dirgoci.get()
@@ -1441,7 +1431,6 @@ async def on_message(message):
 
         if message.content == "!세금": #세금 안내
             send = str(message.author.id)
- # 조회자 ID 확인
 
             dirsegum = db.reference('segum/' + send) # 세금 조회
             segum = dirsegum.get()
@@ -1568,7 +1557,6 @@ async def on_message(message):
             
         if message.content == "!적금납부 00":#적금 00상품 납부
             send = str(message.author.id)
- # 송출자 ID 확인
 
             dirmoney = db.reference('money/' + send) # 돈확인
             money = dirmoney.get()
@@ -1705,7 +1693,6 @@ async def on_message(message):
 
         if message.content.startswith("!주식구입"): #주식 구입하기
             send = str(message.author.id)
- #구입 요청자 ID 확인
 
             dirmoney = db.reference('money/' + send) #돈확인
             money = dirmoney.get()
@@ -1767,7 +1754,6 @@ async def on_message(message):
 
         if message.content.startswith("!주식판매"): #주식 구입하기
             send = str(message.author.id)
- #구입 요청자 ID 확인
 
             dirmoney = db.reference('money/' + send) #돈확인
             money = dirmoney.get()
@@ -1811,7 +1797,7 @@ async def on_message(message):
 
         if message.content.startswith("!청소"): #채팅방 청소 기능
             send = str(message.author.id)
-            
+
             if send == "265725373843636224": #관리자만 사용 가능하도록 설정
                 await message.channel.purge(limit=1)
     except:

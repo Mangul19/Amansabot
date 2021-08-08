@@ -83,6 +83,16 @@ async def on_message(message):
                 await message.delete()
                 return
 
+            dirismallist = db.reference('SOLmalit/')
+            dmallist = dirismallist.get()
+            isstart = dmallist['isit']
+            if isstart == 0:
+                dirismallist.update({"isit":1})
+            else:
+                await message.delete()
+                await msg.edit(content=message.author.mention + "님 이미 누군가 먼저 입력하여 검사중입니다")
+                return
+
             dirmallist = db.reference('SOLmallist/')
             inmallist = dirmallist.get()
             inmallist = list(inmallist.values())
@@ -90,6 +100,7 @@ async def on_message(message):
             if message.content in inmallist:
                 await msg.edit(content=message.author.mention + "님 해당 단어는 이미 사용한 단어입니다")
                 await message.delete()
+                dirismallist.update({"isit":0})
                 return
 
             dirdan = db.reference('SOLdan/') # 끝말 조회
@@ -99,18 +110,23 @@ async def on_message(message):
             if message.content[:1] != danm:
                 await msg.edit(content=message.author.mention + "님 끝말이 이어지지 않습니다")
                 await message.delete()
+                dirismallist.update({"isit":0})
                 return
 
             driver.get("https://opendict.korean.go.kr/search/searchResult?focus_name=query&query=" + message.content + "&dicType=1&wordMatch=Y")# 사이트 열람
-            driver.implicitly_wait(3)
+            
             einput = driver.find_element_by_xpath("//*[@id='searchPaging']/div[1]/div[2]/ul[2]/li/div/div[1]/dl/dd[1]/a/span[4]").get_attribute("innerHTML")
             print(einput + "성공 (자유)")
             await msg.edit(content=message.author.mention + "님 성공!\n단어 의미 : " + einput)
 
             dirdan.update({"SOLdan":message.content[-1:]})
             dirmallist.update({str(len(inmallist)):message.content})
+            dirismallist.update({"isit":0})
         except:
             await message.delete()
+            dirismallist = db.reference('SOLmalit/')
+            dmallist = dirismallist.get()
+            dirismallist.update({"isit":0})
             await msg.edit(content=message.author.mention + "님 해당 단어는 존재하지 않습니다")
 
 client.run(token)

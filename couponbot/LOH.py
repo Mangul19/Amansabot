@@ -14,6 +14,7 @@ from selenium.webdriver.chrome.options import Options
 import sys
 sys.path.insert(0, "D:/Desktop/bot-Amansa/noup")
 import code
+import time
 
 #clinet
 client = discord.Client()
@@ -55,6 +56,7 @@ async def on_message(message):
     print(str(message.author) + str(message.author.mention) + " : " + str(message.content))
 
     global driver
+    global iruain
 
     try:
         CHin = str(message.channel)
@@ -116,34 +118,34 @@ async def on_message(message):
 
                 for inpu in lohcuch:
                     driver.get("https://www.coupon.lordofheroes.com/")
-                    driver.implicitly_wait(3)
-                    driver.find_element_by_id('input_comp-k7bccwio').click()
-                    driver.find_element_by_id('input_comp-k7bccwio').send_keys(trsText)
-                    driver.find_element_by_id('input_comp-k7bcdh0c').send_keys(inpu)
-                    driver.find_element_by_xpath("//*[@id='comp-k7bces4d']/button").click()
+                    
+                    driver.find_element_by_id('comp-k7bccwio').click()
+                    driver.find_element_by_id('input_comp-k7bccwio').send_keys(inpu)
+                    driver.find_element_by_id('comp-k7bcdh0c').click()
+                    driver.find_element_by_id('input_comp-k7bcdh0c').send_keys(trsText)
                                         
                     alertin = ""
                     try:
-                        WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.ID, "comp-k7cr9hox")))
-                        alertin = driver.find_element_by_xpath('//*[@id="comp-k7cr9hor1"]/p/span/span/span/span/span').text
-                        driver.find_element_by_id('comp-k7cr9hox').click()
+                        WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[1]/p/span/span/span/span/span")))
+                        alertin = driver.find_element_by_xpath('/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[1]/p/span/span/span/span/span').get_attribute("innerHTML")
+                        driver.find_element_by_xpath('/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[3]').click()
                     except:
-                        try:
-                            WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.ID,"comp-keb5oovo1")))
-                            alertin = driver.find_element_by_xpath('//*[@id="comp-keb5oovi2"]/p/span/span/span/span/span').text
-                            driver.find_element_by_id('comp-keb5oovo1').click()
-                        except:
-                            try:
-                                WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.ID, "comp-keb5nt7b1")))
-                                alertin = driver.find_element_by_xpath('//*[@id="comp-keb5nt711"]/p/span/span/span/span/span').text
-                                driver.find_element_by_id('comp-keb5nt7b1').click()
-                            except:
-                                try:
-                                    WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.ID, "comp-k7bli2ek")))
-                                    alertin = driver.find_element_by_xpath('//*[@id="comp-k7bli2fi"]/p/span/span/span/span/span').text
-                                    driver.find_element_by_id('comp-k7bli2ek').click()
-                                except:
-                                    await message.channel.send(message.author.mention + "님 명령어 실행 중 오류가 발생하였습니다 관리자에게 문의하여주세요")
+                        alertin = driver.find_element_by_xpath('/html/body/div/div/div[3]/div/main/div/div/div[2]/div/div/div/div[6]/p/span/span').get_attribute("innerHTML")
+                        while alertin == "USER ID 확인을 하고 다시 입력해주세요" or alertin == " ":
+                            await message.channel.send("LOH 쿠폰 사이트 서버 오류 확인 재시작합니다")
+                            driver.close()
+                            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+                            driver.get("https://www.coupon.lordofheroes.com/")
+                            
+                            driver.find_element_by_id('comp-k7bccwio').click()
+                            driver.find_element_by_id('input_comp-k7bccwio').send_keys(inpu)
+                            driver.find_element_by_id('comp-k7bcdh0c').click()
+                            driver.find_element_by_id('input_comp-k7bcdh0c').send_keys(trsText)
+                            driver.find_element_by_xpath("//*[@id='comp-k7bces4d']/button").click()
+
+                            WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[1]/p/span/span/span/span/span")))
+                            alertin = driver.find_element_by_xpath('/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[1]/p/span/span/span/span/span').get_attribute("innerHTML")
+                            driver.find_element_by_xpath('/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[3]').click()
                                 
                     embed.add_field(name=trsText[:2] + "----- 님에게 " + inpu + " 지급 신청", value=alertin, inline=False)
 
@@ -197,8 +199,6 @@ async def on_message(message):
                 await message.channel.send(embed=embed)
 
         if message.content.startswith("!!쿠폰등록"): #로오히 ID 리스트에 사용자 등록
-            global iruain
-
             if iruain == False:
                 await message.channel.send("해당명령어는 다른분이 사용중 입니다 잠시 후 다시 시도해주세요")
                 return
@@ -220,30 +220,49 @@ async def on_message(message):
 
                 for inpu in lohch:
                     driver.get("https://www.coupon.lordofheroes.com/")
-                    driver.implicitly_wait(3)
-                    driver.find_element_by_id('input_comp-k7bccwio').click()
+                    
+                    driver.find_element_by_id('comp-k7bccwio').click()
                     driver.find_element_by_id('input_comp-k7bccwio').send_keys(inpu)
+                    driver.find_element_by_id('comp-k7bcdh0c').click()
                     driver.find_element_by_id('input_comp-k7bcdh0c').send_keys(trsText)
                     driver.find_element_by_xpath("//*[@id='comp-k7bces4d']/button").click()
                     
                     alertin = ""
-                    
                     try:
-                        WebDriverWait(driver, 1).until(EC.presence_of_element_located((By.ID, "POPUPS_ROOT")))
-                        alertin = driver.find_element_by_xpath('/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[1]/p/span/span/span/span/span').text
+                        WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[1]/p/span/span/span/span/span")))
+                        alertin = driver.find_element_by_xpath('/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[1]/p/span/span/span/span/span').get_attribute("innerHTML")
                         driver.find_element_by_xpath('/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[3]').click()
                     except:
-                        await message.channel.send(message.author.mention + "님 명령어 실행 중 오류가 발생하였습니다 관리자에게 문의하여주세요 대기열 오류")
+                        alertin = driver.find_element_by_xpath('/html/body/div/div/div[3]/div/main/div/div/div[2]/div/div/div/div[6]/p/span/span').get_attribute("innerHTML")
+                        while alertin == "USER ID 확인을 하고 다시 입력해주세요" or alertin == " ":
+                            await message.channel.send("LOH 쿠폰 사이트 서버 오류 확인 재시작합니다")
+                            driver.close()
+                            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+                            driver.get("https://www.coupon.lordofheroes.com/")
+                            
+                            driver.find_element_by_id('comp-k7bccwio').click()
+                            driver.find_element_by_id('input_comp-k7bccwio').send_keys(inpu)
+                            driver.find_element_by_id('comp-k7bcdh0c').click()
+                            driver.find_element_by_id('input_comp-k7bcdh0c').send_keys(trsText)
+                            driver.find_element_by_xpath("//*[@id='comp-k7bces4d']/button").click()
+
+                            WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[1]/p/span/span/span/span/span")))
+                            alertin = driver.find_element_by_xpath('/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[1]/p/span/span/span/span/span').get_attribute("innerHTML")
+                            driver.find_element_by_xpath('/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[3]').click()
+
+                            print("오류 코드 : " + alertin)
                                        
                     embed.add_field(name=inpu[:2] + "----- 님에게 " + trsText + " 지급 신청", value=alertin, inline=False)
 
                     if alertin == "쿠폰 번호 오류":
                         embed.add_field(name="쿠폰 번호 확인 요청", value="쿠폰 번호를 다시 확인하여주세요", inline=False)
                         await message.channel.send(embed=embed)
+                        iruain = True
                         return
                     elif alertin == "쿠폰 사용 기간 오류":
                         embed.add_field(name="쿠폰 번호 확인 요청", value="쿠폰 번호를 다시 확인하여주세요", inline=False)
                         await message.channel.send(embed=embed)
+                        iruain = True
                         return
 
                     if iruain:
@@ -267,6 +286,7 @@ async def on_message(message):
             else:
                 await message.channel.send("이미 등록된 쿠폰입니다")
     except:
+        iruain = True
         await message.channel.send(message.author.mention + "님 명령어 실행 중 오류가 발생하였습니다 명령어를 확인하여 주세요")
         await message.delete()
 

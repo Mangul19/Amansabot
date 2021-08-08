@@ -23,7 +23,7 @@ options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) Appl
 
 driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
 driver.get("https://www.bithumb.com/")
-driver.implicitly_wait(3)
+
 
 #clinet
 client = discord.Client()
@@ -78,7 +78,7 @@ async def back():
         except:
             await msg.edit(content="오류 발생 재접속을 시도합니다")
             driver.get("https://www.bithumb.com/")
-            driver.implicitly_wait(3)
+            
             
 async def back1():
     await client.wait_until_ready()
@@ -117,7 +117,7 @@ async def back1():
         except:
             await msg.edit(content="오류 발생 재접속을 시도합니다")
             driver.get("https://www.bithumb.com/")
-            driver.implicitly_wait(3)
+            
             
 async def back12():
     await client.wait_until_ready()
@@ -156,7 +156,7 @@ async def back12():
         except:
             await msg.edit(content="오류 발생 재접속을 시도합니다")
             driver.get("https://www.bithumb.com/")
-            driver.implicitly_wait(3)
+            
             
 async def back24():
     await client.wait_until_ready()
@@ -195,7 +195,7 @@ async def back24():
         except:
             await msg.edit(content="오류 발생 재접속을 시도합니다")
             driver.get("https://www.bithumb.com/")
-            driver.implicitly_wait(3)
+            
 
 async def back0():
     await client.wait_until_ready()
@@ -234,7 +234,7 @@ async def back0():
         except:
             await msg.edit(content="오류 발생 재접속을 시도합니다")
             driver.get("https://www.bithumb.com/")
-            driver.implicitly_wait(3)
+            
         
 client.loop.create_task(back())
 client.loop.create_task(back1())

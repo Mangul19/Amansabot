@@ -120,7 +120,7 @@ async def on_message(message):
 
                 for inpu in coocuch:
                     driver.get("https://game.devplay.com/coupon/ck/ko")
-                    driver.implicitly_wait(3)
+                    
                     driver.find_element_by_id('email-box').send_keys(trsText)
                     driver.find_element_by_id('code-box').send_keys(inpu)
                     driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
@@ -143,7 +143,7 @@ async def on_message(message):
                         driver.close()
                         driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
                         driver.get("https://game.devplay.com/coupon/ck/ko")
-                        driver.implicitly_wait(3)
+                        
                         driver.find_element_by_id('email-box').send_keys(trsText)
                         driver.find_element_by_id('code-box').send_keys(inpu)
                         driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
@@ -220,7 +220,7 @@ async def on_message(message):
 
                 for inpu in cookingch:
                     driver.get("https://game.devplay.com/coupon/ck/ko")
-                    driver.implicitly_wait(3)
+                    
                     driver.find_element_by_id('email-box').send_keys(inpu)
                     driver.find_element_by_id('code-box').send_keys(trsText)
                     driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
@@ -248,7 +248,7 @@ async def on_message(message):
                         driver.close()
                         driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
                         driver.get("https://game.devplay.com/coupon/ck/ko")
-                        driver.implicitly_wait(3)
+                        
                         driver.find_element_by_id('email-box').send_keys(inpu)
                         driver.find_element_by_id('code-box').send_keys(trsText)
                         driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
@@ -300,7 +300,7 @@ async def on_message(message):
 
             for inpu in coocuch:
                 driver.get("https://game.devplay.com/coupon/ck/ko")
-                driver.implicitly_wait(3)
+                
                 driver.find_element_by_id('email-box').send_keys(trsText)
                 driver.find_element_by_id('code-box').send_keys(inpu)
                 driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
@@ -322,7 +322,7 @@ async def on_message(message):
                     driver.close()
                     driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
                     driver.get("https://game.devplay.com/coupon/ck/ko")
-                    driver.implicitly_wait(3)
+                    
                     driver.find_element_by_id('email-box').send_keys(trsText)
                     driver.find_element_by_id('code-box').send_keys(inpu)
                     driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
@@ -389,7 +389,7 @@ async def on_message(message):
             embed = discord.Embed(title="처리내용", color=0x5CD1E5)
              
             driver.get("https://thanks10m.cookierun-kingdom.com/ko/")
-            driver.implicitly_wait(3)
+            
             driver.find_element_by_xpath('//*[@id="top"]/div[3]/form/input').send_keys(trsText)
             driver.find_element_by_xpath('//*[@id="btn-mid-check"]').click()
             WebDriverWait(driver, 10).until(EC.alert_is_present())

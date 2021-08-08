@@ -58,7 +58,7 @@ async def background():
     while True:
         try:
             driver.get("http://www.twitch.tv/hanmangul")# 사이트 열람
-            driver.implicitly_wait(3)
+            
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
 

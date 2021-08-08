@@ -17,7 +17,7 @@ driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/�
 >>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 
 driver.get("https://www.youtube.com/watch?v=0ZVLvRenGl8")# 사이트 열람
-driver.implicitly_wait(3)
+
 
 driver.find_element_by_xpath('//*[@id="buttons"]/ytd-button-renderer').click()
 driver.find_element_by_name('identifier').send_keys('mulmangul19@gmail.com')
@@ -27,7 +27,7 @@ time.sleep(60*12*24)
 while(True):
     try:
         driver.get("https://www.youtube.com/watch?v=0ZVLvRenGl8")# 사이트 열람
-        driver.implicitly_wait(3)
+        
     except:
         print("오류 발생 다음에 다시 시도합니다")
 

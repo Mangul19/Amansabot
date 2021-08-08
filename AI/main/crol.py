@@ -12,7 +12,7 @@ song = "pop.00026"
 global driver
 driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
 driver.get("http://mangul.iptime.org/" + song)# 사이트 열람
-driver.implicitly_wait(3)
+
 
 jang = (driver.find_element_by_xpath('//*[@id="final"]').get_attribute("innerHTML")).split('장르')
 ch = (driver.find_element_by_xpath('//*[@id="d"]').get_attribute("innerHTML"))
