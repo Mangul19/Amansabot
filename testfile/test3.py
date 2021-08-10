@@ -5,10 +5,10 @@ from firebase_admin import db
 
 #firebase
 cred = credentials.Certificate("D:/Desktop/중요파일/bot-Amansa/noup/firebase-adminsdk.json")
-firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
+firebase_admin.initialize_app(cred,{'databaseURL' : '---'})
 
 
-dirteamscno = db.reference('testteam/' + "지완/" + "1")
+dirteamscno = db.reference('testteam/' + "--/" + "1")
 dirteamscno.update({"test":5520})
 
 '''

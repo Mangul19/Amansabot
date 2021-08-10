@@ -31,7 +31,7 @@ client_id = code.client_id
 client_secret = code.client_secret
 #firebase
 cred = credentials.Certificate("firebase-adminsdk.json")
-firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
+firebase_admin.initialize_app(cred,{'databaseURL' : '---'})
 
 options = webdriver.ChromeOptions()
 options.add_argument('headless')

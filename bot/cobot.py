@@ -7,11 +7,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 import sys
-<<<<<<< HEAD
 sys.path.insert(0, "D:/Desktop/bot-Amansa/noup")
-=======
-sys.path.insert(0, "D:/Desktop/중요파일/bot-Amansa/noup")
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 import code
 
 #clinet
@@ -19,11 +15,7 @@ client = discord.Client()
 #discord bot tokken
 token = code.token
 #firebase
-<<<<<<< HEAD
 cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.json")
-=======
-cred = credentials.Certificate("D:/Desktop/중요파일/bot-Amansa/noup/firebase-adminsdk.json")
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
 #준비 될 시 시작

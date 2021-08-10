@@ -19,11 +19,7 @@ options = webdriver.ChromeOptions()
 #options.add_argument("disable-gpu")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
-<<<<<<< HEAD
 driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
-=======
-driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/중요파일/bot-Amansa/chromedriver.exe')
->>>>>>> 8e6da7a5f6c543bee85c0fe39074a7e8a29606b3
 
 #준비 될 시 시작
 @client.event

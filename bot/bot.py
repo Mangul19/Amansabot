@@ -23,8 +23,9 @@ import sys
 sys.path.insert(0, "D:/Desktop/bot-Amansa/noup")
 import code
 
+intents = discord.Intents.all()
 #clinet
-client = discord.Client()
+client = discord.Client(intents=intents)
 #discord bot tokken
 token = code.token
 #Naver Open API application ID
@@ -59,19 +60,31 @@ async def on_ready():
 #새로운 사람이 들어오면
 @client.event
 async def on_member_join(member):
+    role = discord.utils.get(member.guild.roles, name="한걸음<~9>") # 역할 부여
+    await member.add_roles(role)
+
     channel = client.get_channel(719907483069448223)
-    await channel.send(member.author.mention + '님 어만사άλφα에 어서오세요!! \n' +
-        '1. 대화 할 시 친하지 않은 상대방과 존대를 해오는 상대방에게는 꼭 존대로 응해주세요 \n' +
-        '(초면에는 서로서로 한 발자국 거리두고 대화해 보아요) \n' +
-        '2. 문제가 생길시 "벤"이 됩니다 \n'+
-        '3. !게임정보 을 입력하여 명령어 확인 후 자신이 하는 게임에 닉네임을 등록해주세요! 서로 같이 게임하면서 친해질 수 있습니다 \n' +
-        '4. 주변에 같이 이 디코방에서 즐길 사람있으면 언제든지 초대해주세요! 환영입니다!')
+    await channel.send(member.mention + '님  어만사άλφα에 어서오세요!!\n' +
+        '1. 하는게임등록을 방문해주세요 서로 같이 게임하면서 친해질 수 있습니다\n' +
+        '2. 주변에 같이 이 디코방에서 즐길 사람있으면 언제든지 초대해주세요! 환영입니다!\n' +
+        '3. 공지를 꼭!! 반드시 확인해주세요\n' +
+        '4. 기본적인 에티켓은 지킵시다\n' +
+        '5. 봇채널-BOT 카테고리 알람은 반드시 꺼두세요!!\n' +
+        '[해당 카테고리 우클릭 > 카테고리 알림 끄기 > 다시 활성화 할 때까지]\n'+
+        member.mention + ' 님에게 한걸음<~9>을/를 부여하였습니다')
 
 #서버를 나가면
 @client.event
 async def on_member_remove(member):
     channel = client.get_channel(719907483069448223)
-    await channel.send(member.author.mention + ' 님이 서버에서 나가셨습니다.')
+    await channel.send(member.mention + '(' + str(member) + ') 님이 서버에서 나가셨습니다\n(경험치 및 레벨 정보 삭제 나머지 정보는 유지)')
+
+    send = str(member.id)
+    dirlevel = db.reference('level/' + send) #레벨 값 가져오기
+    direxp = db.reference('exp/' + send) #경험치 값 가져오기
+
+    dirlevel.delete()
+    direxp.delete()
 
 #메세지 수신시
 @client.event
@@ -183,7 +196,6 @@ async def on_message(message):
 
         if message.content.startswith("") and str(message.channel.id) != "871251097988235275": #개인 레벨 경험치 부여
             send = str(message.author.id)  #메세지 송신자 ID 설정
-
             
             dirlevel = db.reference('level/' + send) #레벨 값 가져오기
             level = dirlevel.get()
@@ -194,10 +206,6 @@ async def on_message(message):
             if level == None: #저장된 정보가 없을시
                 dirlevel.update({send:1}) #새로운 값 설정 저장
                 direxp.update({send:0})
-                
-                role = discord.utils.get(message.guild.roles, name="한걸음<~9>") # 역할 부여
-                await message.author.add_roles(role)
-                await message.channel.send(message.author.mention + " 님에게 한걸음<~9>을/를 부여하였습니다")
             else: # 저장된 정보가 있을시
                 level = level[send] #레벨 및 경험치 값 가져오기
                 exp = exp[send]

@@ -1,4 +1,0 @@
-Rando = random.randint(1, 1000)
-
-for inpu in range(5)
-print(Rando)

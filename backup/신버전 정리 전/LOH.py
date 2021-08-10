@@ -17,7 +17,7 @@ client = discord.Client()
 token = code.lohtoken
 #firebase
 cred = credentials.Certificate("firebase-adminsdk.json")
-firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
+firebase_admin.initialize_app(cred,{'databaseURL' : '---'})
 
 options = webdriver.ChromeOptions()
 #options.add_argument('headless')

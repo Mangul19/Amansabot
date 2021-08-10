@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 #firebase
 cred = credentials.Certificate("firebase-adminsdk.json")
-firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
+firebase_admin.initialize_app(cred,{'databaseURL' : '---'})
 
 dircooking = db.reference('cooking/') #ID 리스트 가져오기
 cookingch = dircooking.get()

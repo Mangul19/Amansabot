@@ -14,7 +14,7 @@ client = discord.Client()
 token = code.token
 #firebase
 cred = credentials.Certificate("firebase-adminsdk.json")
-firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
+firebase_admin.initialize_app(cred,{'databaseURL' : '---'})
 
 #준비 될 시 시작
 @client.event
