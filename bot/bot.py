@@ -29,9 +29,9 @@ client = discord.Client(intents=intents)
 #discord bot tokken
 token = code.token
 #Naver Open API application ID
-client_id = code.client_id
+client_id = code.client_id[9]
 #Naver Open API application token
-client_secret = code.client_secret
+client_secret = code.client_secret[9]
 #firebase
 cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.json")
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
@@ -40,8 +40,8 @@ options = webdriver.ChromeOptions()
 options.add_argument('headless')
 options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")
-options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
-options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
+options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
+options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
 
 #경마 조절 장치
 loto_mal = True
@@ -102,7 +102,7 @@ async def on_message(message):
         helplist = helplist['helplist']
 
         #봇방에는 채팅을 치지못하게 설정
-        if str(message.channel.id) == "751716285129424897" or str(message.channel.id) == "823395883088871434" or str(message.channel.id) == "833629507939467274":
+        if str(message.channel.id) == "751716285129424897":
             trsText = message.content.split(" ")
             trsText = trsText[0]
             TRF = trsText in helplist
@@ -112,13 +112,13 @@ async def on_message(message):
                 return
             
         #명령어 사용 구역외에는 명령어 사용 불가능하게 설정
-        if str(message.channel.id) != "809826202088898570" and str(message.channel.id) != "751716285129424897" and str(message.channel.id) != "823395883088871434" and str(message.channel.id) != "833629507939467274": #봇방이 아닌곳 채팅 제한
+        if str(message.channel.id) != "751716285129424897" and str(message.channel.id) != "718436389062180917": #봇방이 아닌곳 채팅 제한
             trsText = message.content.split(" ")
             trsText = trsText[0]
             TRF = trsText in helplist
             if TRF:
                 if trsText == "!TRS":
-                    if str(message.channel.id) != "821752050948767754" and str(message.channel.id) == "792305492931772437":
+                    if str(message.channel.id) != "875718837373386822" and (message.channel.id) != "718436389062180917" and str(message.channel.id) == "832799360210436107":
                         await message.delete()
                         await message.channel.send("번역기는 전용 채팅방에 입력하여주세요")
                         return
@@ -174,7 +174,7 @@ async def on_message(message):
             embed.add_field(name="설명", value="Language1에는 번역할 언어의 코드를 Language2에는 번역될 언어의 코드를 적고 그 뒤(content)에 내용을 작성하면 AI가 판별 후 번역을 해줍니다", inline=False)
             embed.add_field(name="explanation", value="in Language1, write the code of the language that will be translated, and write the code of the language you want to translate in Language2 ou write down the contents after that, AI will judge and translate", inline=False)
             embed.add_field(name="Language Code", value="언어 코드는 하단 참고 \nLanguage code is at the bottom of the note", inline=False)
-            #embed.set_image(url="https://cdn.discordapp.com/attachments/718436389062180917/819230778113523732/a048c2a829301878.PNG")
+            embed.set_image(url="https://cdn.discordapp.com/attachments/718436389062180917/819230778113523732/a048c2a829301878.PNG")
             embed.add_field(name="EX", value="!TRS ko*ja 안녕하세요", inline=False)
             await message.channel.send('번역은 일반 채팅방에 쳐도 괜찮습니다', embed=embed)
 
@@ -491,8 +491,7 @@ async def on_message(message):
         if message.content == "!코로나":#코로나 정보
             driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
             driver.get("http://ncov.mohw.go.kr/")# 사이트 열람
-            
-
+            driver.implicitly_wait(2)
             
             embed = discord.Embed(title="코로나 정보", color=0x5CD1E5) #임베드 생성
 
@@ -503,7 +502,7 @@ async def on_message(message):
             embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
 
             driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
-            
+            driver.implicitly_wait(2)
             
             einput = driver.find_element_by_css_selector('#ALL_decidecnt_increase > b').text
 
@@ -614,7 +613,7 @@ async def on_message(message):
         if message.content == "!지진": #최근 지진 정보 접속 및 안내
             driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
             driver.get("https://www.weather.go.kr/w/eqk-vol/recent-eqk.do")# 사이트 열람
-            
+            driver.implicitly_wait(2)
 
             html = driver.page_source
             driver.quit()

@@ -22,11 +22,11 @@ cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.jso
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
 options = webdriver.ChromeOptions()
-options.add_argument('headless')
+#options.add_argument('headless')
 options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")
-options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
-options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
+options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
+options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
 driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
 
 iruain = True
@@ -120,6 +120,7 @@ async def on_message(message):
 
                 for inpu in coocuch:
                     driver.get("https://game.devplay.com/coupon/ck/ko")
+                    driver.implicitly_wait(2)
                     
                     driver.find_element_by_id('email-box').send_keys(trsText)
                     driver.find_element_by_id('code-box').send_keys(inpu)
@@ -143,6 +144,7 @@ async def on_message(message):
                         driver.close()
                         driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
                         driver.get("https://game.devplay.com/coupon/ck/ko")
+                        driver.implicitly_wait(2)
                         
                         driver.find_element_by_id('email-box').send_keys(trsText)
                         driver.find_element_by_id('code-box').send_keys(inpu)
@@ -220,6 +222,7 @@ async def on_message(message):
 
                 for inpu in cookingch:
                     driver.get("https://game.devplay.com/coupon/ck/ko")
+                    driver.implicitly_wait(2)
                     
                     driver.find_element_by_id('email-box').send_keys(inpu)
                     driver.find_element_by_id('code-box').send_keys(trsText)
@@ -248,6 +251,7 @@ async def on_message(message):
                         driver.close()
                         driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
                         driver.get("https://game.devplay.com/coupon/ck/ko")
+                        driver.implicitly_wait(2)
                         
                         driver.find_element_by_id('email-box').send_keys(inpu)
                         driver.find_element_by_id('code-box').send_keys(trsText)
@@ -300,6 +304,7 @@ async def on_message(message):
 
             for inpu in coocuch:
                 driver.get("https://game.devplay.com/coupon/ck/ko")
+                driver.implicitly_wait(2)
                 
                 driver.find_element_by_id('email-box').send_keys(trsText)
                 driver.find_element_by_id('code-box').send_keys(inpu)
@@ -322,6 +327,7 @@ async def on_message(message):
                     driver.close()
                     driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
                     driver.get("https://game.devplay.com/coupon/ck/ko")
+                    driver.implicitly_wait(2)
                     
                     driver.find_element_by_id('email-box').send_keys(trsText)
                     driver.find_element_by_id('code-box').send_keys(inpu)
@@ -389,6 +395,7 @@ async def on_message(message):
             embed = discord.Embed(title="처리내용", color=0x5CD1E5)
              
             driver.get("https://thanks10m.cookierun-kingdom.com/ko/")
+            driver.implicitly_wait(2)
             
             driver.find_element_by_xpath('//*[@id="top"]/div[3]/form/input').send_keys(trsText)
             driver.find_element_by_xpath('//*[@id="btn-mid-check"]').click()

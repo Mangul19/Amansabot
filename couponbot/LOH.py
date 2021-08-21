@@ -25,11 +25,11 @@ cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.jso
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
 options = webdriver.ChromeOptions()
-options.add_argument('headless')
+#options.add_argument('headless')
 options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")
-options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
-options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
+options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
+options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
 driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
 
 iruain = True
@@ -64,11 +64,13 @@ async def on_message(message):
             if message.content != "!!help" and message.content.startswith("!!등록") == False and message.content.startswith("!!쿠폰등록") == False:
                 await message.channel.send("대화는 금지!")
                 await message.delete()
+                return
 
         if CHin == '질문채널':
             if message.content == "!!help" or message.content.startswith("!!등록") or message.content.startswith("!!쿠폰등록"):
                 await message.channel.send("여기는 질문창입니다 명령어는 명령어-입력-채널 에 입력해주세요")
                 await message.delete()
+                return
 
         if message.content == "!!help":
             await message.delete()
@@ -118,6 +120,7 @@ async def on_message(message):
 
                 for inpu in lohcuch:
                     driver.get("https://www.coupon.lordofheroes.com/")
+                    driver.implicitly_wait(2)
                     
                     driver.find_element_by_id('comp-k7bccwio').click()
                     driver.find_element_by_id('input_comp-k7bccwio').send_keys(inpu)
@@ -136,6 +139,7 @@ async def on_message(message):
                             driver.close()
                             driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
                             driver.get("https://www.coupon.lordofheroes.com/")
+                            driver.implicitly_wait(2)
                             
                             driver.find_element_by_id('comp-k7bccwio').click()
                             driver.find_element_by_id('input_comp-k7bccwio').send_keys(inpu)
@@ -220,6 +224,7 @@ async def on_message(message):
 
                 for inpu in lohch:
                     driver.get("https://www.coupon.lordofheroes.com/")
+                    driver.implicitly_wait(2)
                     
                     driver.find_element_by_id('comp-k7bccwio').click()
                     driver.find_element_by_id('input_comp-k7bccwio').send_keys(inpu)
@@ -234,11 +239,12 @@ async def on_message(message):
                         driver.find_element_by_xpath('/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[3]').click()
                     except:
                         alertin = driver.find_element_by_xpath('/html/body/div/div/div[3]/div/main/div/div/div[2]/div/div/div/div[6]/p/span/span').get_attribute("innerHTML")
-                        while alertin == "USER ID 확인을 하고 다시 입력해주세요" or alertin == " ":
+                        while alertin == "USER ID 확인을 하고 다시 입력해주세요" or alertin == "​ " or alertin == "​쿠폰 번호 오류" or alertin == "쿠폰 사용 기간 오류":
                             await message.channel.send("LOH 쿠폰 사이트 서버 오류 확인 재시작합니다")
                             driver.close()
                             driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
                             driver.get("https://www.coupon.lordofheroes.com/")
+                            driver.implicitly_wait(2)
                             
                             driver.find_element_by_id('comp-k7bccwio').click()
                             driver.find_element_by_id('input_comp-k7bccwio').send_keys(inpu)
@@ -246,12 +252,13 @@ async def on_message(message):
                             driver.find_element_by_id('input_comp-k7bcdh0c').send_keys(trsText)
                             driver.find_element_by_xpath("//*[@id='comp-k7bces4d']/button").click()
 
-                            WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[1]/p/span/span/span/span/span")))
-                            alertin = driver.find_element_by_xpath('/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[1]/p/span/span/span/span/span').get_attribute("innerHTML")
-                            driver.find_element_by_xpath('/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[3]').click()
-
-                            print("오류 코드 : " + alertin)
-                                       
+                            try:
+                                WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[1]/p/span/span/span/span/span")))
+                                alertin = driver.find_element_by_xpath('/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[1]/p/span/span/span/span/span').get_attribute("innerHTML")
+                                driver.find_element_by_xpath('/html/body/div/div/div[4]/div/div/div[2]/div/div[2]/div/div/div/div[2]/div/div[3]').click()
+                            except:
+                                print("오류 코드 : " + alertin)
+       
                     embed.add_field(name=inpu[:2] + "----- 님에게 " + trsText + " 지급 신청", value=alertin, inline=False)
 
                     if alertin == "쿠폰 번호 오류":
@@ -275,10 +282,10 @@ async def on_message(message):
                         await message.channel.send(embed=embed)
                         embed = discord.Embed(title="처리내용", color=0x5CD1E5)
                         count = 0
-                
+ 
                 embed.add_field(name= "@everyone" + "쿠폰 지급 최종 안내", value=str(len(lohch)) + "명 계정에 새로 등록된 쿠폰 지급 신청을 완료하였습니다", inline=False)
                 await message.channel.send(embed=embed)
-                
+
                 channel = client.get_channel(836612578444181504)
                 await channel.send("@everyone 새로운 " + trsText + " 쿠폰이 등록되어 쿠폰을 일괄 지급하였습니다 확인하여주세요\n쿠폰을 입력해주신 " + message.author.mention + "님 감사합니다\n 귀하의 입력에 " + str(len(lohch)) + "분이 자동 수령을 받으셨습니다")
 

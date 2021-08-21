@@ -29,11 +29,11 @@ token = code.token
 cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.json")
 
 options = webdriver.ChromeOptions()
-options.add_argument('headless')
+#options.add_argument('headless')
 options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")
-options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
-options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
+options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
+options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
 
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
@@ -116,7 +116,7 @@ async def on_message(message):
                 dirmallist.update({"isit":0})
                 return
 
-            inmallist = dmallist['inmallist']
+            inmallist = dmallist['inmallist'].values()
             if message.content in inmallist:
                 await msg.edit(content=message.author.mention + "님 해당 단어는 이미 사용한 단어입니다")
                 await message.delete()
@@ -134,8 +134,9 @@ async def on_message(message):
                 return
 
             driver.get("https://opendict.korean.go.kr/search/searchResult?focus_name=query&query=" + message.content + "&dicType=1&wordMatch=Y")# 사이트 열람
+            driver.implicitly_wait(2)
             
-            einput = driver.find_element_by_xpath("//*[@id='searchPaging']/div[1]/div[2]/ul[2]/li/div/div[1]/dl/dd[1]/a/span[4]").get_attribute("innerHTML")
+            einput = driver.find_element_by_class_name("word_dis.ml5").get_attribute("innerHTML")
             print(einput + "성공(기본)")
 
             dirmylist = db.reference('mallist/mylist/' + send)
@@ -180,8 +181,12 @@ async def on_message(message):
 
             dirdan.update({"dan":message.content[-1:]})
             dirmallist.update({"last":send})
+            
+            count = list(dmallist['inmallist'].keys())
+            count = int(float(count[len(count) - 1])) + 1
+
             dirmallist = db.reference('mallist/inmallist')
-            dirmallist.update({str(len(inmallist)):message.content})
+            dirmallist.update({str(count):message.content})
             dirmallist = db.reference('mallist/')
             
             await msg.edit(content=message.author.mention + "님 성공!\n단어 의미 : " + einput + "\n현재 총 사용 단어 수 : " + str(len(inmallist)) + "\n본인 스코어 : " + str(mylist))

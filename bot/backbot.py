@@ -37,11 +37,11 @@ cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.jso
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
 options = webdriver.ChromeOptions()
-options.add_argument('headless')
+#options.add_argument('headless')
 options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")
-options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
-options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36")
+options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
+options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
 
 async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나 명령어와 시스템 동일**
     await client.wait_until_ready()
@@ -50,22 +50,20 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
 
     while True:
         try:
-            if "10:01" ==  time.strftime('%H:%M', time.localtime(time.time())): #특정 시간에 작동
+            if "12:00" ==  time.strftime('%H:%M', time.localtime(time.time())) or "23:59" ==  time.strftime('%H:%M', time.localtime(time.time())): #특정 시간에 작동
                 driver.get("http://ncov.mohw.go.kr/")# 사이트 열람
-                
-
+                driver.implicitly_wait(2)
                 
                 embed = discord.Embed(title="코로나 정보", color=0x5CD1E5) #임베드 생성
 
                 einput = driver.find_element_by_css_selector('body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(1) > span.before').text
-                embed.add_field(name="질병관리청 공식 확진자 수 [전날 확진자 <AM 10시에 업데이트>]", value=einput + "명", inline=False) # 전날 확진자 선택 및 임베트 추가
+                embed.add_field(name="질병관리청 공식 확진자 수 [전날 확진자]", value=einput + "명", inline=False) # 전날 확진자 선택 및 임베트 추가
 
                 einput = driver.find_element_by_css_selector('body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(4) > span.before').text
-                embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
+                embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자]", value=einput + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
 
                 driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
-                
-
+                driver.implicitly_wait(2)
                 
                 einput = driver.find_element_by_css_selector('#ALL_decidecnt_increase > b').text
 
@@ -74,10 +72,10 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
                 channel = client.get_channel(832799360210436107)
                 await channel.send(embed=embed)
 
-                channel = client.get_channel(833629507939467274)
+                channel = client.get_channel(718436389062180917)
                 await channel.send(embed=embed)
         except:
-            print("10시 코로나 시스템 오류 발생 다음에 다시 시도합니다")
+            print("12시 코로나 시스템 오류 발생 다음에 다시 시도합니다")
             driver.close()
             driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
 
@@ -95,7 +93,7 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
             ji = ji['jisin']
 
             driver.get("https://www.weather.go.kr/w/eqk-vol/search/worldwide.do")# 사이트 열람
-            
+            driver.implicitly_wait(2)
 
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
@@ -120,13 +118,20 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
                     if listin == 5:
                         listin = 7
                         TFL = False
-                
-                #embed.set_image(url=driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(8) > a').text)
+
+                einput = driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(8) > a').get_attribute('href')
+
+                driver.get(einput)
+                driver.implicitly_wait(2)
+
+                einput = driver.find_element_by_css_selector('body > img').get_attribute('src')
+                print(einput)
+                embed.set_image(url=einput)
 
                 channel = client.get_channel(832799360210436107)
                 await channel.send(embed=embed)
 
-                channel = client.get_channel(833629507939467274)
+                channel = client.get_channel(718436389062180917)
                 await channel.send(embed=embed)
             elif einput == "":
                print("해외 지진 시스템 불러오기 오류 다음에 다시 시도합니다") 
@@ -150,7 +155,7 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
             ji = ji['jisin']
 
             driver.get("https://www.weather.go.kr/w/eqk-vol/search/korea.do")# 사이트 열람
-            
+            driver.implicitly_wait(2)
 
             html = driver.page_source
             soup = BeautifulSoup(html, 'html.parser')
@@ -176,12 +181,19 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
                         listin = 8
                         TFL = False
                 
-                #embed.set_image(url=driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(9) > a').text)
+                einput = driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(10) > a').get_attribute('href')
+
+                driver.get(einput)
+                driver.implicitly_wait(2)
+
+                einput = driver.find_element_by_css_selector('#img2').get_attribute('src')
+                print(einput)
+                embed.set_image(url=einput)
 
                 channel = client.get_channel(832799360210436107)
                 await channel.send(embed=embed)
 
-                channel = client.get_channel(833629507939467274)
+                channel = client.get_channel(718436389062180917)
                 await channel.send(embed=embed)
             elif einput == "":
                print("국내 지진 시스템 불러오기 오류 다음에 다시 시도합니다") 
@@ -257,9 +269,6 @@ async def background_backrank():#랭킹 지원금
                     break
 
             channel = client.get_channel(832799360210436107)
-            await channel.send(embed=embed)
-
-            channel = client.get_channel(833629507939467274)
             await channel.send(embed=embed)
         except:
             print("지원금 오류 발생 다음에 다시 시도합니다")
@@ -345,9 +354,6 @@ async def background_amangochicdirt():#어만고치 청결도 시스템
 
                             channel = client.get_channel(832799360210436107)
                             await channel.send("ID : <@!" + word + "> 님의 어만고치의 레벨이 상승하였습니다 상금 " + str(10 * level) + "만원을 지급합니다")
-
-                            channel = client.get_channel(833629507939467274)
-                            await channel.send("ID : <@!" + word + ">님의 어만고치의 레벨이 상승하였습니다 상금 " + str(10 * level) + "만원을 지급합니다")  
                         else:#경험치로 인한 레벨 변화가 없을시
                             diramangociin.update({'exp':exp}) #일반 업데이트
         except:
@@ -436,9 +442,6 @@ async def background_amangochichung():#어만고치 허기도 시스템 ** 어�
 
                             channel = client.get_channel(832799360210436107)
                             await channel.send("ID : <@!" + word + "> 님의 어만고치의 레벨이 상승하였습니다 상금 " + str(10 * level) + "만원을 지급합니다")
-
-                            channel = client.get_channel(833629507939467274)
-                            await channel.send("ID : <@!" + word + "> 님의 어만고치의 레벨이 상승하였습니다 상금 " + str(10 * level) + "만원을 지급합니다")
                         else:
                             diramangociin.update({'exp':exp}) 
         except:
@@ -492,9 +495,6 @@ async def background_se(): #자동 세금 시스템 - 소지금, 보유금 동�
                 channel = client.get_channel(832799360210436107)
                 await channel.send("소지금 세금을 납부하게 하였습니다")
 
-                channel = client.get_channel(833629507939467274)
-                await channel.send("소지금 세금을 납부하게 하였습니다") 
-
                 irmoney = db.reference('ye/') #소지금이 있는 모든 사람 조회
                 money = dirmoney.get()
                 moneykey = list(money.keys())
@@ -536,9 +536,6 @@ async def background_se(): #자동 세금 시스템 - 소지금, 보유금 동�
 
                 channel = client.get_channel(832799360210436107)
                 await channel.send("보유금 세금을 납부하게 하였습니다")
-
-                channel = client.get_channel(833629507939467274)
-                await channel.send("보유금 세금을 납부하게 하였습니다") 
         except:
             print("세금 오류 발생 다음에 다시 시도합니다")
 
@@ -611,9 +608,6 @@ async def background_code00mukye(): #코드 00번 적금 자동 해지
 
                         channel = client.get_channel(832799360210436107)
                         await channel.send("ID : <@!" + word + "> 님의 사흘적금이 만기되었습니다 원금 + 이자 + 보너스  총 " + str(givemoney) + "원이 입금됩니다")
-
-                        channel = client.get_channel(833629507939467274)
-                        await channel.send("ID : <@!" + word + "> 님의 사흘적금이 만기되었습니다 원금 + 이자 + 보너스  총 " + str(givemoney) + "원이 입금됩니다")
         except:
             print("00 적금 해지 오류 발생 다음에 다시 시도합니다")
         
@@ -661,9 +655,6 @@ async def background_code01mukye(): #코드 01번 적금 자동 해지 **코드 
                         dirmukye01in.delete() #해당 유저에 대한 주식 01번 정보 삭제
 
                         channel = client.get_channel(832799360210436107)
-                        await channel.send("ID : <@!" + word + "> 님의 닷새적금이 만기되었습니다 원금 + 이자 + 보너스 총 " + str(givemoney) + "원이 입금됩니다")
-
-                        channel = client.get_channel(833629507939467274)
                         await channel.send("ID : <@!" + word + "> 님의 닷새적금이 만기되었습니다 원금 + 이자 + 보너스 총 " + str(givemoney) + "원이 입금됩니다")
         except:
             print("01 적금 해지 오류 발생 다음에 다시 시도합니다")
@@ -777,7 +768,7 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
             cov1 = cov['cov1']
 
             driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
-            
+            driver.implicitly_wait(2)
 
             einput1 = driver.find_element_by_css_selector("#ALL_decidecnt_increase > div.live-table > div:first-child > div > span > p:nth-child(1) > b").get_attribute("innerHTML")
 
@@ -792,9 +783,6 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
                 dircov.update({'cov1':einput1})
 
                 channel = client.get_channel(869937397591322675)
-                await channel.send(embed=embed)
-
-                channel = client.get_channel(833629507939467274)
                 await channel.send(embed=embed)
             elif einput1 == "":
                print("실시간 코로나 불러오기 오류 다음에 다시 시도합니다") 
@@ -815,7 +803,7 @@ async def background_jisinle(): #상위의 지진 시스템과 거의 동일
             jisin = jisin['jisin']
             
             driver.get("http://necis.kma.go.kr/necis-dbf/usermain/new/common/userMainNewForm.do")# 사이트 열람
-            
+            driver.implicitly_wait(2)
 
             #로그인
             driver.find_element_by_name('email').send_keys(code.necisid)
