@@ -23,7 +23,7 @@ firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-
 
 options = webdriver.ChromeOptions()
 #options.add_argument('headless')
-options.add_argument('window-size=1920x1080')
+options.add_argument('window-size=854x480')
 options.add_argument("disable-gpu")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
@@ -51,9 +51,6 @@ async def on_message(message):
 
     #받은 메세지 및 입력자 출력
     print(str(message.author) + str(message.author.mention) + " : " + str(message.content))
-
-    global driver
-
 
     try:
         CHin = str(message.channel)
@@ -140,9 +137,10 @@ async def on_message(message):
                         get.append(inpu)
 
                     while alertin == "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
-                        await message.channel.send("데브 사이트 서버 오류 확인 재시작합니다")
-                        driver.close()
-                        driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+                        driver.get("https://www.google.com/")
+                        driver.implicitly_wait(10)
+                        print("오류로 초기화")
+
                         driver.get("https://game.devplay.com/coupon/ck/ko")
                         driver.implicitly_wait(2)
                         
@@ -247,9 +245,10 @@ async def on_message(message):
                         return
                     
                     while alertin == "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
-                        await message.channel.send("데브 사이트 서버 오류 확인 재시작합니다")
-                        driver.close()
-                        driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+                        driver.get("https://www.google.com/")
+                        driver.implicitly_wait(10)
+                        print("오류로 초기화")
+
                         driver.get("https://game.devplay.com/coupon/ck/ko")
                         driver.implicitly_wait(2)
                         
@@ -323,9 +322,10 @@ async def on_message(message):
                     get.append(inpu)
 
                 while alertin == "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
-                    await message.channel.send("데브 사이트 서버 오류 확인 재시작합니다")
-                    driver.close()
-                    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+                    driver.get("https://www.google.com/")
+                    driver.implicitly_wait(10)
+                    print("오류로 초기화")
+
                     driver.get("https://game.devplay.com/coupon/ck/ko")
                     driver.implicitly_wait(2)
                     

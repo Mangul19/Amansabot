@@ -30,7 +30,7 @@ cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.jso
 
 options = webdriver.ChromeOptions()
 #options.add_argument('headless')
-options.add_argument('window-size=1920x1080')
+options.add_argument('window-size=854x480')
 options.add_argument("disable-gpu")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
@@ -118,7 +118,7 @@ async def on_message(message):
             
             einput = driver.find_element_by_class_name("word_dis.ml5").get_attribute("innerHTML")
             print(einput + "성공 (자유)")
-            await msg.edit(content=message.author.mention + "님 성공!\n단어 의미 : " + einput)
+            await msg.edit(content=message.author.mention + "님 성공!\n단어 의미 : " + einput + "\n현재 총 사용 단어 수 : " + str(len(inmallist)) )
 
             dirdan.update({"SOLdan":message.content[-1:]})
             dirmallist.update({str(len(inmallist)):message.content})

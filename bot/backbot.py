@@ -38,15 +38,15 @@ firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-
 
 options = webdriver.ChromeOptions()
 #options.add_argument('headless')
-options.add_argument('window-size=1920x1080')
+options.add_argument('window-size=854x480')
 options.add_argument("disable-gpu")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
 
+driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+
 async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나 명령어와 시스템 동일**
     await client.wait_until_ready()
-    global driver
-    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
 
     while True:
         try:
@@ -75,16 +75,14 @@ async def background_backcov(): # 코로나 정보 조회 시스템 **!코로나
                 channel = client.get_channel(718436389062180917)
                 await channel.send(embed=embed)
         except:
+            driver.get("https://www.google.com/")
+            driver.implicitly_wait(10)
             print("12시 코로나 시스템 오류 발생 다음에 다시 시도합니다")
-            driver.close()
-            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
 
         await asyncio.sleep(60*1)
 
 async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진 시스템과 대부분 일치**
     await client.wait_until_ready()
-    global driver
-    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
 
     while True:
         try:
@@ -136,17 +134,14 @@ async def background_heijisin():#해외 지진 자동 감지 시스템 **!지진
             elif einput == "":
                print("해외 지진 시스템 불러오기 오류 다음에 다시 시도합니다") 
         except:
+            driver.get("https://www.google.com/")
+            driver.implicitly_wait(10)
             print("해외 지진 시스템 오류 발생 다음에 다시 시도합니다")
-            driver.close()
-            
-            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
             
         await asyncio.sleep(60*1)
 
 async def background_backjisin():#지진 자동 감지 시스템 **!지진 시스템과 일치**
     await client.wait_until_ready()
-    global driver
-    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
 
     while True:
         try:
@@ -156,9 +151,6 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
 
             driver.get("https://www.weather.go.kr/w/eqk-vol/search/korea.do")# 사이트 열람
             driver.implicitly_wait(2)
-
-            html = driver.page_source
-            soup = BeautifulSoup(html, 'html.parser')
 
             einput = driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(2) > span').text # 가져올 값 선택
 
@@ -183,12 +175,14 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
                 
                 einput = driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(10) > a').get_attribute('href')
 
-                driver.get(einput)
-                driver.implicitly_wait(2)
+                try:
+                    driver.get(einput)
+                    driver.implicitly_wait(2)
 
-                einput = driver.find_element_by_css_selector('#img2').get_attribute('src')
-                print(einput)
-                embed.set_image(url=einput)
+                    einput = driver.find_element_by_css_selector('#img2').get_attribute('src')
+                    embed.set_image(url=einput)
+                except:
+                    embed.add_field(name="이미지 오류", value="이미지는 없습니다", inline=False) 
 
                 channel = client.get_channel(832799360210436107)
                 await channel.send(embed=embed)
@@ -198,10 +192,8 @@ async def background_backjisin():#지진 자동 감지 시스템 **!지진 시�
             elif einput == "":
                print("국내 지진 시스템 불러오기 오류 다음에 다시 시도합니다") 
         except:
+            driver.get("https://www.google.com/")
             print("국내 지진 시스템 오류 발생 다음에 다시 시도합니다")
-            driver.close()
-            
-            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
 
         await asyncio.sleep(60*1)
 
@@ -663,6 +655,8 @@ async def background_code01mukye(): #코드 01번 적금 자동 해지 **코드 
 
 async def background_jusic():#주식 변환시스템
     await client.wait_until_ready()
+    await message.channel.purge(limit=int(1))
+
     jusiclist = ["어만코인","달주식","투자주식","점핑주식","단단주식","꽃주식","기계주식","도비코인"] #변화시킬 주식 미리 저장
 
     channel = client.get_channel(871004552869056512)
@@ -758,8 +752,6 @@ async def background_jusic():#주식 변환시스템
 
 async def background_backcovlive(): # 실시간 코로나 정보 조회 시스템 **!코로나 명령어와 시스템 동일**
     await client.wait_until_ready()
-    global driver
-    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
 
     while True:
         try:
@@ -787,14 +779,14 @@ async def background_backcovlive(): # 실시간 코로나 정보 조회 시스�
             elif einput1 == "":
                print("실시간 코로나 불러오기 오류 다음에 다시 시도합니다") 
         except:
+            driver.get("https://www.google.com/")
+            driver.implicitly_wait(10)
             print("실시간 코로나 시스템 오류 발생 다음에 다시 시도합니다")
 
         await asyncio.sleep(60*1)
 
 async def background_jisinle(): #상위의 지진 시스템과 거의 동일
     await client.wait_until_ready()
-    global driver
-    driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
 
     while True:
         try:

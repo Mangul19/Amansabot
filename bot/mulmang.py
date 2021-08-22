@@ -15,7 +15,7 @@ token = code.multoken
 
 options = webdriver.ChromeOptions()
 #options.add_argument('headless')
-options.add_argument('window-size=1920x1080')
+options.add_argument('window-size=854x480')
 options.add_argument("disable-gpu")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")

@@ -38,9 +38,9 @@ cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.jso
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
 options = webdriver.ChromeOptions()
-options.add_argument('headless')
-options.add_argument('window-size=1920x1080')
-#options.add_argument("disable-gpu")
+#options.add_argument('headless')
+options.add_argument('window-size=854x480')
+options.add_argument("disable-gpu")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
 
@@ -49,21 +49,36 @@ driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bo
 #준비 될 시 시작
 @client.event
 async def on_ready():
-    print("시작")
-    
     driver.get("https://www.weather.go.kr/w/eqk-vol/search/korea.do")# 사이트 열람
     driver.implicitly_wait(2)
+        
+    embed = discord.Embed(title="국내의 최근 지진을 불러옵니다", description="지진 시스템", color=0x5CD1E5)
 
-    embed = discord.Embed(title="테스트", color=0x5CD1E5)
+    einlist = ["발생시각", "규모", "발생 깊이","최대 진도" ,"위치"]
+    listin = 2
+    TFL = False
+
+    for insite in einlist:
+        einput = driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(' + str(listin) + ') > span').text
+        embed.add_field(name=insite, value=einput, inline=TFL)
+
+        listin += 1
+        TFL = True
+        if listin == 6:
+            listin = 8
+            TFL = False
 
     einput = driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(10) > a').get_attribute('href')
 
-    driver.get(einput)
-    driver.implicitly_wait(2)
+    try:
+        driver.get(einput)
+        driver.implicitly_wait(2)
 
-    einput = driver.find_element_by_css_selector('#img2').get_attribute('src')
-    print(einput)
-    embed.set_image(url=einput)
+        einput = driver.find_element_by_css_selector('#img2').get_attribute('src')
+        embed.set_image(url=einput)
+    except:
+        embed.add_field(name="이미지 오류", value="이미지는 없습니다", inline=False)
+        embed = driver.find_element_by_css_selector('body > embed')
 
     channel = client.get_channel(832799360210436107)
     await channel.send(embed=embed)

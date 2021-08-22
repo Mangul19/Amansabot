@@ -37,11 +37,13 @@ cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.jso
 firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
 options = webdriver.ChromeOptions()
-options.add_argument('headless')
-options.add_argument('window-size=1920x1080')
+#options.add_argument('headless')
+options.add_argument('window-size=854x480')
 options.add_argument("disable-gpu")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
+
+driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
 
 #경마 조절 장치
 loto_mal = True
@@ -65,7 +67,7 @@ async def on_member_join(member):
 
     channel = client.get_channel(719907483069448223)
     await channel.send(member.mention + '님  어만사άλφα에 어서오세요!!\n' +
-        '1. 하는게임등록을 방문해주세요 서로 같이 게임하면서 친해질 수 있습니다\n' +
+        '1. 봇사용 방에서 !게임정보 를 입력해보세요! 게임을 하며 친해져요\n' +
         '2. 주변에 같이 이 디코방에서 즐길 사람있으면 언제든지 초대해주세요! 환영입니다!\n' +
         '3. 공지를 꼭!! 반드시 확인해주세요\n' +
         '4. 기본적인 에티켓은 지킵시다\n' +
@@ -93,8 +95,9 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    #받은 메세지 및 입력자 출력
-    print(str(message.author) + str(message.author.mention) + " : " + str(message.content))
+    #채팅방이 다를 경우 무시
+    if str(message.channel.id) != "718436389062180917" and str(message.channel.id) != "875718837373386822":
+        print(str(message.author) + str(message.author.mention) + " : " + str(message.content))
 
     try:
         dirhelplist = db.reference('helplist/')
@@ -112,7 +115,7 @@ async def on_message(message):
                 return
             
         #명령어 사용 구역외에는 명령어 사용 불가능하게 설정
-        if str(message.channel.id) != "751716285129424897" and str(message.channel.id) != "718436389062180917": #봇방이 아닌곳 채팅 제한
+        if str(message.channel.id) != "751716285129424897" and str(message.channel.id) != "873984166897807470": #봇방이 아닌곳 채팅 제한
             trsText = message.content.split(" ")
             trsText = trsText[0]
             TRF = trsText in helplist
@@ -193,88 +196,6 @@ async def on_message(message):
             embed.add_field(name="!로토도박 금액 배팅", value="배팅을 최대 10까지 할 수 있는 상세 도박\n확률은 일반 도박보다 더 낮습니다", inline=False)
             embed.add_field(name="!경마 번호 매수", value="번호는 1~5번 이내로 지정해주세요 \n매수는 1매당 1천 5백원이며 최대 10매까지 구입이 가능합니다", inline=False)
             await message.channel.send( embed=embed)
-
-        if message.content.startswith("") and str(message.channel.id) != "871251097988235275": #개인 레벨 경험치 부여
-            send = str(message.author.id)  #메세지 송신자 ID 설정
-            
-            dirlevel = db.reference('level/' + send) #레벨 값 가져오기
-            level = dirlevel.get()
-
-            direxp = db.reference('exp/' + send) #경험치 값 가져오기
-            exp = direxp.get()
-
-            if level == None: #저장된 정보가 없을시
-                dirlevel.update({send:1}) #새로운 값 설정 저장
-                direxp.update({send:0})
-            else: # 저장된 정보가 있을시
-                level = level[send] #레벨 및 경험치 값 가져오기
-                exp = exp[send]
-
-                intstr = str(message.content) # 메세지를 String값으로 변환
-                intstr = len(intstr) # 길이 계산
-
-                ranin = random.uniform(1.0, 10.0)
-                ran = ranin * intstr / level
-                ran = math.ceil(ran) # 길이에 랜덤값 계산후 정수값 저장
-
-                if ran > (1000 / level): # 한번에 많은 경험치 부여 방지를 위해 최대값을 100으로 설정
-                    ran = 1000 / level
-
-                exp = round(exp + ran, 3)
-
-                if exp > 1000: #경험치 값이 1천이 넘었을때
-                    exp = exp - 1000 # 경험치에 1천을 제하고 저장
-                    direxp.update({send:exp})
-
-                    level = level + 1 # 레벨을 1 상승시킨 후 저장
-                    dirlevel.update({send:level})
-
-                    await message.channel.send(message.author.mention + "님의 레벨이 " + str(level) +" 으로/로 상승하였습니다") # 레벨업 정보 송신
-
-                    if level == 10: #레벨에따라 (10의배수) 역할 부여 및 기존 역할 제거
-                        role = discord.utils.get(message.guild.roles, name="입주자<~19>")
-                        await message.author.add_roles(role)
-                        await message.channel.send(message.author.mention + "님에게 입주자<~19>을/를 부여하였습니다")
-                        role = discord.utils.get(message.guild.roles, name="한걸음<~9>")
-                        await message.author.remove_roles(role)
-                    elif level == 20:
-                        role = discord.utils.get(message.guild.roles, name="설립자<~29>")
-                        await message.author.add_roles(role)
-                        await message.channel.send(message.author.mention + "님에게 설립자<~29>을/를 부여하였습니다")
-                        role = discord.utils.get(message.guild.roles, name="입주자<~19>")
-                        await message.author.remove_roles(role)
-                    elif level == 30:
-                        role = discord.utils.get(message.guild.roles, name="제작자<~39>")
-                        await message.author.add_roles(role)
-                        await message.channel.send(message.author.mention + "님에게 제작자<~39>을/를 부여하였습니다")
-                        role = discord.utils.get(message.guild.roles, name="설립자<~29>")
-                        await message.author.remove_roles(role)
-                    elif level == 40:
-                        role = discord.utils.get(message.guild.roles, name="고인물<~49>")
-                        await message.author.add_roles(role)
-                        await message.channel.send(message.author.mention + "님에게 고인물<~49>을/를 부여하였습니다")
-                        role = discord.utils.get(message.guild.roles, name="제작자<~39>")
-                        await message.author.remove_roles(role)
-                    elif level == 50:
-                        role = discord.utils.get(message.guild.roles, name="화석<~59>")
-                        await message.author.add_roles(role)
-                        await message.channel.send(message.author.mention + "님에게 화석<~59>을/를 부여하였습니다")
-                        role = discord.utils.get(message.guild.roles, name="고인물<~49>")
-                        await message.author.remove_roles(role)
-                    elif level == 60:
-                        role = discord.utils.get(message.guild.roles, name="석유<~69>")
-                        await message.author.add_roles(role)
-                        await message.channel.send(message.author.mention + "님에게 석유<~69>을/를 부여하였습니다")
-                        role = discord.utils.get(message.guild.roles, name="화석<~59>")
-                        await message.author.remove_roles(role)
-                    elif level == 70:
-                        role = discord.utils.get(message.guild.roles, name="구름<~79>")
-                        await message.author.add_roles(role)
-                        await message.channel.send(message.author.mention + "님에게 구름<~79>을/를 부여하였습니다")
-                        role = discord.utils.get(message.guild.roles, name="석유<~69>")
-                        await message.author.remove_roles(role)
-                else: # 경험치가 충족하지 않았으면 그냥 저장
-                    direxp.update({send:exp})
 
         if message.content == "!주사위": # 주사위
             x = random.randint(1, 6)
@@ -489,17 +410,16 @@ async def on_message(message):
             await message.channel.send(message.author.mention + "님이" + " 현재 보유중인 돈은 : " + str(ye) + "원입니다")
 
         if message.content == "!코로나":#코로나 정보
-            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
             driver.get("http://ncov.mohw.go.kr/")# 사이트 열람
             driver.implicitly_wait(2)
             
             embed = discord.Embed(title="코로나 정보", color=0x5CD1E5) #임베드 생성
 
             einput = driver.find_element_by_css_selector('body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(1) > span.before').text
-            embed.add_field(name="질병관리청 공식 확진자 수 [전날 확진자 <AM 10시에 업데이트>]", value=einput + "명", inline=False) # 전날 확진자 선택 및 임베트 추가
+            embed.add_field(name="질병관리청 공식 확진자 수]", value=einput + "명", inline=False) # 전날 확진자 선택 및 임베트 추가
 
             einput = driver.find_element_by_css_selector('body > div > div.mainlive_container > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(4) > span.before').text
-            embed.add_field(name="질병관리청 공식 사망자 수 [전날 사망자 <AM 10시에 업데이트>]", value=einput + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
+            embed.add_field(name="질병관리청 공식 사망자 수]", value=einput + "명", inline=False)# 전날 사망자 선택 및 임베트 추가
 
             driver.get("https://v1.coronanow.kr/live.html")# 사이트 열람
             driver.implicitly_wait(2)
@@ -611,29 +531,35 @@ async def on_message(message):
                 await message.channel.send("벌금을 낼 수 있는 금액보다 너무 큰 금액입니다. 배팅 금액을 다시 입력해주세요\n신용 금액은 평균 금액인 배팅액 * 7 원으로 측정됩니다")
 
         if message.content == "!지진": #최근 지진 정보 접속 및 안내
-            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
-            driver.get("https://www.weather.go.kr/w/eqk-vol/recent-eqk.do")# 사이트 열람
+            driver.get("https://www.weather.go.kr/w/eqk-vol/search/korea.do")# 사이트 열람
             driver.implicitly_wait(2)
+                
+            embed = discord.Embed(title="국내의 최근 지진을 불러옵니다", description="지진 시스템", color=0x5CD1E5)
 
-            html = driver.page_source
-            driver.quit()
-            soup = BeautifulSoup(html, 'html.parser')
+            einlist = ["발생시각", "규모", "발생 깊이","최대 진도" ,"위치"]
+            listin = 2
+            TFL = False
 
-            embed = discord.Embed(title="최근 지진 정보", description="", color=0x5CD1E5) # 임베드 생성
-            
-            einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(1) > td'))[17:-6] # 가져올 값 선택
-            embed.add_field(name='발생시각', value=einput, inline=False)#임베드 추가
-            einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(2) > td > strong'))[9:-17] # 가져올 값 선택
-            embed.add_field(name='규모', value=einput, inline=True)#임베드 추가
-            einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(3) > td > strong > font:nth-child(1)'))[22:-8] # 가져올 값 선택
-            embed.add_field(name='최대진도', value=einput, inline=True)#임베드 추가
-            einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(4) > td:nth-child(4)'))[5:-6] # 가져올 값 선택
-            embed.add_field(name='발생깊이', value=einput, inline=True)#임베드 추가
-            einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(4) > td.td_loc'))[20:-48] # 가져올 값 선택
-            embed.add_field(name='위치', value=einput, inline=False)#임베드 추가
-            einput = str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div.over-scroll.cont-box-eqk > table > tbody > tr:nth-child(5) > td'))[17:-6] # 가져올 값 선택
-            embed.add_field(name='안내사항', value=einput, inline=False)#임베드 추가
-            #embed.set_image(url="https://www.weather.go.kr/" + str(soup.select('#eqk-report > div.cont-box02 > div:nth-child(3) > div:nth-child(3) > div > img'))[32:-4])
+            for insite in einlist:
+                einput = driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(' + str(listin) + ') > span').text
+                embed.add_field(name=insite, value=einput, inline=TFL)
+
+                listin += 1
+                TFL = True
+                if listin == 6:
+                    listin = 8
+                    TFL = False
+
+            einput = driver.find_element_by_css_selector('#excel_body > tbody > tr:nth-child(1) > td:nth-child(10) > a').get_attribute('href')
+
+            try:
+                driver.get(einput)
+                driver.implicitly_wait(2)
+
+                einput = driver.find_element_by_css_selector('#img2').get_attribute('src')
+                embed.set_image(url=einput)
+            except:
+               embed.add_field(name="이미지 오류", value="이미지는 없습니다", inline=False)
 
             await message.channel.send(embed=embed)
 

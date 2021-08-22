@@ -49,25 +49,38 @@ async def on_message(message):
     #받은 메세지 및 입력자 출력
     print(str(message.author) + str(message.author.mention) + " : " + str(message.content))
 
+    global num
     if str(message.channel.id) == "718436389062180917":
         mal = translng("ko", "zh-CN", message)
         if mal == "429":
-            channel = client.get_channel(718436389062180917)
-            await channel.send("Changed to next papago API Client")
+            for i in range(5):
+                channel = client.get_channel(875718837373386822)
+                await channel.send(str(num) + " Changed to next papago API Client")
+                channel = client.get_channel(718436389062180917)
+                await channel.send(str(num) + "번 API가 한도치에 도달하여 새로운 API에 접속하였습니다 [최대 10번까지 있음]")
         elif mal == "ful":
-            channel = client.get_channel(718436389062180917)
-            await channel.send("API is restricted Please contact the manager")
+            for i in range(5):
+                channel = client.get_channel(875718837373386822)
+                await channel.send("All API is restricted Please contact the manager")
+                channel = client.get_channel(718436389062180917)
+                await channel.send("모든 API가 한도치에 도달했습니다 서비스 이용이 불가합니다")
         else:
             channel = client.get_channel(875718837373386822)
             await channel.send(embed=mal)
     elif str(message.channel.id) == "875718837373386822":
         mal = translng("zh-CN", "ko",message)
         if mal == "429":
-            channel = client.get_channel(875718837373386822)
-            await channel.send("Changed to next papago API Client")
+            for i in range(5):
+                channel = client.get_channel(875718837373386822)
+                await channel.send(str(num) + " Changed to next papago API Client")
+                channel = client.get_channel(718436389062180917)
+                await channel.send(str(num) + "번 API가 한도치에 도달하여 새로운 API에 접속하였습니다 [최대 10번까지 있음]")
         elif mal == "ful":
-            channel = client.get_channel(875718837373386822)
-            await channel.send("API is restricted Please contact the manager")
+            for i in range(5):
+                channel = client.get_channel(875718837373386822)
+                await channel.send("All API is restricted Please contact the manager")
+                channel = client.get_channel(718436389062180917)
+                await channel.send("모든 API가 한도치에 도달했습니다 서비스 이용이 불가합니다")
         else:
             channel = client.get_channel(718436389062180917)
             await channel.send(embed=mal)

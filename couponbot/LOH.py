@@ -26,7 +26,7 @@ firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-
 
 options = webdriver.ChromeOptions()
 #options.add_argument('headless')
-options.add_argument('window-size=1920x1080')
+options.add_argument('window-size=854x480')
 options.add_argument("disable-gpu")
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
 options.add_argument("app-version=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36")
@@ -55,7 +55,6 @@ async def on_message(message):
     #받은 메세지 출력
     print(str(message.author) + str(message.author.mention) + " : " + str(message.content))
 
-    global driver
     global iruain
 
     try:
@@ -135,9 +134,11 @@ async def on_message(message):
                     except:
                         alertin = driver.find_element_by_xpath('/html/body/div/div/div[3]/div/main/div/div/div[2]/div/div/div/div[6]/p/span/span').get_attribute("innerHTML")
                         while alertin == "USER ID 확인을 하고 다시 입력해주세요" or alertin == " ":
-                            await message.channel.send("LOH 쿠폰 사이트 서버 오류 확인 재시작합니다")
-                            driver.close()
-                            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+
+                            driver.get("https://www.google.com/")
+                            driver.implicitly_wait(10)
+                            print("오류로 초기화")
+                            
                             driver.get("https://www.coupon.lordofheroes.com/")
                             driver.implicitly_wait(2)
                             
@@ -240,9 +241,11 @@ async def on_message(message):
                     except:
                         alertin = driver.find_element_by_xpath('/html/body/div/div/div[3]/div/main/div/div/div[2]/div/div/div/div[6]/p/span/span').get_attribute("innerHTML")
                         while alertin == "USER ID 확인을 하고 다시 입력해주세요" or alertin == "​ " or alertin == "​쿠폰 번호 오류" or alertin == "쿠폰 사용 기간 오류":
-                            await message.channel.send("LOH 쿠폰 사이트 서버 오류 확인 재시작합니다")
-                            driver.close()
-                            driver = webdriver.Chrome(chrome_options=options, executable_path='D:/Desktop/bot-Amansa/chromedriver.exe')
+
+                            driver.get("https://www.google.com/")
+                            driver.implicitly_wait(10)
+                            print("오류로 초기화")
+                            
                             driver.get("https://www.coupon.lordofheroes.com/")
                             driver.implicitly_wait(2)
                             
