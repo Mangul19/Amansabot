@@ -23,6 +23,8 @@ firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-
 
 namelist = []
 guild = ""
+voiTF = {}
+spTF = {}
 
 #준비 될 시 시작
 @client.event
@@ -64,8 +66,8 @@ async def on_message(message):
         ran = ranin * intstr / level
         ran = math.ceil(ran) # 길이에 랜덤값 계산후 정수값 저장
 
-        if ran > 500: # 한번에 많은 경험치 부여 방지를 위해 최대값을 1000으로 설정
-            ran = 500
+        if ran > 100: # 한번에 많은 경험치 부여 방지를 위해 최대값을 1000으로 설정
+            ran = 100
 
         print(send + " : " + str(ran))
 
@@ -129,6 +131,8 @@ async def on_message(message):
 @client.event
 async def on_voice_state_update(member, before, after):
     global namelist
+    global voiTF
+    global spTF
 
     #봇일 경우 무시
     if member == client.user:
@@ -136,17 +140,44 @@ async def on_voice_state_update(member, before, after):
 
     if before.channel == None:
         namelist.append(member)
+        voiTF[member] = "reset"
+        spTF[member] = "reset"
+        listch(namelist)
     elif after.channel == None:
         namelist.remove(member)
+        listch(namelist)
+        return
 
-    if before.channel == None or after.channel == None:
-        print("--통화방 입장 리스트 변경됨--")
+    deaf = after.self_deaf
+    mute = after.self_mute
+
+    if voiTF[member] != deaf:
+        if deaf:
+            voiTF[member] = deaf
+            print(str(member) + "님의 듣기 상태가 OFF 입니다")
+            return
+        elif deaf == False:
+            voiTF[member] = deaf
+            print(str(member) + "님의 듣기 상태가 ON 입니다")
+
+    if spTF[member] != mute:
+        if mute:
+            spTF[member] = mute
+            print(str(member) + "님의 마이크 상태가 OFF 입니다")
+        elif mute == False:
+            spTF[member] = mute
+            print(str(member) + "님의 마이크 상태가 ON 입니다")
+
+def listch(namelist):
+    print("--통화방 입장 리스트 변경됨--")
         
-        for name in namelist:
-            print(name)
+    for name in namelist:
+        print(name)
 
 async def levelin():
     global namelist
+    global voiTF
+    global spTF
 
     while True:
         await asyncio.sleep(60*1)
@@ -167,13 +198,17 @@ async def levelin():
                 level = level[send] #레벨 및 경험치 값 가져오기
                 exp = exp[send]
 
-                ranin = random.uniform(1.0, 10.0)
+                ranin = random.uniform(0.1, 5.0)
                 ran = ranin * 100 / level
+
+                if voiTF[name]:
+                    print(str(name) + " 님은 현재 헤드셋 OFF 상태로 경험치를 100% 감소시킵니다")
+                    ran = 0
+                elif spTF[name]:
+                    print(str(name) + " 님은 현재 마이크 OFF 상태로 경험치를 50% 감소시킵니다")
+                    ran -= ran / 2
+
                 ran = math.ceil(ran) # 길이에 랜덤값 계산후 정수값 저장
-
-                if ran > 500: # 한번에 많은 경험치 부여 방지를 위해 최대값을 1000으로 설정
-                    ran = 500
-
                 print("음성 - " + send + " : " + str(ran))
 
                 exp = round(exp + ran, 3)
@@ -185,7 +220,7 @@ async def levelin():
                     level = level + 1 # 레벨을 1 상승시킨 후 저장
                     dirlevel.update({send:level})
 
-                    channel = client.get_channel(718436389062180917)
+                    channel = client.get_channel(832799360210436107)
                     await channel.send(name.mention + "님의 레벨이 " + str(level) +" 으로/로 상승하였습니다") # 레벨업 정보 송신
 
                     global guild

@@ -549,12 +549,12 @@ async def background_ye(): #자동 예금
                 yegum = diryegum.get()
                 yegum = yegum[word]
 
-                yegum = round(yegum + (yegum / 100 * 0.375), 3) #이자를 더한 후 정상 업데이트
+                yegum = round(yegum + (yegum / 100 * 0.175), 3) #이자를 더한 후 정상 업데이트
                 diryegum.update({word:yegum})
         except:
             print("자동 예금 이자 오류 발생 다음에 다시 시도합니다")
 
-        await asyncio.sleep(60*25)
+        await asyncio.sleep(60*60)
 
 async def background_code00mukye(): #코드 00번 적금 자동 해지
     await client.wait_until_ready()
@@ -655,11 +655,11 @@ async def background_code01mukye(): #코드 01번 적금 자동 해지 **코드 
 
 async def background_jusic():#주식 변환시스템
     await client.wait_until_ready()
-    await message.channel.purge(limit=int(1))
 
     jusiclist = ["어만코인","달주식","투자주식","점핑주식","단단주식","꽃주식","기계주식","도비코인"] #변화시킬 주식 미리 저장
 
     channel = client.get_channel(871004552869056512)
+    await channel.purge(limit=int(1))
     msg = await channel.send("로딩중입니다 잠시만 기다려주세요")
 
     while True:

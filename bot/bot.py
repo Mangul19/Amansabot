@@ -152,23 +152,23 @@ async def on_message(message):
 
         if message.content == "!상점":
             embed = discord.Embed(title="상점 목록", description="!구입'물품명' 갯수 EX)!구입우유 5", color=0x5CD1E5)
-            embed.add_field(name="우유", value="6250원", inline=True)
-            embed.add_field(name="체다치즈", value="8200원", inline=True)
-            embed.add_field(name="묶음라면", value="[10% 할인] 7627원\n<1봉 = 5개>", inline=True)
-            embed.add_field(name="라면", value="1695원", inline=True)
+            embed.add_field(name="우유", value="6875원", inline=True)
+            embed.add_field(name="체다치즈", value="9020원", inline=True)
+            embed.add_field(name="묶음라면", value="[10% 할인] 8389원\n<1봉 = 5개>", inline=True)
+            embed.add_field(name="라면", value="1864원", inline=True)
             await message.channel.send(embed=embed)
 
         if message.content == "!송금":
             embed = discord.Embed(title="명령어", color=0x5CD1E5)
             embed.add_field(name="!이체 '금액'", value="'금액'원을 이체 예약 합니다", inline=False)
-            embed.add_field(name="!수령이체 '코드'", value="'금액'원을 예금 통장에서 출금합니다", inline=False)
+            embed.add_field(name="!수령이체 '코드'", value="예약된 이체를 수령합니다", inline=False)
             await message.channel.send(embed=embed)
 
         if message.content == "!예적금":
             embed = discord.Embed(title="명령어", color=0x5CD1E5)
             embed.add_field(name="!예금 '금액'", value="'금액'원을 예금 통장에 입금합니다\n전부 예금하고 싶다면 금액 대신 '전부'를 입력하세요", inline=False)
             embed.add_field(name="!출금예금 '금액'", value="'금액'원을 예금 통장에서 출금합니다\n전부 출금하고 싶다면 금액 대신 '전부'를 입력하세요", inline=False)
-            embed.add_field(name="!통장확인", value="통장 잔고를 확인합니다\n예금 이율은 시간당 0.3%이며 시스템이 업데이트 될때도 지급됩니다", inline=False)
+            embed.add_field(name="!통장확인", value="통장 잔고를 확인합니다\n예금 이율은 시간당 0.175%이며 시스템이 업데이트 될때도 지급됩니다", inline=False)
             embed.add_field(name="!적금", value="적금관련 명령어를 확인합니다", inline=False)
             await message.channel.send(embed=embed)
 
@@ -194,7 +194,7 @@ async def on_message(message):
             embed.add_field(name="!도박", value="일반 도박\n보유 금액이 8만 5천원 이상 혹은 3천원이하 일때는 불가능합니다", inline=False)
             embed.add_field(name="!홀짝 홀OR짝", value="홀짝 게임 5천원 이상일때만 가능\n성공시 자신의 돈의 1.5배 지급! 실패시 벌금! 자신의 돈의 1.5 ~ 1.75배 손실", inline=False)
             embed.add_field(name="!로토도박 금액 배팅", value="배팅을 최대 10까지 할 수 있는 상세 도박\n확률은 일반 도박보다 더 낮습니다", inline=False)
-            embed.add_field(name="!경마 번호 매수", value="번호는 1~5번 이내로 지정해주세요 \n매수는 1매당 1천 5백원이며 최대 10매까지 구입이 가능합니다", inline=False)
+            embed.add_field(name="!경마 번호 매수", value="번호는 1~5번 이내로 지정해주세요 \n매수는 1매당 1만원이며 최대 10매까지 구입이 가능합니다", inline=False)
             await message.channel.send( embed=embed)
 
         if message.content == "!주사위": # 주사위
@@ -623,12 +623,12 @@ async def on_message(message):
                     loto_mal = True
                     return
 
-                if mesu < 1 or bunho > 10: # 매수량 이상시
+                if mesu < 1 or mesu > 10: # 매수량 이상시
                     await msg.edit(content="매수량을 다시 입력하여주세요")
                     loto_mal = True
                     return
 
-                if money < mesu * 1500.00: # 보유 금액이 부족 할 시
+                if money < mesu * 10000: # 보유 금액이 부족 할 시
                     await msg.edit(content="보유금이 부족합니다")
                     loto_mal = True
                     return
@@ -671,13 +671,13 @@ async def on_message(message):
                 await msg.edit(content=val)
 
                 if win == bunho:# 승리 말 맞췄을 시
-                    await msg.edit(content=val + "맞췄습니다! 원금과 " + str(mesu) + " * 1050.75원이 입금됩니다")
-                    inputme = round(money + (mesu * 1050.75), 3) #구입한 매수 만큼 승리 급액 주기
+                    await msg.edit(content=val + "맞췄습니다! 원금과 " + str(mesu) + " * 10000원이 입금됩니다")
+                    inputme = round(money + (mesu * 10000), 3) #구입한 매수 만큼 승리 급액 주기
                     dirmoney.update({send:inputme})
                 else: # 승리 말 틀렸을 시
-                    await msg.edit(content=val + "아쉽네요 총 " + str(mesu) + " * 3250.68원을 잃습니다")
+                    await msg.edit(content=val + "아쉽네요 총 " + str(mesu) + " * 10000원을 잃습니다")
 
-                    if money - mesu * 3500.00 < 0.00: # 돈이 음수 일시
+                    if money - mesu * 10000 < 0.00: # 돈이 음수 일시
                         roto = random.randint(1, 100)
                         if roto == 1:
                             await msg.edit(content=message.author.mention + "님!" + " 파산 로또 당첨! 10만원이 입금됩니다")
@@ -686,7 +686,7 @@ async def on_message(message):
                             await msg.edit(content=message.author.mention + "님의" + "보유금이 전부 사용되었습니다")
                             dirmoney.update({send:0.0})
                     else: #보유 금액이 양수 일 시
-                        inputme = round(money - (mesu * 3250.68), 3)
+                        inputme = round(money - (mesu * 10000), 3)
                         dirmoney.update({send:inputme})
                 loto_mal = True # 경마가 가능하게 설정
             else:
@@ -1101,11 +1101,11 @@ async def on_message(message):
             trsText = message.content.split(" ") # 구입 갯수 확인
             trsText = round(float(trsText[1]), 0)
 
-            if trsText * 8200 <= money: #금액이 충분할 경우
+            if trsText * 9020 <= money: #금액이 충분할 경우
                 name = "chechi" # 구입 상품 설정
                 dirinven = db.reference('inven/' + send  + '/' + name) # 해당아이템 소지 조회
                 inven = dirinven.get()
-                money = round(money - trsText * 8200, 3)
+                money = round(money - trsText * 9020, 3)
                 
                 if inven == None: # 없다면 초기화
                     dirinven.update({name:0})
@@ -1137,11 +1137,11 @@ async def on_message(message):
             trsText = message.content.split(" ")
             trsText = round(float(trsText[1]), 0)
 
-            if trsText * 6250 <= money:
+            if trsText * 6875 <= money:
                 name = "mlk"
                 dirinven = db.reference('inven/' + send  + '/' + name)
                 inven = dirinven.get()
-                money = round(money - trsText * 6250, 3)
+                money = round(money - trsText * 6875, 3)
                 
                 if inven == None:
                     dirinven.update({name:0})
@@ -1173,11 +1173,11 @@ async def on_message(message):
             trsText = message.content.split(" ")
             trsText = round(float(trsText[1]), 0)
 
-            if trsText * 7627 <= money:
+            if trsText * 8389 <= money:
                 name = "ramen"
                 dirinven = db.reference('inven/' + send  + '/' + name)
                 inven = dirinven.get()
-                money = round(money - trsText * 7627, 3)
+                money = round(money - trsText * 8389, 3)
                 
                 if inven == None:
                     dirinven.update({name:0})
@@ -1209,11 +1209,11 @@ async def on_message(message):
             trsText = message.content.split(" ")
             trsText = round(float(trsText[1]), 0)
 
-            if trsText * 1695 <= money:
+            if trsText * 1864 <= money:
                 name = "ramen"
                 dirinven = db.reference('inven/' + send  + '/' + name)
                 inven = dirinven.get()
-                money = round(money - trsText * 1695, 3)
+                money = round(money - trsText * 1864, 3)
                 
                 if inven == None:
                     dirinven.update({name:0})
