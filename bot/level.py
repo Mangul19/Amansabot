@@ -62,19 +62,19 @@ async def on_message(message):
         intstr = str(message.content) # 메세지를 String값으로 변환
         intstr = len(intstr) # 길이 계산
 
-        ranin = random.uniform(1.0, 10.0)
+        ranin = random.uniform((80 - level), 80)
         ran = ranin * intstr / level
         ran = math.ceil(ran) # 길이에 랜덤값 계산후 정수값 저장
 
-        if ran > 100: # 한번에 많은 경험치 부여 방지를 위해 최대값을 1000으로 설정
+        if ran > 100: # 한번에 많은 경험치 부여 방지를 위해 최대값을 100으로 설정
             ran = 100
 
         print(send + " : " + str(ran))
 
         exp = round(exp + ran, 3)
 
-        if exp > (50 * level): #경험치 값이 넘었을때
-            exp = exp - (50 * level) # 경험치에 1천을 제하고 저장
+        if exp > (100 * level * 2): #경험치 값이 넘었을때
+            exp = exp - (100 * level * 2) # 경험치에 1천을 제하고 저장
             direxp.update({send:exp})
 
             level = level + 1 # 레벨을 1 상승시킨 후 저장
@@ -198,8 +198,8 @@ async def levelin():
                 level = level[send] #레벨 및 경험치 값 가져오기
                 exp = exp[send]
 
-                ranin = random.uniform(0.1, 5.0)
-                ran = ranin * 100 / level
+                ranin = random.uniform(1.0, 3.125)
+                ran = ranin * (80 - level) / 2
 
                 if voiTF[name]:
                     print(str(name) + " 님은 현재 헤드셋 OFF 상태로 경험치를 100% 감소시킵니다")
@@ -209,12 +209,12 @@ async def levelin():
                     ran -= ran / 2
 
                 ran = math.ceil(ran) # 길이에 랜덤값 계산후 정수값 저장
-                print("음성 - " + send + " : " + str(ran))
+                print("통화 - " + send + " : " + str(ran))
 
                 exp = round(exp + ran, 3)
 
-                if exp > (50 * level): #경험치 값이 넘었을때
-                    exp = exp - (50 * level) # 경험치 제하고 저장
+                if exp > (100 * level * 2): #경험치 값이 넘었을때
+                    exp = exp - (100 * level * 2) # 경험치 제하고 저장
                     direxp.update({send:exp})
 
                     level = level + 1 # 레벨을 1 상승시킨 후 저장

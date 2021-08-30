@@ -116,22 +116,29 @@ async def on_message(message):
                 await message.delete()
                 return
 
+            video = pafy.new(url)
+
+            if video.length > 5400:
+                await message.channel.send(embed=discord.Embed(title="곡의 길이가 1시간 30분을 넘어갑니다 재생을 거부합니다",colour = 0x2EFEF7))
+                await message.delete()
+                return
+
             if len(client.voice_clients) > 0:
                 if client.voice_clients[0].is_playing():
-                    video = pafy.new(url)
                     await message.channel.send(embed=discord.Embed(title="이미 봇이 음악을 재생중입니다\n" + video.title + " 을 재생목록에 추가합니다",colour = 0x2EFEF7))
+                    songlist.append(url)
+                elif client.voice_clients[0].is_paused():
+                    await message.channel.send(embed=discord.Embed(title="봇이 재생을 일시정지한 상태입니다\n" + video.title + " 을 재생목록에 추가합니다",colour = 0x2EFEF7))
                     songlist.append(url)
                 else:
                     now = url
                     play(url)
-                    video = pafy.new(url)
                     await message.channel.send(embed=discord.Embed(title=video.title + " 을 재생합니다",colour = 0x2EFEF7))
             else:
                 channel = message.author.voice.channel
                 await channel.connect()
                 now = url
                 play(url)
-                video = pafy.new(url)
                 await message.channel.send(embed=discord.Embed(title=video.title + " 을 재생합니다",colour = 0x2EFEF7))
         except:
             await message.delete()

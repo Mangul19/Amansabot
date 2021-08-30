@@ -51,6 +51,10 @@ async def on_message(message):
 
     global num
     if str(message.channel.id) == "718436389062180917":
+        if len(message.content) == 0:
+            channel = client.get_channel(875718837373386822)
+            return
+
         mal = translng("ko", "zh-CN", message)
         if mal == "429":
             for i in range(5):
@@ -68,6 +72,10 @@ async def on_message(message):
             channel = client.get_channel(875718837373386822)
             await channel.send(embed=mal)
     elif str(message.channel.id) == "875718837373386822":
+        if len(message.content) == 0:
+            channel = client.get_channel(718436389062180917)
+            return
+
         mal = translng("zh-CN", "ko",message)
         if mal == "429":
             for i in range(5):
