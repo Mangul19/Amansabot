@@ -6,9 +6,7 @@
 -----
 support Funding
 
-https://toon.at/donate/mulmangul
-
-https://fancim.me/celeb/profile.aspx?cu_id=mulmangul19
+https://toss.me/hanmangul
 
 -----
 최근 업데이트
