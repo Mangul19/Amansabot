@@ -8,12 +8,19 @@ import re
 import youtube_dl
 import random
 import pafy
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import db
 
 intents = discord.Intents.all()
+
 #clinet
 client = discord.Client(intents=intents)
 #discord bot tokken
 token = code.token
+#firebase
+cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.json")
+firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
 
 songlist = []
 now = ""
@@ -56,6 +63,7 @@ async def on_voice_state_update(member, before, after):
 @client.event
 async def on_message(message):
     global now
+    global songlist
 
     #봇일 경우 무시
     if message.author == client.user:
@@ -64,12 +72,12 @@ async def on_message(message):
     #받은 메세지 및 입력자 출력
     if message.channel.id == 873984166897807470:
         print(str(message.author) + str(message.author.mention) + " : " + str(message.content))
-        if not message.content.startswith("!취소") and not message.content == ("!재생목록") and not message.content == ("!음악") and not message.content.startswith("!추가") and not message.content == ("!일시정지") and not message.content == ("!재생") and not message.content == ("!스킵"):
+        if not message.content == ("!내목록재생") and not message.content.startswith("!전용추가") and not message.content.startswith("!취소") and not message.content == ("!재생목록") and not message.content == ("!음악") and not message.content.startswith("!추가") and not message.content == ("!일시정지") and not message.content == ("!재생") and not message.content == ("!스킵"):
             await message.delete()
             await message.channel.send("해당방은 뮤직 시스템 전용방입니다")
             return
     else:
-        if message.content.startswith("!취소") or message.content == ("!재생목록") or message.content == ("!음악") or message.content.startswith("!추가") or message.content == ("!일시정지") or message.content == ("!재생") or message.content == ("!스킵"):
+        if message.content == ("!내목록재생") or message.content.startswith("!전용추가") or message.content.startswith("!취소") or message.content == ("!재생목록") or message.content == ("!음악") or message.content.startswith("!추가") or message.content == ("!일시정지") or message.content == ("!재생") or message.content == ("!스킵"):
             await message.delete()
             await message.channel.send("해당방에서는 뮤직 시스템 이용이 불가능 합니다")
             return
@@ -83,6 +91,8 @@ async def on_message(message):
         embed.add_field(name="!스킵", value="현재 음악을 스킵하고 다음 곡으로 넘어갑니다", inline=False)
         embed.add_field(name="!재생목록", value="현재 재생중인 음악 포함 재생목록을 보여줍니다", inline=False)
         embed.add_field(name="!취소 '번호'", value="재생목록의 번호 번째 항목을 제거합니다", inline=False)
+        embed.add_field(name="!전용추가 'URL'", value="내 전용 재생목록에 해당 음악을 추가합니다\n전용 재생목록 추가는 youtu.be 링크만 가능합니다 [유튜브 공유 기능의 링크]", inline=False)
+        embed.add_field(name="!내목록재생", value="전용 재생목록의 곡을 재생합니다", inline=False)
         embed.set_footer(text="음량은 기본적으로(20%) 기본 설정되어있으며 복합방에서만 재생이 가능합니다")
         await message.channel.send(embed=embed)
 
@@ -168,7 +178,7 @@ async def on_message(message):
     if message.content == ("!스킵"):
         try:
             if client.voice_clients[0].is_playing():
-                if len(songlist) > 0:
+                if len(songlist) > 1:
                     now = songlist[0]
                     video = pafy.new(now)
                     await message.channel.send(embed=discord.Embed(title="곡을 스킵하였습니다\n" + video.title + " 을 재생합니다",colour = 0x2EFEF7))
@@ -180,6 +190,8 @@ async def on_message(message):
             await message.channel.send(embed=discord.Embed(title="이미 정지 상태입니다",colour = 0x2EFEF7))
     
     if message.content == ("!재생목록"):
+        print(songlist)
+
         if now == "없음":
            await message.channel.send(embed=discord.Embed(title="음악을 재생하고 있지 않습니다",colour = 0x2EFEF7)) 
            await message.delete()
@@ -220,6 +232,80 @@ async def on_message(message):
         await message.channel.send(embed=discord.Embed(title=video.title + " 을 취소 하였습니다",colour = 0x2EFEF7))
         songlist.pop(num)
 
+    if message.content.startswith("!전용추가"):
+        try:
+            if message.content.split(" ")[1] == None:
+                await message.channel.send(embed=discord.Embed(title=":no_entry_sign: url을 제대로 입력해주세요.",colour = 0x2EFEF7))
+                await message.delete()
+                return
+
+            url = message.content.split(" ")[1]
+            if "&list=" in url:
+                await message.channel.send(embed=discord.Embed(title=":no_entry_sign: 리스트는 추가가 불가능합니다",colour = 0x2EFEF7))
+                await message.delete()
+                return
+
+            url1 = re.match('(https?://)?(www\.)?(youtu\.be/([-\w]+))', url) #정규 표현식을 사용해 url 검사
+            if url1 == None:
+                await message.channel.send(embed=discord.Embed(title=":no_entry_sign: youtu.be 링크만 추가가 가능합니다",colour = 0x2EFEF7))
+                await message.delete()
+                return
+
+            send = str(message.author.id)
+            dirsong = db.reference('songlist/' + send)
+            songlistin = dirsong.get()
+            if songlistin == None:
+                songlistin = ['없음']
+            else:
+                songlistin = list(songlistin)
+
+            video = pafy.new(url)
+            url = url.split("https://youtu.be/")[1]
+            if url in songlistin:
+                await message.channel.send(embed=discord.Embed(title= video.title + " 은 이미 추가되어 있습니다",colour = 0x2EFEF7))
+            else:
+                await message.channel.send(embed=discord.Embed(title= video.title + " 을 전용 재생목록에 추가합니다",colour = 0x2EFEF7))
+                if songlistin[0] == '없음':
+                    songlistin = 00
+                dirsong.update({str(len(songlistin)):url})
+        except:
+            await message.delete()
+            await message.channel.send(embed=discord.Embed(title=":no_entry_sign: 잘못입력하여 인식이 중지되었습니다",colour = 0x2EFEF7))
+
+    if message.content == ("!내목록재생"):
+        send = str(message.author.id)
+        dirsong = db.reference('songlist/' + send)
+        songlistin = dirsong.get()
+        if songlistin == None:
+            await message.channel.send(embed=discord.Embed(title= message.author.mention + " 님은 재생목록이 비어있습니다",colour = 0x2EFEF7))
+            return
+        else:
+            songlistin = list(songlistin)
+            
+            if len(client.voice_clients) > 0:
+                if client.voice_clients[0].is_playing():
+                    await message.channel.send(embed=discord.Embed(title="이미 봇이 음악을 재생중입니다\n전용 재생목록을 플레이 재생목록에 추가합니다", description= message.author.mention,colour = 0x2EFEF7))
+                    for listsong in songlistin:
+                        songlist.append('https://youtu.be/' + listsong)
+                elif client.voice_clients[0].is_paused():
+                    await message.channel.send(embed=discord.Embed(title="봇이 재생을 일시정지한 상태입니다\n전용 재생목록을 플레이 재생목록에 추가합니다", description= message.author.mention,colour = 0x2EFEF7))
+                    for listsong in songlistin:
+                        songlist.append('https://youtu.be/' + listsong)
+                else:
+                    now ='https://youtu.be/' +  songlistint[0]
+                    play(songlistin[0])
+                    await message.channel.send(embed=discord.Embed(title="전용 재생목록을 플레이 재생목록에 추가합니다", description= message.author.mention,colour = 0x2EFEF7))
+                    for listsong in songlistin[1:]:
+                        songlist.append('https://youtu.be/' + listsong)
+            else:
+                channel = message.author.voice.channel
+                await channel.connect()
+                now = 'https://youtu.be/' + songlistin[0]
+                play(songlistin[0])
+                await message.channel.send(embed=discord.Embed(title="전용 재생목록을 플레이 재생목록에 추가합니다", description= message.author.mention,colour = 0x2EFEF7))
+                for listsong in songlistin[1:]:
+                    songlist.append('https://youtu.be/' + listsong)
+            
     await message.delete()
 
 def play_next():

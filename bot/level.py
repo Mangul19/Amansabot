@@ -62,19 +62,18 @@ async def on_message(message):
         intstr = str(message.content) # 메세지를 String값으로 변환
         intstr = len(intstr) # 길이 계산
 
-        ranin = random.uniform((80 - level), 80)
-        ran = ranin * intstr / level
-        ran = math.ceil(ran) # 길이에 랜덤값 계산후 정수값 저장
+        und = 100 / level
+        ran = random.uniform(und, und + 20) * intstr / level
 
         if ran > 100: # 한번에 많은 경험치 부여 방지를 위해 최대값을 100으로 설정
             ran = 100
 
         print(send + " : " + str(ran))
-
         exp = round(exp + ran, 3)
 
-        if exp > (100 * level * 2): #경험치 값이 넘었을때
-            exp = exp - (100 * level * 2) # 경험치에 1천을 제하고 저장
+        if exp > (100 * level * 1.5): #경험치 값이 넘었을때
+            exp = exp - (100 * level * 1.5) # 경험치에 1천을 제하고 저장
+            exp = round(exp, 3)
             direxp.update({send:exp})
 
             level = level + 1 # 레벨을 1 상승시킨 후 저장
@@ -123,6 +122,18 @@ async def on_message(message):
                 await message.author.add_roles(role)
                 await message.channel.send(message.author.mention + "님에게 구름<~79>을/를 부여하였습니다")
                 role = discord.utils.get(guild, name="석유<~69>")
+                await message.author.remove_roles(role)
+            elif level == 80:
+                role = discord.utils.get(guild, name="위성<~89>")
+                await message.author.add_roles(role)
+                await message.channel.send(message.author.mention + "님에게 위성<~89>을/를 부여하였습니다")
+                role = discord.utils.get(guild, name="구름<~79>")
+                await message.author.remove_roles(role)
+            elif level == 90:
+                role = discord.utils.get(guild, name="행성<~99>")
+                await message.author.add_roles(role)
+                await message.channel.send(message.author.mention + "님에게 행성<~99>을/를 부여하였습니다")
+                role = discord.utils.get(guild, name="위성<~89>")
                 await message.author.remove_roles(role)
         else: # 경험치가 충족하지 않았으면 그냥 저장
             direxp.update({send:exp})
@@ -198,8 +209,8 @@ async def levelin():
                 level = level[send] #레벨 및 경험치 값 가져오기
                 exp = exp[send]
 
-                ranin = random.uniform(1.0, 3.125)
-                ran = ranin * (80 - level) / 2
+                top = 100 / level
+                ran = random.uniform(0.1, top) * top 
 
                 if voiTF[name]:
                     print(str(name) + " 님은 현재 헤드셋 OFF 상태로 경험치를 100% 감소시킵니다")
@@ -208,13 +219,12 @@ async def levelin():
                     print(str(name) + " 님은 현재 마이크 OFF 상태로 경험치를 50% 감소시킵니다")
                     ran -= ran / 2
 
-                ran = math.ceil(ran) # 길이에 랜덤값 계산후 정수값 저장
                 print("통화 - " + send + " : " + str(ran))
-
                 exp = round(exp + ran, 3)
 
-                if exp > (100 * level * 2): #경험치 값이 넘었을때
-                    exp = exp - (100 * level * 2) # 경험치 제하고 저장
+                if exp > (100 * level * 1.5): #경험치 값이 넘었을때
+                    exp = exp - (100 * level * 1.5) # 경험치 제하고 저장
+                    exp = round(exp, 3)
                     direxp.update({send:exp})
 
                     level = level + 1 # 레벨을 1 상승시킨 후 저장
@@ -265,6 +275,18 @@ async def levelin():
                         await name.add_roles(role)
                         await channel.send(name.mention + "님에게 구름<~79>을/를 부여하였습니다")
                         role = discord.utils.get(guild, name="석유<~69>")
+                        await name.remove_roles(role)
+                    elif level == 80:
+                        role = discord.utils.get(guild, name="위성<~89>")
+                        await name.add_roles(role)
+                        await channel.send(name.mention + "님에게 위성<~89>을/를 부여하였습니다")
+                        role = discord.utils.get(guild, name="구름<~79>")
+                        await name.remove_roles(role)
+                    elif level == 90:
+                        role = discord.utils.get(guild, name="행성<~99>")
+                        await name.add_roles(role)
+                        await channel.send(name.mention + "님에게 행성<~99>을/를 부여하였습니다")
+                        role = discord.utils.get(guild, name="위성<~89>")
                         await name.remove_roles(role)
                 else: # 경험치가 충족하지 않았으면 그냥 저장
                     direxp.update({send:exp})

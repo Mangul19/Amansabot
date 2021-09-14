@@ -121,7 +121,7 @@ async def on_message(message):
                     
                     driver.find_element_by_id('email-box').send_keys(trsText)
                     driver.find_element_by_id('code-box').send_keys(inpu)
-                    driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
+                    driver.find_element_by_xpath("/html/body/div/div[1]/div[2]/form/div[4]/div").click()
                     WebDriverWait(driver, 1).until(EC.alert_is_present())
 
                     alertin = driver.switch_to_alert().text
@@ -146,7 +146,7 @@ async def on_message(message):
                         
                         driver.find_element_by_id('email-box').send_keys(trsText)
                         driver.find_element_by_id('code-box').send_keys(inpu)
-                        driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
+                        driver.find_element_by_xpath("/html/body/div/div[1]/div[2]/form/div[4]/div").click()
                         WebDriverWait(driver, 1).until(EC.alert_is_present())
                         alertin = driver.switch_to_alert().text
                         if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
@@ -224,7 +224,7 @@ async def on_message(message):
                     
                     driver.find_element_by_id('email-box').send_keys(inpu)
                     driver.find_element_by_id('code-box').send_keys(trsText)
-                    driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
+                    driver.find_element_by_xpath("/html/body/div/div[1]/div[2]/form/div[4]/div").click()
                     WebDriverWait(driver, 1).until(EC.alert_is_present())
                     alertin = driver.switch_to_alert().text
                     if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
@@ -254,7 +254,7 @@ async def on_message(message):
                         
                         driver.find_element_by_id('email-box').send_keys(inpu)
                         driver.find_element_by_id('code-box').send_keys(trsText)
-                        driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
+                        driver.find_element_by_xpath("/html/body/div/div[1]/div[2]/form/div[4]/div").click()
                         WebDriverWait(driver, 1).until(EC.alert_is_present())
                         alertin = driver.switch_to_alert().text
                         if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
@@ -307,7 +307,7 @@ async def on_message(message):
                 
                 driver.find_element_by_id('email-box').send_keys(trsText)
                 driver.find_element_by_id('code-box').send_keys(inpu)
-                driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
+                driver.find_element_by_xpath("/html/body/div/div[1]/div[2]/form/div[4]/div").click()
                 WebDriverWait(driver, 1).until(EC.alert_is_present())
                 alertin = driver.switch_to_alert().text
                 if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
@@ -331,7 +331,7 @@ async def on_message(message):
                     
                     driver.find_element_by_id('email-box').send_keys(trsText)
                     driver.find_element_by_id('code-box').send_keys(inpu)
-                    driver.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/form/div[4]/div").click()
+                    driver.find_element_by_xpath("/html/body/div/div[1]/div[2]/form/div[4]/div").click()
                     WebDriverWait(driver, 1).until(EC.alert_is_present())
                     alertin = driver.switch_to_alert().text
                     if alertin != "서버에서 알 수 없는 응답이 발생하였습니다. 잠시후 다시 시도해주세요.":
@@ -387,7 +387,6 @@ async def on_message(message):
         if message.content.startswith("!!당첨확인"): #당첨확인
             await message.channel.send(message.author.mention + "님의 해당이벤트는 현재 종료되었습니다")
             return
-
 
             trsText = message.content.split(" ")[1]
             await message.delete()

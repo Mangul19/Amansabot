@@ -49,6 +49,15 @@ async def on_message(message):
     #받은 메세지 및 입력자 출력
     print(str(message.author) + str(message.author.mention) + " : " + str(message.content))
 
+    if message.content.startswith("https://") or message.content.startswith("http://"):
+        if str(message.channel.id) == "718436389062180917":
+            channel = client.get_channel(875718837373386822)
+            await channel.send(message.content)
+        elif str(message.channel.id) == "875718837373386822":
+            channel = client.get_channel(718436389062180917)
+            await channel.send(message.content)
+        return
+
     global num
     if str(message.channel.id) == "718436389062180917":
         if len(message.content) == 0:
@@ -96,7 +105,7 @@ async def on_message(message):
 def translng(leng1, leng2, word):
     global num
 
-    dirtime = db.reference('apitime/') # 해당일 출석체크 정보 조회
+    dirtime = db.reference('apitime/') # 해당일 정보 조회
     times = dirtime.get()
     times = times["time"]
 

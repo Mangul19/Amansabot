@@ -8,6 +8,7 @@ from firebase_admin import credentials
 from firebase_admin import db
 import random
 import math
+import requests
 import datetime
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
@@ -91,15 +92,119 @@ async def on_member_remove(member):
 #메세지 수신시
 @client.event
 async def on_message(message):
+    global driver
+
     #봇일 경우 무시
     if message.author == client.user:
         return
-
-    #채팅방이 다를 경우 무시
-    if str(message.channel.id) != "718436389062180917" and str(message.channel.id) != "875718837373386822":
-        print(str(message.author) + str(message.author.mention) + " : " + str(message.content))
-
     try:
+        if str(message.channel.id) == "718436389062180917":
+            if message.content == "고양이":
+                embed = discord.Embed(title="랜덤 고양이 사진 출력!", color=0x5CD1E5)
+                res = requests.get("https://api.thecatapi.com/v1/images/search")
+                res = res.json()[0]['url']
+                embed.set_image(url=res)
+                await message.channel.send(embed=embed)
+            elif message.content == "강아지":
+                embed = discord.Embed(title="랜덤 강아지 사진 출력!", color=0x5CD1E5)
+                res = requests.get("https://api.thedogapi.com/v1/images/search")
+                res = res.json()[0]['url']
+                embed.set_image(url=res)
+                await message.channel.send(embed=embed)
+            elif message.content == "전하양":
+                embed = discord.Embed(title="전하양님 출력!", color=0x5CD1E5)
+                x = random.randint(1, 4)
+                if x == 1:
+                    embed.set_image(url="https://i.ytimg.com/vi/o5J_btXA_Dg/maxresdefault.jpg")
+                elif x == 2:
+                    embed.set_image(url="https://dispatch.cdnser.be/wp-content/uploads/2018/06/ally_2018-06-11_07-54-09_033865.png")
+                elif x == 3:
+                    embed.add_field(name="전하양님과 티벳 여우의 일치율 확인중...!!", value="확인결과 100% 입니다", inline=False)
+                else:
+                    embed.set_image(url="https://cdn.discordapp.com/attachments/718436389062180917/884073670430048266/SE-9f589ca1-4159-44da-b55f-26c74e86cd6e.jpg")
+
+                await message.channel.send(embed=embed)
+            elif message.content == "강까망":
+                embed = discord.Embed(title="강까망님 출력!", color=0x5CD1E5)
+                x = random.randint(1, 5)
+                if x == 1:
+                    embed.set_image(url="http://img3.tmon.kr/cdn3/deals/2021/06/25/4955202358/front_b7b9d_gzcmf.jpg")
+                elif x == 2:
+                    embed.set_image(url="https://cdn.discordapp.com/attachments/718436389062180917/884075978786213948/1620941746242.jpg")
+                elif x == 3:
+                    embed.set_image(url="https://pbs.twimg.com/media/DxctR8JVAAQnZYH.jpg")
+                elif x == 4:
+                    embed.set_image(url="https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/1aoj/image/yJiTMIB1n3UcbmaNTVGaR35i-NE.jpg")
+                else:
+                    embed.set_image(url="https://cdn.discordapp.com/attachments/718436389062180917/884074105941426246/-10.jpg")
+                await message.channel.send(embed=embed)
+            elif message.content == "힌구름":
+                embed = discord.Embed(title="힌구름님 출력!", color=0x5CD1E5)
+                x = random.randint(1, 3)
+                if x == 1:
+                    embed.set_image(url="https://cdn.discordapp.com/attachments/718436389062180917/884074612210683944/output_1408480075.jpg")
+                elif x == 2:
+                    embed.set_image(url="https://cdn.discordapp.com/attachments/718436389062180917/885865564864671764/output_1201758684.jpg")
+                else:
+                    embed.set_image(url="https://cdn.discordapp.com/attachments/718436389062180917/885865524637081681/IMG_20190214_202649.jpg")
+                await message.channel.send(embed=embed)
+            elif message.content == "하양까망" or message.content == "까망하양" :
+                embed = discord.Embed(title="흰검 조합 출력!", color=0x5CD1E5)
+                embed.set_image(url="https://cdn.discordapp.com/attachments/718436389062180917/884076344693117009/-17.jpg")
+                await message.channel.send(embed=embed)
+            elif message.content == "랜덤사진":
+                embed = discord.Embed(title="랜덤사진 출력!", color=0x5CD1E5)
+
+                driver.get("https://source.unsplash.com/random")
+                driver.implicitly_wait(2)
+
+                src = driver.find_element_by_css_selector('body > img').get_attribute('src')
+                embed.set_image(url=src)
+
+                await message.channel.send(embed=embed)
+            elif message.content == "김초밥":
+                embed = discord.Embed(title="김초밥님 출력!", color=0x5CD1E5)
+                embed.set_image(url="http://gdimg.gmarket.co.kr/853596867/still/600?ver=1551924578")
+                await message.channel.send(embed=embed)
+            elif message.content == "퇴근":
+                embed = discord.Embed(title="퇴근짤 출력!", color=0x5CD1E5)
+                embed.set_image(url="https://blog.kakaocdn.net/dn/mmCVM/btqV2VB2JZ0/RIDUHKkogl7ZPn41ZkmOHk/img.gif")
+                await message.channel.send(embed=embed)
+            elif message.content == "월요일":
+                embed = discord.Embed(title="월요일짤 출력!", color=0x5CD1E5)
+                embed.set_image(url="https://scontent.ficn4-1.fna.fbcdn.net/v/t1.18169-9/14724648_1122850547822026_660916425192095596_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=9267fe&_nc_ohc=cRrIkb8e-_EAX_Txlu0&_nc_ht=scontent.ficn4-1.fna&oh=61fa9a30a6a296547df7fb72ec73e268&oe=6162D642")
+                await message.channel.send(embed=embed)
+            elif message.content == "먹보":
+                embed = discord.Embed(title="먹는데!! 왜!!짤 출력!", color=0x5CD1E5)
+                embed.set_image(url="https://lh3.googleusercontent.com/proxy/0CXNNLCyRTQ42VL5CB6apspK7H6decIzphY6RGsfSEyBdADW1OzNOwQaP4_4vU1WvgoQnkXpgVS0oyellCQMTH3ODWQN7qv3lm3iDKhs")
+                await message.channel.send(embed=embed)
+            elif message.content == "?":
+                embed = discord.Embed(title="?짤 출력!", color=0x5CD1E5)
+                x = random.randint(1, 3)
+                if x == 1:
+                    embed.set_image(url="https://d3kxs6kpbh59hp.cloudfront.net/community/COMMUNITY/1ee72cd79dd040b5950672df0afabc72/775e5171f2a4477e821a6af18de1d04d_1546789067.png")
+                elif x == 2:
+                    embed.set_image(url="https://cdn.discordapp.com/attachments/718436389062180917/885866013122519060/IMG_20180227_105346.jpg")
+                else:
+                    embed.set_image(url="https://cdn.discordapp.com/attachments/718436389062180917/885865758796681216/20210907_173002.jpg")
+                await message.channel.send(embed=embed)
+            elif message.content == "더러워":
+                embed = discord.Embed(title="더러워짤 출력!", color=0x5CD1E5)
+                embed.set_image(url="https://cdn.discordapp.com/attachments/718436389062180917/885866527549689917/20201231_192040.jpg")
+                await message.channel.send(embed=embed)
+            elif message.content == "너두?":
+                embed = discord.Embed(title="야나두! 출력!", color=0x5CD1E5)
+                embed.set_image(url="https://cdn.discordapp.com/attachments/718436389062180917/885867823384117308/IMG_20200509_164136.jpg")
+                await message.channel.send(embed=embed)
+            elif message.content == "나두!":
+                embed = discord.Embed(title="너두? 출력!", color=0x5CD1E5)
+                embed.set_image(url="https://cdn.discordapp.com/attachments/718436389062180917/885867743352598588/IMG_20200509_164135.jpg")
+                await message.channel.send(embed=embed)
+
+        #채팅방이 다를 경우 무시
+        if str(message.channel.id) != "718436389062180917" and str(message.channel.id) != "875718837373386822":
+            print(str(message.author) + str(message.author.mention) + " : " + str(message.content))
+
         dirhelplist = db.reference('helplist/')
         helplist = dirhelplist.get()
         helplist = helplist['helplist']
@@ -130,10 +235,14 @@ async def on_message(message):
                     await message.channel.send("명령어는 봇방에 입력하여주세요")
                     return
 
+        if message.content == "!이스터에그":
+            embed = discord.Embed(title="현재 이스터에그 힌트 모음", description="하얀색의 상징, 검은색의 상징, 두 색의 조합\n냥파, 멍파, 무슨 사진이 나올까?, 드럼통\n직장인의 행복, 병이 생기는 날, 나 많이 먹어..?\n?, 오리의 상징, 더티\nU TOO?, ME TOO!", color=0x5CD1E5)
+            await message.channel.send(embed=embed)
+
         #~~명령어
         if message.content == "!help":
             embed = discord.Embed(title="명령어", color=0x5CD1E5)
-            embed.add_field(name="일반", value="!translation, !레벨, !업데이트, !지진, !코로나, !날씨, !출첵", inline=False)
+            embed.add_field(name="일반", value="!translation, !레벨, !업데이트, !지진, !코로나, !날씨, !출첵, !이스터에그, !태풍", inline=False)
             embed.add_field(name="게임", value="!주사위, !게임, !랭킹", inline=False)
             embed.add_field(name="어만머니", value="!bank 비밀번호, !돈확인, !돈받기,  !세금, !예적금, !송금, !코드발급, !주식, !주식확인", inline=False)
             embed.add_field(name="어만고치", value="!어만고치, !상점, !인벤토리, !먹이, !고치샤워", inline=False)
@@ -145,6 +254,32 @@ async def on_message(message):
 
             embed.set_footer(text="시스템 버전 " + verand)
             await message.channel.send(embed=embed)
+        
+        if message.content == "!태풍":
+            try:
+                embed = discord.Embed(title="태풍정보", color=0x5CD1E5)
+
+                driver.get("https://www.weather.go.kr/w/typhoon/report.do")
+                driver.implicitly_wait(2)
+
+                unit1 = driver.find_element_by_css_selector('body > div.container > section > div > div.cont-wrap.cmp-typ-report > div > div.tab-menu-wrap > div > div > a > span').get_attribute('href')
+                unit2 = driver.find_element_by_css_selector('body > div.container > section > div > div.cont-wrap.cmp-typ-report > div > div.typhoon-report > div > div > div.title').get_attribute('href')
+
+                embed.add_field(name=unit1, value=unit2, inline=True)
+
+                src = driver.find_element_by_css_selector('body > div.container > section > div > div.cont-wrap.cmp-typ-report > div > div.typhoon-report > div > div > img').get_attribute('src')
+                embed.set_image(url=src)
+
+                driver.get("https://www.weather.go.kr/w/typhoon/prediction.do")
+                driver.implicitly_wait(2)
+
+                src = driver.find_element_by_css_selector('#slide-images > li:nth-child(1) > a > img').get_attribute('src')
+                embed.set_thumbnail(url=src)
+                embed.set_author(name="AI 모델 사진 [확대본은 우측에 있습니다]", icon_url=src)
+                
+                await message.channel.send(embed=embed)
+            except:
+                await message.channel.send("진행중인 태풍이 없거나 정보 수신을 실패하였습니다")
 
         if message.content == "!먹이":
             embed = discord.Embed(title="먹이 명령어 사용방법", description="!먹이주기 물품명 갯수\nEX)!먹이주기 라면 2", color=0x5CD1E5)
@@ -214,7 +349,7 @@ async def on_message(message):
             level = level[send]
             exp = exp[send]
 
-            await message.channel.send(message.author.mention + " 님은 현재 총 " + str(exp) + "exp 가 있으며 레벨은 " + str(level) + "입니다")    
+            await message.channel.send(message.author.mention + " 님은 현재 총 " + str(exp) + "exp 가 있으며 레벨은 " + str(level) + "입니다\n 레벨업에 필요한 경험치는 " + str(100 * level * 1.5) + "exp 입니다")    
 
         if message.content == "!도박":
             send = str(message.author.id)
@@ -479,7 +614,6 @@ async def on_message(message):
 
         if message.content.startswith("!로토도박"): #도박
             send = str(message.author.id)
-
 
             dirmoney = db.reference('money/' + send)#돈 값 받기
             money = dirmoney.get()
