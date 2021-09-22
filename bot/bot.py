@@ -113,13 +113,17 @@ async def on_message(message):
                 await message.channel.send(embed=embed)
             elif message.content == "전하양":
                 embed = discord.Embed(title="전하양님 출력!", color=0x5CD1E5)
-                x = random.randint(1, 4)
+                x = random.randint(1, 6)
                 if x == 1:
                     embed.set_image(url="https://i.ytimg.com/vi/o5J_btXA_Dg/maxresdefault.jpg")
                 elif x == 2:
                     embed.set_image(url="https://dispatch.cdnser.be/wp-content/uploads/2018/06/ally_2018-06-11_07-54-09_033865.png")
                 elif x == 3:
                     embed.add_field(name="전하양님과 티벳 여우의 일치율 확인중...!!", value="확인결과 100% 입니다", inline=False)
+                elif x == 4:
+                    embed.set_image(url="https://w.namu.la/s/8bc5774b00d269682030ce66eb9bf63ad888302c791c23e4535121e6461c097794a950c281b548903a2f5ccbb5abbaaeef040c74430038c5c1f93ee15f579f9ab62f96327f572862f7e803a110eaa45619f324cf9a1946039b91f3879b5c119970562ea936b93e3e734300578b714eff")
+                elif x == 5:
+                    embed.set_image(url="https://cdn.discordapp.com/attachments/718436389062180917/888649048259719208/5.PNG")
                 else:
                     embed.set_image(url="https://cdn.discordapp.com/attachments/718436389062180917/884073670430048266/SE-9f589ca1-4159-44da-b55f-26c74e86cd6e.jpg")
 
@@ -178,7 +182,7 @@ async def on_message(message):
                 embed = discord.Embed(title="먹는데!! 왜!!짤 출력!", color=0x5CD1E5)
                 embed.set_image(url="https://lh3.googleusercontent.com/proxy/0CXNNLCyRTQ42VL5CB6apspK7H6decIzphY6RGsfSEyBdADW1OzNOwQaP4_4vU1WvgoQnkXpgVS0oyellCQMTH3ODWQN7qv3lm3iDKhs")
                 await message.channel.send(embed=embed)
-            elif message.content == "?":
+            elif message.content == "??":
                 embed = discord.Embed(title="?짤 출력!", color=0x5CD1E5)
                 x = random.randint(1, 3)
                 if x == 1:

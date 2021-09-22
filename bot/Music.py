@@ -42,15 +42,17 @@ async def on_voice_state_update(member, before, after):
     global now
 
     #봇일 경우 무시
-    if member == client.user:
+    if member == client.user or member.id == 839143097723912222:
         return
 
     if before.channel == None or before.channel.id != 751452064865058867:
         if after.channel.id == 751452064865058867:
             count += 1
+            print(str(count) + "명 입장 중")
     elif before.channel.id == 751452064865058867:
-        if after.channel == None or after.channel.id != 751452064865058867:
+        if  after.channel == None or after.channel.id != 751452064865058867:
             count -= 1
+            print(str(count) + "명 입장 중")
 
             if count == 0 and len(client.voice_clients) > 0:
                 channel = client.get_channel(873984166897807470)

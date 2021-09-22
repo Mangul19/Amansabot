@@ -1,30 +1,13 @@
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import db
+import os
+from gtts import gTTS
 
-#firebase
-cred = credentials.Certificate("D:/Desktop/bot-Amansa/noup/firebase-adminsdk.json")
-firebase_admin.initialize_app(cred,{'databaseURL' : 'https://amansa-bot-default-rtdb.firebaseio.com/'})
+language = 'ko'
+slow_audio_speed = False
+filename = "bot/gtts.mp3"
 
-dirmallist = db.reference('mallist/')
-dmallist = dirmallist.get()
-mal = dmallist['inmallist'].values()
+def reading_from_user():
+    audio_created = gTTS(text=user_input, lang=language, slow=slow_audio_speed)
+    audio_created.save(filename)
 
-wordCount = {} 
-
-plus = 0
- 
-for word in mal:
- 
-    # Get 명령어를 통해, Dictionary에 Key가 없으면 0리턴
- 
-    wordCount[word] = wordCount.get(word, 0) + 1 
-    
-    keys = sorted(wordCount.keys())
- 
-for word in keys:
-    if wordCount[word] > 1:
-        print(word + ':' + str(wordCount[word])) 
-        plus += (wordCount[word] - 1)
-
-print(plus)
+if __name__ == '__main__':
+    reading_from_user()
